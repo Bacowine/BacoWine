@@ -11,7 +11,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'twig');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -36,6 +36,15 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+//LANZAMIENTO DEL SERVIDOR
+app.listen(3000, function(err){
+  if(err){ 
+    console.log("No se pudo inicializar el servidor" + err.message);
+  }else{
+    console.log("Servidor arrancado en el puerto 3000");
+  } 
 });
 
 module.exports = app;
