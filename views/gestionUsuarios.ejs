@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gestion de usuarios</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <p>Desde esta pagina podras gestionar los usuarios</p>
+    <div class="container">
+        <div class="row">
+            <div class="col m-4">
+                <div class="row ">
+                    ID: <input id="correo" type="number">
+                </div>
+                <div class="row mt-1">
+                    Nombre: <input id="pass1" type="text">
+                </div>
+                <div class="row mt-1">
+                    Correo: <input type="text">
+                </div>
+                <div class="row mt-1">
+                    <input id="boton_crear" class="btn btn-dark" type="submit" value="Añadir usuario">
+                </div>
+            </div>
+            <div class="col m-4">
+                <div class="row mt-1">
+                    <form action="/verUsuario" method="POST">
+                        <button type="submit" class="btn menu boton-buscar btn-dark ">Buscar</button>
+                        <input class="input-buscar" type="text" name="idUser" placeholder="id usuario">
+                    </form>                
+                </div>
+                <div>
+                    <% if(usuario !== null ){%>
+                        <p>DATOS DEL USUARIO</p>
+                        <p><%= usuario.id %></p>
+                        <p><%= usuario.nombre %></p>
+                        <p><%= usuario.correos %></p>
+                    <%};
+                    %>                
+                </div>
+                
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

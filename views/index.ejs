@@ -3,9 +3,16 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <p>Welcome to the <%= title %></p>
+    <div class="container">
+      <div class="card">
+        <p class="h1">Gestion de usuarios</p>
+        <a class="h4" href="/gestionUsuarios">Ir a la gestion de usuarios</a>
+      </div>
+    </div>
   </body>
 </html>
