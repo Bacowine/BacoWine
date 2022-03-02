@@ -10,18 +10,20 @@
     <div class="container">
         <div class="row">
             <div class="col m-4">
-                <div class="row ">
-                    ID: <input id="correo" type="number">
-                </div>
-                <div class="row mt-1">
-                    Nombre: <input id="pass1" type="text">
-                </div>
-                <div class="row mt-1">
-                    Correo: <input type="text">
-                </div>
-                <div class="row mt-1">
-                    <input id="boton_crear" class="btn btn-dark" type="submit" value="Añadir usuario">
-                </div>
+                <form action="/insertarUsuario" method="POST">
+                    <div class="row ">
+                        <input class="" type="text" name="id" placeholder="Id usuario">
+                    </div>
+                    <div class="row mt-1">
+                        Nombre: <input name="nombre" type="text">
+                    </div>
+                    <div class="row mt-1">
+                        Correo: <input name="correo" type="text">
+                    </div>
+                    <div class="row mt-1">
+                        <button type="submit" class="btn menu boton-buscar btn-dark ">Agregar</button>
+                    </div>
+                </form>                
             </div>
             <div class="col m-4">
                 <div class="row mt-1">

@@ -14,5 +14,7 @@ router.get('/gestionUsuarios', function(req, res, next) {
 });
 
 router.post("/verUsuario", controllerU.verUsuario); 
+router.post("/insertarUsuario", controllerU.insertarUsuario); 
+
 
 module.exports = router;
