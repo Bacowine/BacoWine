@@ -11,7 +11,6 @@ class controllerUsuario{
         function cb_verUsuario(err, result, rows){
             if (err) {
                 response.status(500); 
-                next(err);
                 response.render("error", {message:"Error interno de acceso a la base de datos"});
             } else{
                 console.log(rows);
