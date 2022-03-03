@@ -19,7 +19,6 @@ class controllerUsuario{
         }
     }
     insertarUsuario(request, response){
-        let id = request.body.id;
         let nombre = request.body.nombre; 
         let correo = request.body.correo; 
 
@@ -27,7 +26,7 @@ class controllerUsuario{
         //console.log(nombre);
         //console.log(correo);
 
-        modelUsers.insertarUsuario(id, nombre, correo, cb_insertarUsuario); //Sacamos si ya le ha dado me gusta el usuario a esta pregunta
+        modelUsers.insertarUsuario(nombre, correo, cb_insertarUsuario); //Sacamos si ya le ha dado me gusta el usuario a esta pregunta
     
         function cb_insertarUsuario(err, result, info){
             if (err) {

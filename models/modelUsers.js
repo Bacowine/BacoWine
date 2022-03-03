@@ -32,15 +32,15 @@ class modelUsers {
         });
     }  
 
-    insertarUsuario(id, nombre, correo, callback){
+    insertarUsuario(nombre, correo, callback){
         this.pool.getConnection(function(err, connection) {
             if (err) { 
                 callback(new Error("Error de conexión a la base de datos"));
             }
             else {
                 console.log("HOLAA");
-                const sql = "INSERT INTO usuarios(id, nombre, correos) VALUES(?, ?, ?)";
-                connection.query( sql, [id, nombre,correo], function(err, rows) {
+                const sql = "INSERT INTO usuarios(nombre, correos) VALUES(?, ?)";
+                connection.query( sql, [nombre,correo], function(err, rows) {
                     connection.release(); // devolver al pool la conexión
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
