@@ -36,14 +36,16 @@
                     </form>                
                 </div>
                 <div>
-                    <% if(usuario !== null ){%>
+                    <% if(usuario !== null && usuario !== -1 ){%>
                         <p>DATOS DEL USUARIO</p>
                         <p><%= usuario.id %></p>
                         <p><%= usuario.nombre %></p>
                         <p><%= usuario.correos %></p>
-                    <% } else { %>
-                        <p>No existe el id</p>
-                    <% } %>                
+                    <% } %>   
+
+                    <% if(usuario == -1){%>
+                        <p>ID no encontrado</p>
+                    <% } %>   
                 </div>
                 
             </div>

@@ -22,7 +22,7 @@ class modelUsers {
                     else {
                         console.log(rows)
                         if (rows.length === 0) {
-                            callback(null, false, null); //no está el usuario con el password proporcionado
+                            callback(null, false, -1); //no está el usuario con el password proporcionado
                         }
                         else {
                             callback(null, true, rows[0]);
