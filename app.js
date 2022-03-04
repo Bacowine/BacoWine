@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-require('dotenv').config();
+require('dotenv').config({path: __dirname + '/.env'});
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -40,11 +40,13 @@ app.use(function(err, req, res, next) {
 });
 
 //LANZAMIENTO DEL SERVIDOR
-app.listen(process.env.PORT, function(err){
+const PORT = process.env.PORT || 80;
+app.listen(PORT, function(err){
   if(err){ 
     console.log("No se pudo inicializar el servidor" + err.message);
   }else{
-    console.log(`Servidor arrancado en el puerto ${process.env.PORT}`);
+    console.log(`Servidor arrancado en el puerto ${PORT}`);
+    console.log(process.env)
   } 
 });
 

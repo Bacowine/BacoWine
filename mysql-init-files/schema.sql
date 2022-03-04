@@ -1,5 +1,0 @@
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(45) NOT NULL,
-    correos VARCHAR(45) NOT NULL
-);

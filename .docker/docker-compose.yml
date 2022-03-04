@@ -3,20 +3,21 @@ services:
   mysqldb:
     image: mysql:5.7
     restart: unless-stopped
-    env_file: ./.env
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./mysql-init-files:/docker-entrypoint-initdb.d
+      - ../mysql-init-files:/docker-entrypoint-initdb.d
   app:
+    env_file: ./docker.env
     depends_on:
       - mysqldb
-    build: ./
+    build:
+      context: ../
+      dockerfile: ./.docker/Dockerfile
     restart: unless-stopped
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
