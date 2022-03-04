@@ -21,7 +21,8 @@ class controllerUsuario{
     insertarUsuario(request, response){
         let nombre = request.body.nombre; 
         let correo = request.body.correo; 
-
+        let idIntroducido = request.body.idUser;
+        console.log(idIntroducido);
         //console.log(id);
         //console.log(nombre);
         //console.log(correo);
