@@ -20,7 +20,13 @@
                     <div class="row mt-1">
                         <button type="submit" class="btn menu boton-buscar btn-dark ">Agregar</button>
                     </div>
-                </form>                
+                </form>
+                <div>
+                    <% if(res !== null ){%>
+                        <p>ID DEL USUARIO: <%= res.insertId %></p>
+                    <%};
+                    %>                
+                </div>              
             </div>
             <div class="col m-4">
                 <div class="row mt-1">
@@ -35,8 +41,9 @@
                         <p><%= usuario.id %></p>
                         <p><%= usuario.nombre %></p>
                         <p><%= usuario.correos %></p>
-                    <%};
-                    %>                
+                    <% } else { %>
+                        <p>No existe el id</p>
+                    <% } %>                
                 </div>
                 
             </div>

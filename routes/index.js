@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/gestionUsuarios', function(req, res, next) {
-  res.render('gestionUsuarios', {usuario: null}); //vista cargada estaticamente
+  res.render('gestionUsuarios', {res:"", usuario: null}); //vista cargada estaticamente
 });
 
 router.post("/verUsuario", controllerU.verUsuario); 

@@ -14,7 +14,7 @@ class controllerUsuario{
                 response.render("error", {message:"Error interno de acceso a la base de datos"});
             } else{
                 console.log(rows);
-                response.render("gestionUsuarios", {usuario: rows});
+                response.render("gestionUsuarios", {res:null, usuario: rows});
             }
         }
     }
@@ -34,7 +34,7 @@ class controllerUsuario{
             } 
             else{
                 console.log("ANYADIDO CORRECTAMENTE EL USUARIO");
-                response.render("gestionUsuarios", {usuario: null});
+                response.render("gestionUsuarios", {res: info,usuario:null});
             }
         }
     }

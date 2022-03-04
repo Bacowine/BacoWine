@@ -20,6 +20,7 @@ class modelUsers {
                         callback(new Error("Error de acceso a la base de datos"));
                     }
                     else {
+                        console.log(rows)
                         if (rows.length === 0) {
                             callback(null, false, null); //no está el usuario con el password proporcionado
                         }
@@ -48,12 +49,13 @@ class modelUsers {
                         callback(new Error("Error de acceso a la base de datos"));
                     }
                     else {
+                        console.log(rows)
                         if (rows.length === 0) {
-                            callback(null, false); 
+                            callback(null, false,null); 
                             console.log("HOLAA");
                         }
                         else { 
-                            callback(null, true);
+                            callback(null, true,rows);
                         }          
                     }
                 });
