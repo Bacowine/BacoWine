@@ -9,9 +9,10 @@ services:
       - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
     volumes:
-      - ./mysql-data:/var/lib/mysql:z
-      - ./mysql-init-files:/docker-entrypoint-initdb.d:z
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
   app:
     depends_on:
       - mysqldb
@@ -21,3 +22,5 @@ services:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
     stdin_open: true
     tty: true
+volumes: 
+  mysql-data:
