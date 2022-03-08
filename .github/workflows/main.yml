@@ -14,13 +14,17 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+      - uses: 'actions/checkout@v3'
+
+      - id: 'GCloud auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-    
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        
+      - name: 'Set up GCloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+        
       - name: GCE 
         run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine"
       
