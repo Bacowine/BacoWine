@@ -14,7 +14,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: GCE 
-      - run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine"
+        run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine"
       
       # Runs a single command using the runners shell
       - name: Run a one-line script
