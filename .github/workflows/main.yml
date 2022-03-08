@@ -26,7 +26,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v0'
         
       - name: GCE 
-        run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine" --command="screen -x app && ls"
+        run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine" --command="ls && echo run"
       
       # Runs a single command using the runners shell
       - name: Run a one-line script
