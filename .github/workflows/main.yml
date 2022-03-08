@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps: 
-      - uses: actions/checkout@v2
+    steps:
       - name: GCE 
       - run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine"
       
