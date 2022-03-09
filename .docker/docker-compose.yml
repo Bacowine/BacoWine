@@ -19,8 +19,11 @@ services:
       context: ../
       dockerfile: ./.docker/Dockerfile
     restart: unless-stopped
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+      - 443:443
     stdin_open: true
     tty: true
 volumes: 
