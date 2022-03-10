@@ -41,17 +41,14 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
-https.createServer({
-  cert: fs.readFileSync('/etc/letsencrypt/live/bacowine.live/fullchain.pem'),
-  key: fs.readFileSync('/etc/letsencrypt/live/bacowine.live/privkey.pem')
- },app).listen(443, function(){
-	console.log('Servidor https corriendo en el puerto 443');
-});
-
-https.on('error', function (e) {
-  console.log('ERROR al intentar arrancar servidor https en el puerto 443');
-});
+if(fs.existsSync('/etc/letsencrypt/live/bacowine.live/fullchain.pem') && fs.existsSync('/etc/letsencrypt/live/bacowine.live/privkey.pem')) {
+	https.createServer({
+	  cert: fs.readFileSync('/etc/letsencrypt/live/bacowine.live/fullchain.pem'),
+	  key: fs.readFileSync('/etc/letsencrypt/live/bacowine.live/privkey.pem')
+	 },app).listen(443, function(){
+		console.log('Servidor https corriendo en el puerto 443');
+	});
+};
 
 //LANZAMIENTO DEL SERVIDOR
 const PORT = process.env.PORT || 80;
