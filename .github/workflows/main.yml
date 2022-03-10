@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: GCE
+name: GCE Deploy Dev
 
 on:
   workflow_dispatch:
@@ -26,14 +26,4 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v0'
         
       - name: GCE 
-        run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine" --command="ls && echo run"
-      
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+        run: gcloud compute ssh "bacowine-dev" --project "bacowine" --command="cd /opt/BacoWine/ && sudo git pull && cd .docker && sudo docker-compose up --build"
