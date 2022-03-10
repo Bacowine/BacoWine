@@ -28,7 +28,7 @@ Antes de empezar se necesita tener instalado lo siguiente:
 
 A continuacion se clona el proyecto y se instalan los paquetes necesarios.
 ```sh
-$ git clone https://github.com/Plopezq/BacoWine
+$ git clone https://github.com/Bacowine/BacoWine.git
 ```
 ```sh
 $ cd Bacowine
@@ -51,7 +51,8 @@ $ node app.js
 Es necesario tener instalado docker y docker-compose.
 
 ```sh
-$ sudo apt install docker
+$ curl -fsSL https://get.docker.com -o get-docker.sh
+$ sudo sh get-docker.sh
 ```
 
 El repositorio de Ubuntu tiene una versión antigua de docker-compose y hay que instalarlo desde github.
