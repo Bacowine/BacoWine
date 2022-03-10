@@ -49,6 +49,10 @@ https.createServer({
 	console.log('Servidor https corriendo en el puerto 443');
 });
 
+https.on('error', function (e) {
+  console.log('ERROR al intentar arrancar servidor https en el puerto 443');
+});
+
 //LANZAMIENTO DEL SERVIDOR
 const PORT = process.env.PORT || 80;
 app.listen(PORT, function(err){
