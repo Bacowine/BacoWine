@@ -26,4 +26,4 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v0'
         
       - name: GCE 
-        run: gcloud compute ssh "bacowine-dev" --project "bacowine" --command="cd /opt/BacoWine/ && sudo git pull && cd .docker && sudo docker-compose up --build"
+        run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine" --command="cd /opt/BacoWine/ && sudo git pull && cd .docker && sudo docker-compose up --build"
