@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Prueba tests\" && exit 0"
+    "test": "jest"
   },
+  
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -17,5 +18,8 @@
     "https": "^1.0.0",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
