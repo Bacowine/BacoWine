@@ -1,29 +1,53 @@
-# This is a basic workflow to help you get started with Actions
-
-name: GCE Deploy Dev
+name: Google Compute Engine
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - develop
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  compute_engine:
-    # The type of runner that the job will run on
+  test:
+    # Checkout the Repo
     runs-on: ubuntu-latest
-    
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    - uses: actions/checkout@v2
+    
+    # Install Node 16
+    - name: Use Node.js '16.x'
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+        
+    # Install dependencies
+    - run: npm install
+    
+    # Run tests
+    - run: npm test
+    
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the Repo
       - uses: 'actions/checkout@v3'
-
+      
+      # Login to GCloud
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
-        
+          
+      # Setup GCloud SDK
       - name: 'Set up GCloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
         
-      - name: GCE 
+      # Rebuild develop docker container
+      - name: Deploy to develop
         run: gcloud compute ssh --zone "europe-west1-b" "bacowine-dev" --project "bacowine" --command="cd /opt/BacoWine/ && sudo git pull && cd .docker && sudo docker-compose up --build -d"
+        if: github.ref == 'refs/heads/develop'
+        
+      # Rebuild production docker container
+      - name: Deploy to production
+        run: gcloud compute ssh --zone "europe-west1-b" "bacowine-prod" --project "bacowine" --command="cd /opt/BacoWine/ && sudo git pull && cd .docker && sudo docker-compose up --build -d"
+        if: github.ref == 'refs/heads/main'
