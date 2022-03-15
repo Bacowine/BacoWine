@@ -6,7 +6,7 @@ const controllerU = new controllerUsers();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Dev BacoWine project' });
+  res.render('index', { title: 'BacoWine DEV' });
 });
 
 router.get('/gestionUsuarios', function(req, res, next) {
