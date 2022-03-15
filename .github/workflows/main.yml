@@ -1,7 +1,7 @@
 name: Google Compute Engine
 
 on:
-  pull_request:
+  push:
     branches:
       - main
       - develop
@@ -41,6 +41,10 @@ jobs:
       # Setup GCloud SDK
       - name: 'Set up GCloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
+        
+      # Echo branch
+      - name: Deploy to develop
+        run: echo github.ref
         
       # Rebuild develop docker container
       - name: Deploy to develop
