@@ -6,6 +6,7 @@ var logger = require('morgan');
 require('dotenv').config({path: __dirname + '/.env'});
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var bodegaRouter = require('./routes/bodega');
 
 var fs = require('fs');
 var https = require('https');
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/bodega', bodegaRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body>
+    <h1>Detalles bodega <%= id %></h1>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-5">
+          <img src="data:image/png;base64, <%= bodega.foto %>" class="img-fluid" alt="Foto bodega">
+        </div>
+        <div class="col-7">
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">Nombre</span>
+            </div>
+            <input type="text" value="<%=bodega.nombre%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">Año</span>
+            </div>
+            <input type="text" value="<%=bodega.anyo%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">Localización</span>
+            </div>
+            <input type="text" value="<%=bodega.localizacion%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">Descripción</span>
+            </div>
+            <textarea style="resize:none" class="form-control" rows="10" readonly><%=bodega.descripcion%></textarea>
+          </div>
+          
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">D.O</span>
+            </div>
+            <input type="text" value="<%=bodega.origen%>" class="form-control" readonly>
+          </div>
+                    
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
