@@ -26,5 +26,7 @@ CREATE TABLE bodegas (
   anyoCreacion INT,
   localizGeo VARCHAR(40),
   descripcion VARCHAR(500),
-  denominOrigen VARCHAR(40)
+  denominOrigen VARCHAR(40),
+  foto BLOB,
+  activo BOOLEAN DEFAULT true NOT NULL
 );
