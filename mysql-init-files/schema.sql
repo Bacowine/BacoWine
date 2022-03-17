@@ -22,11 +22,11 @@ CREATE TABLE vino (
 
 CREATE TABLE bodegas (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(40),
-  anyoCreacion INT,
-  localizGeo VARCHAR(40),
-  descripcion VARCHAR(500),
-  denominOrigen VARCHAR(40),
+  nombre VARCHAR(40) NOT NULL,
+  anyoCreacion INT NOT NULL,
+  localizGeo VARCHAR(40) NOT NULL,
+  descripcion VARCHAR(500) NOT NULL,
+  denominOrigen VARCHAR(40) NOT NULL,
   foto BLOB,
   activo BOOLEAN DEFAULT true NOT NULL
 );
