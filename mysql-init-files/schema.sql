@@ -19,3 +19,12 @@ CREATE TABLE vino (
     foto BLOB,
     activo BOOLEAN DEFAULT true NOT NULL
 );
+
+CREATE TABLE bodegas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(40),
+  anyoCreacion INT,
+  localizGeo VARCHAR(40),
+  descripcion VARCHAR(500),
+  denominOrigen VARCHAR(40)
+);
