@@ -16,7 +16,7 @@ CREATE TABLE vino (
     graduacion DECIMAL(4,2) UNSIGNED NOT NULL CHECK (graduacion <= 100), 
     bodega VARCHAR(100) NOT NULL, 
     localidades VARCHAR(500) NOT NULL,
-    foto BLOB,
+    foto LONGBLOB,
     activo BOOLEAN DEFAULT true NOT NULL
 );
 
@@ -27,6 +27,6 @@ CREATE TABLE bodegas (
   localizGeo VARCHAR(40) NOT NULL,
   descripcion VARCHAR(500) NOT NULL,
   denominOrigen VARCHAR(40) NOT NULL,
-  foto BLOB,
+  foto LONGBLOB,
   activo BOOLEAN DEFAULT true NOT NULL
 );
