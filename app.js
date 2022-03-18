@@ -51,7 +51,7 @@ if(fs.existsSync('/etc/letsencrypt/live/bacowine.live/fullchain.pem') && fs.exis
 };
 
 //LANZAMIENTO DEL SERVIDOR
-const PORT = process.env.NODE_LOCAL_PORT || 80;
+const PORT = process.env.NODE_PORT || 80;
 app.listen(PORT, function(err){
   if(err){ 
     console.log("No se pudo inicializar el servidor" + err.message);
