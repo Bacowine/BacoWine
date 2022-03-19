@@ -1,8 +1,6 @@
 "use strict";
 
-const config = require("../config");
-const mysql = require("mysql");
-const pool = mysql.createPool(config.BDconfig);
+const pool = require("../models/db");
 const MVinos = require("../models/modelVinos");
 const modelVinos = new MVinos(pool);
 

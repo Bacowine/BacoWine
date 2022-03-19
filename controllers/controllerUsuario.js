@@ -1,7 +1,5 @@
 
-const config = require("../config");
-const mysql = require("mysql");
-const pool = mysql.createPool(config.BDconfig);
+const pool = require("../models/db");
 const Musers = require("../models/modelUsers");
 const modelUsers = new Musers(pool);
 
