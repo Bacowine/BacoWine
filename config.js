@@ -1,4 +1,5 @@
 "use strict";
+require('dotenv').config({path: __dirname + '/.env'});
 module.exports = {
     BDconfig: {
         host: process.env.MYSQLDB_HOST || "localhost",
