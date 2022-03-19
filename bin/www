@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+var app = require('../app');
+var fs = require('fs');
+var https = require('https');
+var http = require('http');
+const config = require("../config");
+
+
+if(fs.existsSync('/etc/letsencrypt/live/bacowine.live/fullchain.pem') && fs.existsSync('/etc/letsencrypt/live/bacowine.live/privkey.pem')) {
+	https.createServer({
+	  cert: fs.readFileSync('/etc/letsencrypt/live/bacowine.live/fullchain.pem'),
+	  key: fs.readFileSync('/etc/letsencrypt/live/bacowine.live/privkey.pem')
+	 },app).listen(443, function(err){
+        if(err){ 
+            console.log("No se pudo inicializar el servidor https" + err.message);
+        }else{
+            console.log('Servidor https corriendo en el puerto 443');
+        } 
+	});
+};
+
+//LANZAMIENTO DEL SERVIDOR
+const PORT = config.App.PORT || 80;
+
+http.createServer(app).listen(PORT, function(err){
+  if(err){ 
+    console.log("No se pudo inicializar el servidor" + err.message);
+  }else{
+    console.log(`Servidor arrancado en el puerto ${PORT}`);
+  } 
+});
