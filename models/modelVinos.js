@@ -1,37 +1,11 @@
-"use strict";
+const pool = require('./db');
 
-class modelVinos {
-
-    constructor(pool) {  
-        this.pool=pool;
-    }
-
-    verVino(id, callback) {
-        this.pool.getConnection(function(err, connection) {
-            if (err) { 
-                callback(new Error("Error de conexion a la base de datos:" + err));
-            }
-            else {
-                const sql = "SELECT * FROM vino where id = ?";
-                connection.query(sql, [id], function(err, rows) {
-                    connection.release(); // devolver al pool la conexión
-                    if (err) {
-                        callback(new Error("Error de acceso a la base de datos:" + err));
-                    }
-                    else {
-                        console.log(rows);
-                        if (rows.length === 0) {
-                            callback(null, false, -1); //no existe el vino con ese id
-                        }
-                        else {
-                            callback(null, true, rows[0]);
-                        }           
-                    }
-                });
-            }
-        });
-    }  
-}
-
+const modelVinos = {};
+modelVinos.find = async (id) => {
+  const sql = pool.format('SELECT * FROM vino where id = ?', [id]);
+  const [result] = await pool.promise().query(sql);
+  console.log(sql);
+  return result;
+};
 
 module.exports = modelVinos;

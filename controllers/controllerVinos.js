@@ -1,24 +1,16 @@
+const modelVinos = require('../models/modelVinos');
 
-const pool = require("../models/db");
-const Mvinos = require("../models/modelVinos");
-const modelVinos = new Mvinos(pool);
+const controllerVinos = {};
 
-class controllerVinos{
-
-
-    verVinos(request, response){
-        modelVinos.verVino(request.body.idVino, cb_verVino);
-        function cb_verVino(err, result, rows){
-            if (err) {
-                response.status(500); 
-                response.render("error", {message:"Error interno de acceso a la base de datos"});
-            } else{
-                console.log(rows);
-                response.render("mostrarVino", {res:null, vino: rows});
-            }
-        }
-    }
-
-}
+controllerVinos.verVinos = async (request, response) => {
+  try {
+    const [rows] = await modelVinos.find(request.body.id);
+    // console.log(rows);
+    response.render('mostrarVino', { res: null, vino: rows });
+  } catch (e) {
+    response.status(500);
+    response.render('error', { message: 'Error interno de acceso a la base de datos' });
+  }
+};
 
 module.exports = controllerVinos;

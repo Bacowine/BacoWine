@@ -1,25 +1,29 @@
-"use strict";
+const pool = require('../models/db');
+const modelVinos = require('../models/modelVinos');
 
-const pool = require("../models/db");
-const MVinos = require("../models/modelVinos");
-const modelVinos = new MVinos(pool);
+describe('mostrar vino', () => {
+  afterAll(() => {
+    pool.end();
+  });
 
-test('mostrar vino con ID = 1', (done) =>  {
-    modelVinos.verVino(1, cb_mostrarVino);
-    function cb_mostrarVino(err, result, vino){
-        expect(err).toBe(null);
-        expect(result).toBe(true);
-        expect(vino.id).toBe(1);
-        done();
+  test('mostrar vino con ID = 1', async () => {
+    const [result] = await modelVinos.find(1);
+
+    expect(result).not.toBe(undefined);
+    expect(result.id).toBe(1);
+  });
+
+  test('mostrar vino que no existe', async () => {
+    let result;
+    let err;
+
+    try {
+      [result] = await modelVinos.find(100000000);
+    } catch (e) {
+      err = e;
     }
-});
 
-test('mostrar vino que no existe', (done) =>  {
-    modelVinos.verVino(100000000, cb_mostrarVino);
-    function cb_mostrarVino(err, result, vino){
-        expect(err).toBe(null);
-        expect(result).toBe(false);
-        expect(vino).toBe(-1);
-        done();
-    }
+    expect(result).toBe(undefined);
+    expect(err).toBe(undefined);
+  });
 });

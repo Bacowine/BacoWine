@@ -21,7 +21,7 @@ if(fs.existsSync('/etc/letsencrypt/live/bacowine.live/fullchain.pem') && fs.exis
 };
 
 //LANZAMIENTO DEL SERVIDOR
-const PORT = config.App.PORT || 80;
+const PORT = config.App.port || 80;
 
 http.createServer(app).listen(PORT, function(err){
   if(err){ 
