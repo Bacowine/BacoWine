@@ -32,8 +32,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
-      name: develop
-      url: 'https://dev.bacowine.live'
+      name: production
+      url: 'https://bacowine.live'
     steps:
       - name: Deploy to develop
         uses: appleboy/ssh-action@master
