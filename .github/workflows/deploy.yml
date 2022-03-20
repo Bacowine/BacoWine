@@ -18,10 +18,10 @@ jobs:
       name: develop
       url: 'https://dev.bacowine.live'
     steps:
-      - name: Deploy to develop
+      - name: Rebuild docker
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.GCP_DEV_HOST }}
+          host: dev.bacowine.live
           username: dev
           key: ${{ secrets.GCP_PRIVATE_KEY }}
           port: 22
@@ -35,10 +35,10 @@ jobs:
       name: production
       url: 'https://bacowine.live'
     steps:
-      - name: Deploy to develop
+      - name: Rebuild docker
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.GCP_PROD_HOST }}
+          host: bacowine.live
           username: dev
           key: ${{ secrets.GCP_PRIVATE_KEY }}
           port: 22
