@@ -1,0 +1,45 @@
+name: Google Compute Engine
+
+on:
+  push:
+    paths-ignore:
+      - ".github/**"
+      - "*.md"
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+jobs:  
+  deployDev:
+    name: Deploy to develop
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment:
+      name: develop
+      url: 'https://dev.bacowine.live'
+    steps:
+      - name: Deploy to develop
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.GCP_DEV_HOST }}
+          username: dev
+          key: ${{ secrets.GCP_PRIVATE_KEY }}
+          port: 22
+          script: cd /opt/BacoWine/ && sudo git pull && cd .docker && sudo docker-compose up --build -d
+
+  deployProd:
+    name: Deploy to production
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: 'https://bacowine.live'
+    steps:
+      - name: Deploy to develop
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.GCP_PROD_HOST }}
+          username: dev
+          key: ${{ secrets.GCP_PRIVATE_KEY }}
+          port: 22
+          script: cd /opt/BacoWine/ && sudo git pull && cd .docker && sudo docker-compose up --build -d
