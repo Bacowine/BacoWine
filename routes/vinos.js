@@ -3,6 +3,6 @@ const cVinos = require('../controllers/controllerVinos');
 
 const router = express.Router();
 
-router.post('/mostrarVino', cVinos.verVinos);
+router.get('/mostrarVino', cVinos.verVino);
 
 module.exports = router;
