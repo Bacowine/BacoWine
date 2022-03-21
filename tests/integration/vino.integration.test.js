@@ -1,5 +1,5 @@
-const pool = require('../models/db');
-const modelVinos = require('../models/modelVinos');
+const pool = require('../../models/db');
+const modelVinos = require('../../models/modelVinos');
 
 describe('mostrar vino', () => {
   afterAll(() => {
