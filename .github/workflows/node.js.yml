@@ -11,6 +11,13 @@ jobs:
   tests:
     # Checkout the Repo
     runs-on: ubuntu-latest
+    env:
+      MYSQLDB_HOST: ${{ secrets.MYSQLDB_HOST }}
+      MYSQLDB_USER: ${{ secrets.MYSQLDB_USER }}
+      MYSQLDB_ROOT_PASSWORD: ${{ secrets.MYSQLDB_ROOT_PASSWORD }}
+      MYSQLDB_DATABASE: ${{ secrets.MYSQLDB_DATABASE }}
+      MYSQLDB_PORT: ${{ secrets.MYSQLDB_PORT }}
+      NODE_PORT: ${{ secrets.NODE_PORT }}
     steps:
     - uses: actions/checkout@v2
     
