@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body>
+    <h1>Detalles vino <%= vino.id %></h1>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-5">
+          <img src="data:image/png;base64, <%= vino.foto %>" class="img-fluid" alt="Foto vino">
+        </div>
+        <div class="col-7">
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">Nombre</span>
+            </div>
+            <input type="text" value="<%=vino.nombre%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">Clase</span>
+            </div>
+            <input type="text" value="<%=vino.clase%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">tipo</span>
+            </div>
+            <input type="text" value="<%=vino.tipo%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">graduacion</span>
+            </div>
+            <input type="text" value="<%=vino.graduacion%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">bodega</span>
+            </div>
+            <input type="text" value="<%=vino.bodega%>" class="form-control" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend col-4">
+              <span class="input-group-text">localidades</span>
+            </div>
+            <input type="text" value="<%=vino.localidades%>" class="form-control" readonly>
+          </div>   
+
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
