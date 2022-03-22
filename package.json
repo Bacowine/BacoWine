@@ -3,23 +3,31 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "test": "jest"
+    "start": "node ./bin/www",
+    "dev": "nodemon -r dotenv/config --watch '**/*' -e 'js,mjs,json,ejs' ./bin/www dotenv_config_path=./.env",
+    "test": "jest --silent --forceExit --coverage --detectOpenHandles",
+    "test:nocoverage": "jest --silent --detectOpenHandles"
   },
-  
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "dotenv": "^16.0.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "fs": "0.0.1-security",
     "http-errors": "~1.6.3",
     "https": "^1.0.0",
     "morgan": "~1.9.1",
-    "mysql": "^2.18.1"
+    "mysql2": "^2.3.3"
   },
   "devDependencies": {
-    "jest": "^27.5.1"
+    "@jest-mock/express": "^1.4.5",
+    "@types/jest": "^27.4.1",
+    "dotenv": "^16.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   }
 }
