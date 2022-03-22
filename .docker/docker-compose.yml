@@ -13,6 +13,9 @@ services:
       - ../mysql-init-files:/docker-entrypoint-initdb.d
   app:
     env_file: ./.env
+    environment:
+      - MYSQLDB_PORT=$MYSQLDB_DOCKER_PORT
+      - NODE_PORT=$NODE_DOCKER_PORT
     depends_on:
       - mysqldb
     build:
