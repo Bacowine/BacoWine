@@ -1,59 +1,39 @@
+const modelBodega = require('../models/modelBodega');
 
-const config = require("../config");
-const mysql = require("mysql");
-var pool = mysql.createPool(config.BDconfig);
-const MBodega = require("../models/modelBodega");
-const modelBodega = new MBodega(pool);
+const controllerBodega = {};
 
-class controllerBodega{
+controllerBodega.mostrarDetallesBodega = async (request, response) => {
+  const { id } = request.query;
 
-    mostrarDetallesBodega(request, response){
-        //console.log("Bodega1: " + request.query.id);
-        let id = request.query.id;
-
-        if(id === undefined || id == null){
-            response.status(500);
-            response.render("error", {message:"El id no puede estar vacío"});
-        }else if(isNaN(id)){
-            response.status(500);
-            response.render("error", {message:"El id tiene que ser un número"});
-        }else{
-            modelBodega.mostrarDetBodega(id, cb_mostrarBodega);
-
-            function cb_mostrarBodega(err, result, row){
-                //console.log("Bodega2: ");
-                if (err) {
-                    response.status(500);
-                    response.render("error", {message:"Error interno de acceso a la base de datos" + err});
-                } else{
-                    if(result == true){
-                        //console.log(row);
-                        
-                        row.foto = row.foto.toString('base64');
-                        
-                        const bodega = {
-                            foto:row.foto,
-                            nombre:row.nombre,
-                            anyo:row.anyoCreacion,
-                            localizacion:row.localizGeo,
-                            descripcion:row.descripcion,
-                            origen:row.denominOrigen
-                          };
-                        response.bodega = bodega;
-                        //console.log(response.bodega);
-                        response.render('bodega_detalles', { title: 'BacoWine DEV', id, bodega });
-                    }
-                    else{
-                        //no content - ERROR 204
-                        response.status(204);
-                        response.render("mostrarDetallesBodega", {res:null, bodega: {}});
-                        //response.render("error", {message:"Error interno de acceso a la base de datos"});
-                    }
-                }
-            }
-        }
+  if (id === undefined || id == null) {
+    response.status(500);
+    response.render('error', { message: 'El id no puede estar vacío', error: { status: '', stack: '' } });
+  } else if (Number.isNaN(id)) {
+    response.status(500);
+    response.render('error', { message: 'El id tiene que ser un número', error: { status: '', stack: '' } });
+  } else {
+    try {
+      const [row] = await modelBodega.find(id);
+      if (row !== undefined) {
+        const bodega = {
+          foto: row.foto.toString('base64'),
+          nombre: row.nombre,
+          anyo: row.anyoCreacion,
+          localizacion: row.localizGeo,
+          descripcion: row.descripcion,
+          origen: row.denominOrigen,
+        };
+        response.render('bodega_detalles', { title: 'BacoWine DEV', id, bodega });
+      } else {
+        response.status(500);
+        response.render('error', { message: 'No existe la bodega con ese ID', error: { status: '', stack: '' } });
+      }
+    } catch (e) {
+      console.error(e);
+      response.status(500);
+      response.render('error', { message: 'Error interno de acceso a la base de datos', error: { status: '', stack: '' } });
     }
-
-}
+  }
+};
 
 module.exports = controllerBodega;

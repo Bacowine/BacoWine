@@ -1,17 +1,12 @@
-var express = require('express');
-const controllerBodega = require('../controllers/controllerBodega.js');
-var router = express.Router();
+const express = require('express');
+const controllerBodega = require('../controllers/controllerBodega');
 
-//BORRAR DESPUES DE HACER MODELO Y CONTROLLER
-const modelBodega = require('../models/modelBodega.js');
-const bod = new modelBodega();
-const CBodega = new controllerBodega();
-//<--
+const router = express.Router();
 
-router.get('/', function(req, res, next) {
-  res.send("VISTA PRINCIPAL");
+router.get('/', (_req, res) => {
+  res.send('VISTA PRINCIPAL');
 });
 
-router.get('/detalles', CBodega.mostrarDetallesBodega);
+router.get('/detalles', controllerBodega.mostrarDetallesBodega);
 
 module.exports = router;
