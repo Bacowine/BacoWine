@@ -12,6 +12,19 @@ describe('agregar bodega', () => {
         expect(result).not.toBeNaN();
     });
 
+    test('agregar bodega con anyo incorrecto', async () => {
+
+
+        try {
+            const [result] = await modelBodega.add('Azpilicueta', '*&*&(', 'Rioja', 'Muy bonito', 'Rioja', null);
+        }
+        catch(e) {
+            err = e;
+        }
+        expect(result).toBe(undefined);
+        expect(err).toBe(undefined);
+    });
+
     test('agregar bodega con valores no alfanumericos', async () => {
         let result;
         let err;
