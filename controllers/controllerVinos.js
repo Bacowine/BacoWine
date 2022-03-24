@@ -31,7 +31,7 @@ controllerVinos.agregarVino = async (request, response) => {
   const {
     nombre, clase, tipo, gradoAlcohol, bodega, localidad,
   } = request.body;
-  const [imagen] = request.file;
+  const [imagen] = request.files;
   try {
     const id = await modelVinos.insert([
       nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen.buffer
