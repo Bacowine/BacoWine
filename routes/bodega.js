@@ -8,8 +8,9 @@ router.get('/', (_req, res) => {
 });
 
 router.get('/agregarBodega', (_req, res) => {
-    res.render('agregarBodega', { title: 'BacoWine DEV' });
-  });
-router.get('/insertarBodega', controllerBodega.insertarBodega);
+  res.render('agregarBodega', { title: 'BacoWine DEV' });
+});
+router.post('/agregarBodega', controllerBodega.insertarBodega);
+router.get('/detalles', controllerBodega.mostrarDetallesBodega);
 
 module.exports = router;

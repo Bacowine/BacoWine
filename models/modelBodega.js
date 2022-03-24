@@ -1,37 +1,19 @@
-"use strict";
+const pool = require('./db');
 
-class modelBodega {
-    contructor(pool){
-        this.pool = pool;
-    }
+const modelBodega = {};
 
+modelBodega.find = async (id) => {
+  const sql = pool.format('SELECT * FROM bodegas where id = ? and activo = 1', [id]);
+  const [result] = await pool.promise().query(sql);
+  console.log(sql);
+  return result;
+};
 
-    InsertarBodega (id, callback){
-       this.pool.getConnection(function(err, connection) {
-          if (err) {
-             callback(new Error("Error de conexion a la base de datos:" + err));
-          }
-          else {
-              const sql = "INSERT INTO bodega (id,nombre,anyoCreacion,localizGeo,descripcion,denominOrigen)";
-              connection.query(sql, [id], function(err, rows) {
-                    connection.release(); // devolver al pool la conexión
-                     if (err) {
-                        callback(new Error("Error de acceso a la base de datos:" + err));
-                     }
-                     else {
-                         console.log(rows);
-                             if (rows.length === 0) {
-                                 callback(null, false, -1);
-                             }
-                             else {
-                                  callback(null, true, rows[0]);
-                             }
-                     }
-              });
-          }
-       });
-    }
-}
+modelBodega.add = async (rows) => {
+  const sql = pool.format('INSERT INTO bodegas (nombre,anyoCreacion,localizGeo,descripcion,denominOrigen,foto) VALUES (?)', [rows]);
+  const [result] = await pool.promise().query(sql);
+  console.log(sql.substring(0, 500));
+  return result.insertId;
+};
 
-
-   module.exports = modelBodega;
+module.exports = modelBodega;

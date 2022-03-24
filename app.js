@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
+var bodegaRouter = require('./routes/bodega');
 var vinosRouter = require('./routes/vinos');
 var bodegaRouter = require('./routes/bodega');
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/bodega', bodegaRouter);
 app.use('/vinos', vinosRouter);
 app.use('/bodega', bodegaRouter);
 
