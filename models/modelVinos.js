@@ -9,10 +9,10 @@ modelVinos.find = async (id) => {
   return result;
 };
 
-modelVinos.insert = async (nombre, clase, tipo, graduacion, bodega, localidades, foto) => {
+modelVinos.insert = async (rows) => {
   const sql = pool.format(
-      'INSERT INTO usuarios(nombre, clase, tipo, graduacion, bodega, localidades, foto, activo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
-        [nombre, clase, tipo, graduacion, bodega, localidades, foto, 1]);
+      'INSERT INTO vino(nombre, clase, tipo, graduacion, bodega, localidades, foto, activo) VALUES(?, 1)',
+        [rows]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
   return result;

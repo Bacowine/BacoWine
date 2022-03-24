@@ -12,5 +12,6 @@ router.get('/agregarVino', (req, res) => {
 });
 
 router.get('/mostrarVino', cVinos.verVino);
+router.post('/agregarVino', cVinos.agregarVino);
 
 module.exports = router;

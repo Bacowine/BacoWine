@@ -27,4 +27,21 @@ controllerVinos.verVino = async (request, response) => {
   }
 };
 
+controllerVinos.agregarVino = async (request, response) => {
+  const {
+    nombre, clase, tipo, gradoAlcohol, bodega, localidad,
+  } = request.body;
+  const [imagen] = request.file;
+  try {
+    const id = await modelVinos.insert([
+      nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen.buffer
+    ]);
+    response.render('agregarVino', { id });
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    response.render('error', { message: 'Error interno de acceso a la base de datos', error: { status: '', stack: '' } });
+  }
+};
+
 module.exports = controllerVinos;
