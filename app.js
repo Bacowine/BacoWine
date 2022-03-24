@@ -7,6 +7,7 @@ var indexRouter = require('./routes/index');
 var bodegaRouter = require('./routes/bodega');
 var vinosRouter = require('./routes/vinos');
 var bodegaRouter = require('./routes/bodega');
+const multer = require('multer');
 
 var app = express();
 
@@ -18,6 +19,7 @@ app.set('view engine', 'ejs');
 if(app.get('env') !== 'test') app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(multer().any());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

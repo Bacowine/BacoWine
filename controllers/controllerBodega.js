@@ -36,4 +36,21 @@ controllerBodega.mostrarDetallesBodega = async (request, response) => {
   }
 };
 
+controllerBodega.insertarBodega = async (request, response) => {
+  const {
+    nombre, anyoCreacion, localizGeo, descripcion, denominOrigen,
+  } = request.body;
+  const [imagen] = request.files;
+  try {
+    const id = await modelBodega.add([
+      nombre, anyoCreacion, localizGeo, descripcion, denominOrigen, imagen.buffer,
+    ]);
+    response.render('agregarBodega', { id });
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    response.render('error', { message: 'Error interno de acceso a la base de datos', error: { status: '', stack: '' } });
+  }
+};
+
 module.exports = controllerBodega;
