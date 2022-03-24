@@ -11,7 +11,7 @@
     <p>Welcome to the <%= title %></p>
     <div class="container">
       <div class="row">
-        <div class="col">
+        <div class="col-8">
           <p class="h1">Ir a Vinos</p>
             <form class="form-group row" method="GET" action="vinos/mostrarVino">
               <div class="col-6">
@@ -23,6 +23,11 @@
                 <input class="btn btn-primary m-4" type="submit" value="MostrarVino">
               </div>
             </form>
+        </div>
+        <div class = "col-4">
+          <form class="form-group row" method="GET" action="vinos/agregarVino">
+          <input class="btn btn-primary m-4" type="submit" value="AñadirVino">
+        </form>
         </div>
         
       </div>
