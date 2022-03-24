@@ -9,7 +9,7 @@
 <body>
     <div class="text-center"><h1>Agregar Bodega</h1></div>
     <div class="container">
-        <% if(id) { %>
+        <% if(typeof id !== 'undefined') { %>
             <div class="row"> 
                 <div class="alert alert-success" role="alert">
                     Insertada bodega correctamente con id <%= id %>
