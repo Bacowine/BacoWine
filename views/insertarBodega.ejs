@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agregar Vino</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+    <div class="text-center"><h1>Agregar Bodega</h1></div>
+    <div class="container">
+        <div class="row"> 
+            <form action="/insertarBodega" method="POST">
+                <div class="row mt-1">
+                    <h3>Nombre:</h3> <input class="form-control-lg" name="nombre" type="text">
+                </div>
+                <div class="row mt-1">
+                    <h3>Año de creación:</h3> <input class="form-control-lg" name="clase" type="text">
+                </div>
+                <div class="row mt-1">
+                    <h3>Localización geográfica:</h3> <input class="form-control-lg" name="tipo" type="text">
+                </div>
+                <div class="row mt-1">
+                    <h3>Descripción:</h3> <input class="form-control-lg" name="gradoAlcohol" type="text">
+                </div>
+                <div class="row mt-1">
+                    <h3>Denominaciones de Origen:</h3> <input class="form-control-lg" name="bodega" type="text">
+                </div>
+                <div class="row mt-1">
+                    <h3>Imagen:</h3> <input type="file" name="imagen" class="form-control-lg" accept="image/png,image/jpeg">
+                </div>
+                <div class="row mt-1">
+                    <button type="submit" class="btn menu boton-buscar btn-dark "><h2>Agregar</h2></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
