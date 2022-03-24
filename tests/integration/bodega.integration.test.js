@@ -9,7 +9,8 @@ describe('agregar bodega', () => {
     test('agregar bodega con alfanumericos', async () => {
         const [result] = await modelBodega.add('Azpilicueta', 1929, 'Rioja', 'Muy bonito', 'Rioja', null);
 
-        expect(result).not.toBeNaN();
+        //expect(result).not.toBeNaN();
+        expect(result).toEqual(expect.any(Number));
     });
 
     test('agregar bodega con anyo incorrecto', async () => {
