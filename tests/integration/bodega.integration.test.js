@@ -33,18 +33,4 @@ describe('agregar bodega', () => {
     expect(result).toBe(undefined);
     expect(err).toBeInstanceOf(Error);
   });
-
-  test('agregar bodega con valores no alfanumericos', async () => {
-    let result;
-    let err;
-
-    try {
-      result = await modelBodega.add(['+*-', ')&*^', '*/*-*', '+++', '@#$', 0]);
-    } catch (e) {
-      err = e;
-    }
-
-    expect(result).toBe(undefined);
-    expect(err).toBeInstanceOf(Error);
-  });
 });
