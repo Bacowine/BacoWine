@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "dev": "nodemon -r dotenv/config --watch '**/*' -e 'js,mjs,json,ejs' ./bin/www dotenv_config_path=./.env",
     "test": "jest --silent --forceExit --coverage --detectOpenHandles",
-    "test:nocoverage": "jest --silent --detectOpenHandles"
+    "test:nocoverage": "jest --silent --detectOpenHandles",
+    "test:dev": "jest --silent --forceExit --coverage --detectOpenHandles --setupFiles dotenv/config"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
