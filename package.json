@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon -r dotenv/config --watch '**/*' -e 'js,mjs,json,ejs' ./bin/www dotenv_config_path=./.env",
-    "test": "jest --silent --forceExit --coverage --detectOpenHandles",
+    "test": "jest --forceExit --coverage --detectOpenHandles --setupFiles dotenv/config",
     "test:nocoverage": "jest --silent --detectOpenHandles"
   },
   "dependencies": {
