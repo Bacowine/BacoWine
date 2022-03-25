@@ -5,20 +5,15 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
-
+<script>document.body.innerHTML += "<div class='row mt-1'> "</script>
 <body>
     <div class="text-center"><h1>Agregar Vino</h1></div>
     <div class="container">
         <div class="row"> 
             <form action="/vinos/agregarVino" enctype="multipart/form-data" method="POST">
                 <div class="row mt-1">
-                    <h3>Nombre:</h3> <input class="form-control-lg" name="nombre" type="text">
-                </div>
-                <div class="row mt-1">
-                    <h3>Clase:</h3> <input class="form-control-lg" name="clase" type="text">
-                </div>
-                <div class="row mt-1">
-                    <h3>Tipo:</h3> <input class="form-control-lg" name="tipo" type="text">
+                    <h3>Nombre:</h3> 
+                    <input class="form-control-lg" name="nombre" type="text">
                 </div>
                 <div class="row mt-1">
                     <h3>Grado Alcoholico:</h3> <input class="form-control-lg" name="gradoAlcohol" type="text">
@@ -30,10 +25,51 @@
                     <h3>Localidad:</h3> <input class="form-control-lg" name="localidad" type="text">
                 </div>
                 <div class="row mt-1">
-                    <h3>Imagen:</h3> <input type="file" name="imagen" class="form-control-lg" accept="image/png,image/jpeg">
+                    <div class="col">
+                        <h3>Clase:</h3> 
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked>Tranquilo
+                            <label class="form-check-label" for="radio1"></label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio" value="option2">Option 2
+                            <label class="form-check-label" for="radio2"></label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" disabled>Option 3
+                            <label class="form-check-label"></label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h3>Tipo:</h3>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked>Option 1
+                            <label class="form-check-label" for="radio1"></label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio" value="option2">Option 2
+                            <label class="form-check-label" for="radio2"></label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" disabled>Option 3
+                            <label class="form-check-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-1" id="pepito">
+
+
                 </div>
                 <div class="row mt-1">
-                    <button type="submit" class="btn menu boton-buscar btn-dark "><h2>Agregar</h2></button>
+                    <h3>Imagen:</h3> <input type="file" name="imagen" class="form-control-lg" accept="image/png,image/jpeg">
+                </div>
+                <div class="row mt-4">
+                    <div class="col d-grid">
+                        <button type="submit" class="btn menu boton-buscar btn-dark "><h2>Agregar</h2></button>
+                    </div>
+                    <div class="col d-grid">
+                        <a type="button" href="/" class="btn btn-lg btn-dark " ><h2>Volver</h2></a>
+                    </div>
                 </div>
             </form>
         </div>
