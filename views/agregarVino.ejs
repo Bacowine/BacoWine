@@ -5,7 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
-<script>document.body.innerHTML += "<div class='row mt-1'> "</script>
+
 <body>
     <div class="text-center"><h1>Agregar Vino</h1></div>
     <div class="container">
@@ -56,10 +56,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-1" id="pepito">
-
-
-                </div>
+                <div class="row mt-1">
+                    <button id="AgregaPorcentaje">Agregar</button>
+                </div>                
+                
                 <div class="row mt-1">
                     <h3>Imagen:</h3> <input type="file" name="imagen" class="form-control-lg" accept="image/png,image/jpeg">
                 </div>
@@ -75,4 +75,13 @@
         </div>
     </div>
 </body>
+<script>
+    document.getElementById("AgregaPorcentaje").addEventListener("click", function (evt){
+        evt.preventDefault();
+        let btn = evt.currentTarget;
+        btn.parentNode.append(document.createElement("input"));
+        console.log(evt.currentTarget);
+    });
+    
+</script>
 </html>
