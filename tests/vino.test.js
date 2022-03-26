@@ -1,10 +1,15 @@
 const pool = require('../models/db');
 const modelVinos = require('../models/modelVinos');
+const CVinos = require('../controllers/controllerVinos.js');
+const fs = require("fs");
+const { exitCode } = require('process');
+
+afterAll(() => {
+
+});
+
 
 describe('mostrar vino', () => {
-  afterAll(() => {
-    pool.end();
-  });
 
   test('mostrar vino con ID = 1', async () => {
     const [result] = await modelVinos.find(1);
@@ -27,3 +32,22 @@ describe('mostrar vino', () => {
     expect(err).toBe(undefined);
   });
 });
+
+describe('añadir vino', () => {
+
+  test('Añadir vino ejemplo modelo', async () => {
+    let img = fs.readFileSync(__dirname + "/img/shopping.jpg");
+    let id = await modelVinos.insert(["CM 2017", "Tinto", "Tranquilo", 14, "Carlos Moro", "rioja", img]);
+    expect(id).not.toBe(undefined);
+    const sql = pool.format("DELETE FROM vino WHERE nombre = ?", ["CM 2017"]);
+    pool.promise().query(sql);
+  });
+
+  test('Añadir vino ejemplo modelo INVALIDO', async () => {
+    let id = await modelVinos.insert([]);
+    expect(id).not.toBe(undefined);
+    const sql = pool.format("DELETE FROM vino WHERE nombre = ?", ["CM 2017"]);
+    pool.promise().query(sql);
+  });
+});
+
