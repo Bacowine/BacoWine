@@ -28,13 +28,19 @@ controllerVinos.verVino = async (request, response) => {
 };
 
 controllerVinos.agregarVino = async (request, response) => {
+  const alert = request.errors;
+  if (alert.length > 0) {
+    response.render('agregarVino', { alert });
+    return;
+  }
+
   const {
     nombre, clase, tipo, gradoAlcohol, bodega, localidad,
   } = request.body;
-  const [imagen] = request.files;
+  const imagen = request.files[0] ? request.files[0].buffer : null;
   try {
     const id = await modelVinos.insert([
-      nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen.buffer
+      nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen.buffer,
     ]);
     response.render('agregarVino', { id });
   } catch (e) {

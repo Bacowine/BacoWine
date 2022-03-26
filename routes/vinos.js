@@ -1,5 +1,7 @@
 const express = require('express');
 const cVinos = require('../controllers/controllerVinos');
+const vinoSchema = require('../validators/vino.validator');
+const validate = require('../middlewares/schemaValidator');
 
 const router = express.Router();
 
@@ -12,6 +14,6 @@ router.get('/agregarVino', (req, res) => {
 });
 
 router.get('/mostrarVino', cVinos.verVino);
-router.post('/agregarVino', cVinos.agregarVino);
+router.post('/agregarVino', validate(vinoSchema), cVinos.agregarVino);
 
 module.exports = router;

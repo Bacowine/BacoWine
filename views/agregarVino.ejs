@@ -11,6 +11,17 @@
     <div class="container">
         <div class="row"> 
             <form class="needs-validation" action="/vinos/agregarVino" enctype="multipart/form-data" method="POST" novalidate>
+
+            <% if(typeof alert != 'undefined') { %> 
+                <% alert.forEach( (error) => { %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <%= error.msg %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% }); %> 
+            <% } %> 
+
+            <form action="/vinos/agregarVino" enctype="multipart/form-data" method="POST">
                 <div class="row mt-1">
                     <label for="validationCustom01" class="form-label">Nombre</label>
                     <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" required>
@@ -99,26 +110,27 @@
             </form>
         </div>
     </div>
+    <script src="/javascripts/bootstrap.bundle.min.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+        'use strict'
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+    
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+                }
+    
+                form.classList.add('was-validated')
+            }, false)
+            })
+        })()
+    </script>
 </body>
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function () {
-    'use strict'
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation')
-
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-            }
-
-            form.classList.add('was-validated')
-        }, false)
-        })
-    })()
-</script>
 </html>
