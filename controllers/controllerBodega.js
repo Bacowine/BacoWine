@@ -2,15 +2,15 @@ const modelBodega = require('../models/modelBodega');
 
 const controllerBodega = {};
 
-controllerBodega.mostrarDetallesBodega = async (request, response) => {
+controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
   const { id } = request.query;
 
   if (id === undefined || id == null) {
     response.status(500);
-    response.render('error', { message: 'El id no puede estar vacío', error: { status: '', stack: '' } });
+    next(new Error('El id no puede estar vacío'));
   } else if (Number.isNaN(id)) {
     response.status(500);
-    response.render('error', { message: 'El id tiene que ser un número', error: { status: '', stack: '' } });
+    next(new Error('El id tiene que ser un número'));
   } else {
     try {
       const [row] = await modelBodega.find(id);
@@ -26,30 +26,34 @@ controllerBodega.mostrarDetallesBodega = async (request, response) => {
         response.render('bodega_detalles', { title: 'BacoWine DEV', id, bodega });
       } else {
         response.status(500);
-        response.render('error', { message: 'No existe la bodega con ese ID', error: { status: '', stack: '' } });
+        next(new Error('No existe la bodega con ese ID'));
       }
     } catch (e) {
       console.error(e);
       response.status(500);
-      response.render('error', { message: 'Error interno de acceso a la base de datos', error: { status: '', stack: '' } });
+      const err = new Error('Error interno de acceso a la base de datos');
+      err.stack = e.stack;
+      next(err);
     }
   }
 };
 
-controllerBodega.insertarBodega = async (request, response) => {
+controllerBodega.insertarBodega = async (request, response, next) => {
   const {
     nombre, anyoCreacion, localizGeo, descripcion, denominOrigen,
   } = request.body;
-  const [imagen] = request.files;
+  const imagen = request.files[0] ? request.files[0].buffer : null;
   try {
     const id = await modelBodega.add([
-      nombre, anyoCreacion, localizGeo, descripcion, denominOrigen, imagen.buffer,
+      nombre, anyoCreacion, localizGeo, descripcion, denominOrigen, imagen,
     ]);
     response.render('agregarBodega', { id });
   } catch (e) {
     console.error(e);
     response.status(500);
-    response.render('error', { message: 'Error interno de acceso a la base de datos', error: { status: '', stack: '' } });
+    const err = new Error('Error interno de acceso a la base de datos');
+    err.stack = e.stack;
+    next(err);
   }
 };
 

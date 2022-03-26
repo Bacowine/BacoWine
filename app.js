@@ -27,16 +27,18 @@ app.use('/bodega', bodegaRouter);
 app.use('/vinos', vinosRouter);
 
 // catch 404 and forward to error handler
+
 app.use((_req, _res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use((err, req, res) => {
+app.use((err, req, res, _next) => {
   // set locals, only providing error in development
+  res.locals.title = 'Error';
+  res.locals.status = err.status || 500;
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  res.locals.stack = req.app.get('env') === 'development' ? err.stack : '';
   // render the error page
   res.status(err.status || 500);
   res.render('error');
