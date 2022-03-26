@@ -5,27 +5,58 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+    'use strict'
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+        }, false)
+        })
+    })()
+</script>
 <body>
     <div class="text-center"><h1>Agregar Vino</h1></div>
     <div class="container">
         <div class="row"> 
-            <form action="/vinos/agregarVino" enctype="multipart/form-data" method="POST">
+            <form class="needs-validation g-3" action="/vinos/agregarVino" enctype="multipart/form-data" method="POST" novalidate>
                 <div class="row mt-1">
-                    <h3>Nombre:</h3> 
-                    <input class="form-control-lg" name="nombre" type="text">
+                    <label for="validationCustom01" class="form-label">Nombre</label>
+                    <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" novalidatename="nombre" type="text" required/>
+                    <div class="valid-feedback">
+                        Nombre correcto!
+                      </div>
                 </div>
                 <div class="row mt-1">
-                    <h3>Grado Alcoholico:</h3> <input class="form-control-lg" name="gradoAlcohol" type="number" step="0.01" min="0" max="20">
+                    <label for="validationCustom02" class="form-label">Grado alcoholico:</label>
+                    <input class="form-control" id="validationCustom02" minlength="1" maxlength="2" name="gradoAlcohol" type="number" step="0.01" min="0" max="20" required />
+                    <div class="valid-feedback">
+                        Grado alcoholico ciorrecto!
+                      </div>
+                      <div class="invalid-feedback">
+                        Grado alcoholico ciorrecto!
+                      </div>
                 </div>
                 <div class="row mt-1">
-                    <h3>Bodega:</h3> <input class="form-control-lg" name="bodega" type="text">
+                    <h3>Bodega:</h3> <input class="form-control" minlength="1" maxlength="59" name="bodega" type="text" required/>
                 </div>
                 <div class="row mt-1">
-                    <h3>Localidad:</h3> <input class="form-control-lg" name="localidad" type="text">
+                    <h3>Localidad:</h3> <input class="form-control" minlength="1" maxlength="20" name="localidad" type="text" required/>
                 </div>
                 <div class="row mt-1">
                     <h3>Clase:</h3>
-                    <select class="selectpicker form-select form-select-lg" name="clase" data-style="btn-danger" style="border: 2px solid rgb(82, 82, 82);">
+                    <select class="selectpicker form-select form-select" name="clase" data-style="btn-danger">
                         <option>Blanco</option>
                         <option>Rosado</option>
                         <option>Tinto</option>
@@ -57,11 +88,7 @@
                     </div>
                 </div>
                 <div class="row mt-1">
-                    <button id="AgregaPorcentaje">Agregar</button>
-                </div>                
-                
-                <div class="row mt-1">
-                    <h3>Imagen:</h3> <input type="file" name="imagen" class="form-control-lg" accept="image/png,image/jpeg">
+                    <h3>Imagen:</h3> <input type="file" name="imagen" class="form-control" accept="image/png,image/jpeg">
                 </div>
                 <div class="row mt-4">
                     <div class="col d-grid">
