@@ -5,7 +5,6 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
-
 <body>
     <div class="text-center"><h1>Agregar Vino</h1></div>
     <div class="container">
@@ -16,7 +15,7 @@
                     <input class="form-control-lg" name="nombre" type="text">
                 </div>
                 <div class="row mt-1">
-                    <h3>Grado Alcoholico:</h3> <input class="form-control-lg" name="gradoAlcohol" type="text">
+                    <h3>Grado Alcoholico:</h3> <input class="form-control-lg" name="gradoAlcohol" type="number" step="0.01" min="0" max="20">
                 </div>
                 <div class="row mt-1">
                     <h3>Bodega:</h3> <input class="form-control-lg" name="bodega" type="text">
@@ -25,35 +24,36 @@
                     <h3>Localidad:</h3> <input class="form-control-lg" name="localidad" type="text">
                 </div>
                 <div class="row mt-1">
-                    <div class="col">
-                        <h3>Clase:</h3> 
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked>Tranquilo
-                            <label class="form-check-label" for="radio1"></label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio" value="option2">Option 2
-                            <label class="form-check-label" for="radio2"></label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" disabled>Option 3
-                            <label class="form-check-label"></label>
-                        </div>
+                    <h3>Clase:</h3>
+                    <select class="selectpicker form-select form-select-lg" name="clase" data-style="btn-danger" style="border: 2px solid rgb(82, 82, 82);">
+                        <option>Blanco</option>
+                        <option>Rosado</option>
+                        <option>Tinto</option>
+                        <option>Clarete</option>
+                        <option>Blanc de blanc</option>
+                        <option>Blanc de noirs</option>
+                        <option>vino de nueces</option>
+                        <option>vino especiado</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+                <div class="row mt-1">
+                    <h3>Tipo:</h3> 
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="tipo" value="Tranquilo" checked>Tranquilo
+                        <label class="form-check-label" for="radio1"></label>
                     </div>
-                    <div class="col">
-                        <h3>Tipo:</h3>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked>Option 1
-                            <label class="form-check-label" for="radio1"></label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio" value="option2">Option 2
-                            <label class="form-check-label" for="radio2"></label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" disabled>Option 3
-                            <label class="form-check-label"></label>
-                        </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="tipo" value="Espumoso">Espumoso
+                        <label class="form-check-label" for="radio2"></label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="tipo" value="Espirituoso">Espirituoso
+                        <label class="form-check-label"></label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="tipo" value="Vino oloroso">Vino oloroso
+                        <label class="form-check-label"></label>
                     </div>
                 </div>
                 <div class="row mt-1">
