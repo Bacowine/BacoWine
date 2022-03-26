@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="shortcut icon" href="favicon.ico">
+    <%- include('./partials/_head',{title}); %>
   </head>
   <body>
-    <h1>Detalles <%= vino.nombre %></h1>
+    <%- include('./partials/_header'); %>
+    <h1>Detalles vino <%= vino.id %></h1>
     <div class="container-fluid">
       <div class="row">
         <div class="col-5">

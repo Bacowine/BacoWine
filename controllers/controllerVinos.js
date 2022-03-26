@@ -21,8 +21,8 @@ controllerVinos.verVino = async (request, response) => {
       }
     }
   } catch (e) {
+    console.error(e);
     response.status(500);
-
     response.render('error', { message: 'Error con la base de datos', error: { status: '', stack: '' } });
   }
 };

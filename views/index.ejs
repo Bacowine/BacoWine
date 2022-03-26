@@ -1,15 +1,29 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="shortcut icon" href="favicon.ico">
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to the <%= title %></p>
-    <div class="container">
+<html lang="es-ES">
+
+<head>
+  <%- include('./partials/_head',{title}); %>
+</head>
+
+<body>
+  <%- include('./partials/_header'); %>
+
+  <div id="main" class="container">
+    <div class="row">
+      <div class="col">
+        <p class="h1">Ir a Bodegas</p>
+        <form class="form-group row" method="GET" action="bodega/detalles">
+          <div class="col-6">
+            <label for="idBodega">ID:</label>
+            <input type="text" class="form-control" id="idBodega" aria-describedby="bodegaHelp" placeholder="id bodega"
+              name="id" />
+            <small id="bodegaHelp" class="form-text text-muted">Introduce el id de la bodega</small>
+          </div>
+          <div class="col-6">
+            <input class="btn btn-primary m-4" type="submit" value="MostrarBodega" />
+          </div>
+        </form>
+      </div>
       <div class="row">
         <div class="col-8">
           <p class="h1">Ir a Vinos</p>
@@ -30,5 +44,7 @@
         
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
