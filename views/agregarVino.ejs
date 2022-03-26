@@ -8,7 +8,12 @@
     <div class="text-center"><h1>Agregar Vino</h1></div>
     <div class="container">
         <div class="row"> 
-            <form class="needs-validation" action="/vinos/agregarVino" enctype="multipart/form-data" method="POST" novalidate>
+
+            <% if(typeof id !== 'undefined') { %>                
+                <div class="alert alert-success" role="alert">
+                    Insertado vino correctamente con id <%= id %>
+                </div>                
+            <% } %> 
 
             <% if(typeof alert != 'undefined') { %> 
                 <% alert.forEach( (error) => { %>
@@ -18,11 +23,10 @@
                     </div>
                 <% }); %> 
             <% } %> 
-
-            <form action="/vinos/agregarVino" enctype="multipart/form-data" method="POST">
+            <form class="needs-validation" action="/vinos/agregarVino" enctype="multipart/form-data" method="POST" novalidate>
                 <div class="row mt-1">
                     <label for="validationCustom01" class="form-label">Nombre</label>
-                    <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" required>
+                    <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" name="nombre" required>
                     <div class="valid-feedback">
                         Nombre correcto!
                     </div>

@@ -6,8 +6,7 @@ const vinoSchema = checkSchema({
     errorMessage: 'Nombre no puede estar vacio',
     isLength: {
       options: { min: 1, max: 50 },
-      errorMessage: 'Nombre debe tener entre 3 y 50 caracteres',
-      bail: true,
+      errorMessage: 'Nombre debe tener entre 1 y 50 caracteres',
     },
   },
   gradoAlcohol: {
@@ -32,7 +31,7 @@ const vinoSchema = checkSchema({
     errorMessage: 'Localidad no puede estar vacio',
     isLength: {
       options: { min: 1, max: 20 },
-      errorMessage: 'Localidad debe tener entre 1 y 59 caracteres',
+      errorMessage: 'Localidad debe tener entre 1 y 20 caracteres',
     },
   },
   clase: {
@@ -47,7 +46,7 @@ const vinoSchema = checkSchema({
     notEmpty: true,
     errorMessage: 'Tipo no puede estar vacio',
     isIn: {
-      options: [['Blanco', 'Rosado', 'Tinto', 'Clarete', 'Blanc de blanc', 'Blanc de noirs', 'vino de nueces', 'vino especiado', 'Otros']],
+      options: [['Tranquilo', 'Espumoso', 'Espirituoso', 'Vino oloroso']],
       errorMessage: 'Tipo no contiene un tipo correcto',
     },
   },
