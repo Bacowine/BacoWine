@@ -10,39 +10,38 @@
 
   <div id="main" class="container">
     <div class="row">
+      <p class="h1">Bodegas</p>
       <div class="col">
-        <p class="h1">Ir a Bodegas</p>
-        <form class="form-group row" method="GET" action="bodega/detalles">
-          <div class="col-6">
-            <label for="idBodega">ID:</label>
-            <input type="text" class="form-control" id="idBodega" aria-describedby="bodegaHelp" placeholder="id bodega"
-              name="id" />
-            <small id="bodegaHelp" class="form-text text-muted">Introduce el id de la bodega</small>
-          </div>
-          <div class="col-6">
-            <input class="btn btn-primary m-4" type="submit" value="MostrarBodega" />
+        <form class="row" method="GET" action="bodega/detalles">
+          <div class="col input-group mb-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="idBodega" aria-describedby="bodegaHelp"
+                placeholder="id bodega" name="id" />
+              <label for="idBodega">Id de la bodega</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Mostrar Bodega</button>
           </div>
         </form>
       </div>
-      <div class="row">
-        <div class="col-8">
-          <p class="h1">Ir a Vinos</p>
-            <form class="form-group row" method="GET" action="vinos/mostrarVino">
-              <div class="col-6">
-                <label for="">ID:</label>
-                <input type="text" class="form-control" id="idVino" aria-describedby="vinoHelp" placeholder="id vino" name="id">
-                <small id="vinoHelp" class="form-text text-muted">Introduce el id del vino</small>              
-              </div>
-              <div class="col-6">
-                <input class="btn btn-primary m-4" type="submit" value="MostrarVino">
-              </div>
-            </form>
-        </div>
-        <div class = "col-4">
-          <a href="vinos/agregarVino" class="btn btn-primary m-4" type="button">AñadirVino</a>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p class="h1">Vinos <a href="vinos/agregarVino" class="btn btn-warning" role="button">Añadir Vino</a></p>
+        <form class="row" method="GET" action="vinos/mostrarVino">
+          <div class="col input-group mb-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="idVino" aria-describedby="vinoHelp" placeholder="id vino"
+                name="id">
+              <label for="idVino">Id del vino</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Mostrar Vino</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-4">
         
       </div>
+
     </div>
   </div>
 </body>
