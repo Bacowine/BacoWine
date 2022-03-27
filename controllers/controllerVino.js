@@ -1,8 +1,8 @@
-const modelVinos = require('../models/modelVinos');
+const modelVino = require('../models/modelVino');
 
-const controllerVinos = {};
+const controllerVino = {};
 
-controllerVinos.verVino = async (request, response, next) => {
+controllerVino.verVino = async (request, response, next) => {
   const { id } = request.query;
 
   if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
@@ -10,7 +10,7 @@ controllerVinos.verVino = async (request, response, next) => {
     next(new Error('El id tiene que ser un número válido'));
   } else {
     try {
-      const [rows] = await modelVinos.find(request.query.id);
+      const [rows] = await modelVino.find(request.query.id);
       console.log(rows);
       if (rows === undefined) {
         response.status(500);
@@ -28,7 +28,7 @@ controllerVinos.verVino = async (request, response, next) => {
   }
 };
 
-controllerVinos.agregarVino = async (request, response, next) => {
+controllerVino.agregarVino = async (request, response, next) => {
   const alert = request.errors;
   if (alert.length > 0) {
     response.render('agregarVino', { alert });
@@ -41,7 +41,7 @@ controllerVinos.agregarVino = async (request, response, next) => {
   let imagen;
   if (request.files) imagen = request.files[0] ? request.files[0].buffer : null;
   try {
-    const id = await modelVinos.insert([
+    const id = await modelVino.insert([
       nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen,
     ]);
     response.render('agregarVino', { id });
@@ -53,4 +53,4 @@ controllerVinos.agregarVino = async (request, response, next) => {
   }
 };
 
-module.exports = controllerVinos;
+module.exports = controllerVino;

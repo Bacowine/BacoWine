@@ -1,7 +1,7 @@
 const fs = require('fs');
 const pool = require('../models/db');
-const modelVinos = require('../models/modelVinos');
-const CVinos = require('../controllers/controllerVinos');
+const modelVinos = require('../models/modelVino');
+const CVinos = require('../controllers/controllerVino');
 
 describe('vino', () => {
   afterAll(() => {

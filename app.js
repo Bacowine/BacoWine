@@ -9,7 +9,7 @@ const multer = require('multer');
 
 const indexRouter = require('./routes/index');
 const bodegaRouter = require('./routes/bodega');
-const vinosRouter = require('./routes/vinos');
+const vinoRouter = require('./routes/vino');
 
 const app = express();
 
@@ -28,7 +28,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/bodega', bodegaRouter);
-app.use('/vinos', vinosRouter);
+app.use('/vino', vinoRouter);
 
 // catch 404 and forward to error handler
 
