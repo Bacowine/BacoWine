@@ -66,7 +66,7 @@ controllerVino.borrarVino = async (request, response, next) => {
         next(new Error('No existe el vino con ese ID'));
       } else { 
         await modelVino.borrarVino(request.query.id);
-        //response.render('index',{title : 'Bacowine dev'});
+        response.redirect('/');
       }
     }
     catch (e) {
