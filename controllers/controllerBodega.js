@@ -2,15 +2,15 @@ const modelBodega = require('../models/modelBodega');
 
 const controllerBodega = {};
 
-controllerBodega.mostrarDetallesBodega = async (request, response) => {
+controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
   const { id } = request.query;
 
   if (id === undefined || id == null) {
     response.status(500);
-    response.render('error', { message: 'El id no puede estar vacío', error: { status: '', stack: '' } });
+    next(new Error('El id no puede estar vacío'));
   } else if (Number.isNaN(id)) {
     response.status(500);
-    response.render('error', { message: 'El id tiene que ser un número', error: { status: '', stack: '' } });
+    next(new Error('El id tiene que ser un número'));
   } else {
     try {
       const [row] = await modelBodega.find(id);
@@ -26,12 +26,13 @@ controllerBodega.mostrarDetallesBodega = async (request, response) => {
         response.render('bodega_detalles', { title: 'BacoWine DEV', id, bodega });
       } else {
         response.status(500);
-        response.render('error', { message: 'No existe la bodega con ese ID', error: { status: '', stack: '' } });
+        next(new Error('No existe la bodega con ese ID'));
       }
     } catch (e) {
       console.error(e);
       response.status(500);
-      response.render('error', { message: 'Error interno de acceso a la base de datos', error: { status: '', stack: '' } });
+      e.message = 'Error interno de acceso a la base de datos';
+      next(e);
     }
   }
 };

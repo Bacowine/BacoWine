@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-ES">
 <head>
   <%- include('./partials/_head',{title:message}); %>
+  <link rel='stylesheet' href='/static/stylesheets/error.css' />
 </head>
 <body>
-  <%- include('./partials/_header'); %>
-  <h1><%= message %></h1>
-  <h2><%= error.status %></h2>
-  <pre><%= error.stack %></pre>
+  <div id="notfound">
+    <div class="notfound">
+      <div class="notfound-404"></div>
+      <h1><%=status%></h1>
+      <h2><%=message%></h2>
+      <pre><%=stack%></pre>
+      <a href="/">Ir al inicio</a>
+    </div>
+  </div>
 </body>
 </html>
-
-
