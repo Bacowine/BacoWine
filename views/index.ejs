@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="shortcut icon" href="favicon.ico">
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to the <%= title %></p>
-    <div class="container">
-      <div class="card">
-        <p class="h1">Gestion de usuarios</p>
-        <a class="h4" href="/gestionUsuarios">Ir a la gestion de usuarios</a>
-      </div>
+<html lang="es-ES">
+
+<head>
+  <%- include('./partials/_head',{title}); %>
+</head>
+
+<body>
+  <%- include('./partials/_header'); %>
+
+  <div id="main" class="container">
+    <div class="row">
+      <p class="h1">Bodegas <a href="bodega/agregarBodega" class="btn btn-warning" role="button">Añadir Bodega</a></p>
+      <form class="row" method="GET" action="bodega/detalles">
+        <div class="col input-group mb-3">
+          <div class="form-floating">
+            <input type="number" autocomplete="off" class="form-control" id="idBodega" aria-describedby="bodegaHelp"
+              placeholder="id bodega" name="id" />
+            <label for="idBodega">Id de la bodega</label>
+          </div>
+          <button class="btn btn-primary" type="submit">Mostrar Bodega</button>
+        </div>
+      </form>
     </div>
-  </body>
+    <div class="row">
+      <p class="h1">Vinos <a href="vino/agregarVino" class="btn btn-warning" role="button">Añadir Vino</a></p>
+      <form class="row" method="GET" action="vino/detalles">
+        <div class="col input-group mb-3">
+          <div class="form-floating">
+            <input type="number" autocomplete="off" class="form-control" id="idVino" aria-describedby="vinoHelp" placeholder="id vino"
+              name="id">
+            <label for="idVino">Id del vino</label>
+          </div>
+          <button class="btn btn-primary" type="submit">Mostrar Vino</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
 </html>
