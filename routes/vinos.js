@@ -5,11 +5,11 @@ const validate = require('../middlewares/schemaValidator');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('jjsaasjasj que pro soy mira');
+router.get('/', (_req, res) => {
+  res.redirect('agregarVino');
 });
 
-router.get('/agregarVino', (req, res) => {
+router.get('/agregarVino', (_req, res) => {
   res.render('agregarVino');
 });
 

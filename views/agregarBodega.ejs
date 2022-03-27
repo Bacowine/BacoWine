@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Agregar Bodega</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <%- include('./partials/_head',{title:'Agregar Bodega'}); %>
 </head>
-
 <body>
+    <%- include('./partials/_header'); %>
     <div class="text-center"><h1>Agregar Bodega</h1></div>
     <div class="container">
         <% if(typeof id !== 'undefined') { %>
@@ -30,7 +28,7 @@
                 </div>
                 <div class="row mt-1">
                   <label for="validationCustom02" class="form-label">Año de creación</label>
-                  <input class="form-control" id="validationCustom02" name="anyoCreacion" minlength="1" maxlength="4" name="anyoCreacion" type="number" step="1" min="1900" max="2022" required >
+                  <input class="form-control" id="validationCustom02" name="anyoCreacion" minlength="1" maxlength="4" type="number" step="1" min="1900" max="2022" required >
                   <div class="valid-feedback">
                     Año correcto!
                   </div>
