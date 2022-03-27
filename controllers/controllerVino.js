@@ -52,4 +52,31 @@ controllerVino.agregarVino = async (request, response, next) => {
   }
 };
 
+controllerVino.borrarVino = async (request, response, next) => {
+  const { id } = request.query;
+  if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
+    response.status(500);
+    next(new Error('El id tiene que ser un número válido'));
+  } else {
+    try {
+      const [rows] = await modelVino.findID(request.query.id);
+      console.log(rows);
+      if (rows === undefined) {
+        response.status(500);
+        next(new Error('No existe el vino con ese ID'));
+      } else { 
+        await modelVino.borrarVino(request.query.id);
+        //response.render('index',{title : 'Bacowine dev'});
+      }
+    }
+    catch (e) {
+      console.error(e);
+      response.status(500);
+      e.message = 'Error interno de acceso a la base de datos';
+      next(e);
+    }
+  }
+};
+
+
 module.exports = controllerVino;

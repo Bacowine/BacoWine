@@ -72,8 +72,8 @@
                 </div>
                 <div class="modal-footer">
 
-                  <form action="vino/borrarVino">
-                    <input type="hidden" name="id" value="<%vino.id%>" />
+                  <form action="borrarVino">
+                    <input type="hidden" name="id" id="id" value="<%=vino.id%>" />
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                   </form>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
