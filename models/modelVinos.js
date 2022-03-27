@@ -9,4 +9,11 @@ modelVinos.find = async (id) => {
   return result;
 };
 
+modelVinos.insert = async (rows) => {
+  const sql = pool.format('INSERT INTO vino(nombre, clase, tipo, graduacion, bodega, localidades, foto, activo) VALUES(?, 1)', [rows]);
+  const [result] = await pool.promise().query(sql);
+  console.log(sql.substring(0, 500));
+  return result.insertId;
+};
+
 module.exports = modelVinos;

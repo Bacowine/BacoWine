@@ -31,9 +31,8 @@ controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
     } catch (e) {
       console.error(e);
       response.status(500);
-      const err = new Error('Error interno de acceso a la base de datos');
-      err.stack = e.stack;
-      next(err);
+      e.message = 'Error interno de acceso a la base de datos';
+      next(e);
     }
   }
 };

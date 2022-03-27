@@ -1,48 +1,49 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="shortcut icon" href="favicon.ico">
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to the <%= title %></p>
-    <div class="container">
-      <div class="col">
+<html lang="es-ES">
 
-        <div class="row">
-          <p class="h1">Ir a Bodegas</p>
-          <form class="form-group row" method="GET" action="bodega/detalles">
-            <div class="col-6">
-              <label for="idBodega">ID:</label>
-              <input type="text" class="form-control" id="idBodega" aria-describedby="bodegaHelp" placeholder="id bodega" name="id">
-              <small id="bodegaHelp" class="form-text text-muted">Introduce el id de la bodega</small>              
+<head>
+  <%- include('./partials/_head',{title}); %>
+</head>
+
+<body>
+  <%- include('./partials/_header'); %>
+
+  <div id="main" class="container">
+    <div class="row">
+      <p class="h1">Bodegas</p>
+      <div class="col">
+        <form class="row" method="GET" action="bodega/detalles">
+          <div class="col input-group mb-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="idBodega" aria-describedby="bodegaHelp"
+                placeholder="id bodega" name="id" />
+              <label for="idBodega">Id de la bodega</label>
             </div>
-            <div class="col-6">
-              <input class="btn btn-primary m-4" type="submit" value="MostrarBodega">
-            </div>
-          </form>
-        </div>
-        <div class="row">
-          <p class="h1">Ir a Vinos</p>
-            <form class="form-group row" method="GET" action="vinos/mostrarVino">
-              <div class="col-6">
-                <label for="">ID:</label>
-                <input type="text" class="form-control" id="idVino" aria-describedby="vinoHelp" placeholder="id vino" name="id">
-                <small id="vinoHelp" class="form-text text-muted">Introduce el id del vino</small>              
-              </div>
-              <div class="col-6">
-                <input class="btn btn-primary m-4" type="submit" value="MostrarVino">
-              </div>
-            </form>
-        </div>
-        <div class="row">
-          <p class="h1">Bodegas</p>
-          <a href="bodega/agregarBodega" class="btn btn-primary">Añadir Bodega</a>
-        </div>
+            <button class="btn btn-primary" type="submit">Mostrar Bodega</button>
+          </div>
+        </form>
       </div>
     </div>
-  </body>
+    <div class="row">
+      <div class="col">
+        <p class="h1">Vinos <a href="vinos/agregarVino" class="btn btn-warning" role="button">Añadir Vino</a></p>
+        <form class="row" method="GET" action="vinos/mostrarVino">
+          <div class="col input-group mb-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="idVino" aria-describedby="vinoHelp" placeholder="id vino"
+                name="id">
+              <label for="idVino">Id del vino</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Mostrar Vino</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-4">
+        
+      </div>
+
+    </div>
+  </div>
+</body>
+
 </html>

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="es-ES">
 <head>
-  <title><%= title %></title>
-  <link rel='stylesheet' href='/stylesheets/error.css' />
-  <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link rel="shortcut icon" href="favicon.ico">
+  <%- include('./partials/_head',{title:message}); %>
+  <link rel='stylesheet' href='/static/stylesheets/error.css' />
 </head>
 <body>
   <div id="notfound">

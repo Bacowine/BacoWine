@@ -23,9 +23,33 @@ controllerVinos.verVino = async (request, response, next) => {
   } catch (e) {
     console.error(e);
     response.status(500);
-    const err = new Error('Error interno de acceso a la base de datos');
-    err.stack = e.stack;
-    next(err);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
+
+controllerVinos.agregarVino = async (request, response, next) => {
+  const alert = request.errors;
+  if (alert.length > 0) {
+    response.render('agregarVino', { alert });
+    return;
+  }
+
+  const {
+    nombre, clase, tipo, gradoAlcohol, bodega, localidad,
+  } = request.body;
+  let imagen;
+  if (request.files) imagen = request.files[0] ? request.files[0].buffer : null;
+  try {
+    const id = await modelVinos.insert([
+      nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen,
+    ]);
+    response.render('agregarVino', { id });
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
   }
 };
 
