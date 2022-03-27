@@ -35,6 +35,12 @@ controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
 };
 
 controllerBodega.insertarBodega = async (request, response, next) => {
+  const alert = request.errors;
+  if (alert.length > 0) {
+    response.render('agregarBodega', { alert });
+    return;
+  }
+
   const {
     nombre, anyoCreacion, localizGeo, descripcion, denominOrigen,
   } = request.body;

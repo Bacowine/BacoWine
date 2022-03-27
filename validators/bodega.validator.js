@@ -12,8 +12,8 @@ const bodegaSchema = checkSchema({
   anyoCreacion: {
     notEmpty: true,
     errorMessage: 'Año de creacion no puede estar vacio',
-    isDate: {
-      options: { format: 'YYYY' },
+    isLength: {
+      options: { min: 1, max: 4 },
       errorMessage: 'Año de creacion formato debe ser YYYY',
     },
   },

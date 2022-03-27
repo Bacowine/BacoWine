@@ -7,7 +7,9 @@ const validate = (validations) => async (req, res, next) => {
 
   req.errors = [];
   if (!errors.isEmpty()) {
+    res.status(500);
     req.errors = errors.array();
+    console.log(req.errors);
   }
   next();
 };
