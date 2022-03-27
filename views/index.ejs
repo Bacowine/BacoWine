@@ -10,38 +10,30 @@
 
   <div id="main" class="container">
     <div class="row">
-      <p class="h1">Bodegas</p>
-      <div class="col">
-        <form class="row" method="GET" action="bodega/detalles">
-          <div class="col input-group mb-3">
-            <div class="form-floating">
-              <input type="number" autocomplete="off" class="form-control" id="idBodega" aria-describedby="bodegaHelp"
-                placeholder="id bodega" name="id" />
-              <label for="idBodega">Id de la bodega</label>
-            </div>
-            <button class="btn btn-primary" type="submit">Mostrar Bodega</button>
+      <p class="h1">Bodegas <a href="bodega/agregarBodega" class="btn btn-warning" role="button">Añadir Bodega</a></p>
+      <form class="row" method="GET" action="bodega/detalles">
+        <div class="col input-group mb-3">
+          <div class="form-floating">
+            <input type="number" autocomplete="off" class="form-control" id="idBodega" aria-describedby="bodegaHelp"
+              placeholder="id bodega" name="id" />
+            <label for="idBodega">Id de la bodega</label>
           </div>
-        </form>
-      </div>
+          <button class="btn btn-primary" type="submit">Mostrar Bodega</button>
+        </div>
+      </form>
     </div>
     <div class="row">
-      <div class="col">
-        <p class="h1">Vinos <a href="vinos/agregarVino" class="btn btn-warning" role="button">Añadir Vino</a></p>
-        <form class="row" method="GET" action="vinos/mostrarVino">
-          <div class="col input-group mb-3">
-            <div class="form-floating">
-              <input type="number" autocomplete="off" class="form-control" id="idVino" aria-describedby="vinoHelp" placeholder="id vino"
-                name="id">
-              <label for="idVino">Id del vino</label>
-            </div>
-            <button class="btn btn-primary" type="submit">Mostrar Vino</button>
+      <p class="h1">Vinos <a href="vinos/agregarVino" class="btn btn-warning" role="button">Añadir Vino</a></p>
+      <form class="row" method="GET" action="vinos/mostrarVino">
+        <div class="col input-group mb-3">
+          <div class="form-floating">
+            <input type="number" autocomplete="off" class="form-control" id="idVino" aria-describedby="vinoHelp" placeholder="id vino"
+              name="id">
+            <label for="idVino">Id del vino</label>
           </div>
-        </form>
-      </div>
-      <div class="col-4">
-        
-      </div>
-
+          <button class="btn btn-primary" type="submit">Mostrar Vino</button>
+        </div>
+      </form>
     </div>
   </div>
 </body>
