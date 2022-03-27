@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gestion de usuarios</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <p>Desde esta pagina podras gestionar los usuarios</p>
+    <div class="container">
+        <div class="row">
+            <div class="col m-4">
+                <form action="/insertarUsuario" method="POST">
+                    <div class="row mt-1">
+                        Nombre: <input name="nombre" type="text">
+                    </div>
+                    <div class="row mt-1">
+                        Correo: <input name="correo" type="text">
+                    </div>
+                    <div class="row mt-1">
+                        <button type="submit" class="btn menu boton-buscar btn-dark ">Agregar</button>
+                    </div>
+                </form>
+                <div>
+                    <% if(res !== null ){%>
+                        <p>ID DEL USUARIO: <%= res.insertId %></p>
+                    <%};
+                    %>                
+                </div>              
+            </div>
+            <div class="col m-4">
+                <div class="row mt-1">
+                    <form action="/verUsuario" method="POST">
+                        <button type="submit" class="btn menu boton-buscar btn-dark ">Buscar</button>
+                        <input class="input-buscar" type="text" name="idUser" placeholder="id usuario">
+                    </form>                
+                </div>
+                <div>
+                    <% if(usuario !== null && usuario !== -1 ){%>
+                        <p>DATOS DEL USUARIO</p>
+                        <p><%= usuario.id %></p>
+                        <p><%= usuario.nombre %></p>
+                        <p><%= usuario.correos %></p>
+                    <% } %>   
+
+                    <% if(usuario == -1){%>
+                        <p>ID no encontrado</p>
+                    <% } %>   
+                </div>
+                
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
