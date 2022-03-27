@@ -5,12 +5,9 @@ const controllerBodega = {};
 controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
   const { id } = request.query;
 
-  if (id === undefined || id == null) {
+  if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
     response.status(500);
-    next(new Error('El id no puede estar vacío'));
-  } else if (Number.isNaN(id)) {
-    response.status(500);
-    next(new Error('El id tiene que ser un número'));
+    next(new Error('El id tiene que ser un número válido'));
   } else {
     try {
       const [row] = await modelBodega.find(id);

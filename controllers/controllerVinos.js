@@ -3,13 +3,13 @@ const modelVinos = require('../models/modelVinos');
 const controllerVinos = {};
 
 controllerVinos.verVino = async (request, response, next) => {
-  try {
-    // console.log(isNaN(request.query.id));
-    if (Number.isNaN(request.query.id) || request.query.id === undefined
-                                       || request.query.id === null) {
-      response.status(500);
-      next(new Error('El id introducido no es correcto'));
-    } else {
+  const { id } = request.query;
+
+  if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
+    response.status(500);
+    next(new Error('El id tiene que ser un número válido'));
+  } else {
+    try {
       const [rows] = await modelVinos.find(request.query.id);
       console.log(rows);
       if (rows === undefined) {
@@ -19,12 +19,12 @@ controllerVinos.verVino = async (request, response, next) => {
         rows.foto = rows.foto.toString('base64');
         response.render('vino_detalles', { res: null, vino: rows, title: 'Detalles del vino' });
       }
+    } catch (e) {
+      console.error(e);
+      response.status(500);
+      e.message = 'Error interno de acceso a la base de datos';
+      next(e);
     }
-  } catch (e) {
-    console.error(e);
-    response.status(500);
-    e.message = 'Error interno de acceso a la base de datos';
-    next(e);
   }
 };
 

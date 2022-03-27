@@ -2,16 +2,44 @@ const pool = require('../models/db');
 const CBodega = require('../controllers/controllerBodega');
 const modelBodega = require('../models/modelBodega');
 
-describe('mostrar bodega', () => {
+describe('bodega', () => {
   afterAll(() => {
     pool.end();
   });
 
-  describe('model mostrar bodega', () => {
-    test('En modelo', async () => {
+  describe('model bodega', () => {
+    test('ver bodega con id=1', async () => {
       const [result] = await modelBodega.find(1);
       expect(result).not.toBe(undefined);
       expect(result.id).toBe(1);
+    });
+
+    test('agregar bodega con alfanumericos', async () => {
+      let result;
+      let err;
+
+      try {
+        result = await modelBodega.add(['Azpilicueta', 1929, 'Rioja', 'Muy bonito', 'Rioja', 0]);
+        console.log(result);
+      } catch (e) {
+        console.log(e);
+        err = e;
+      }
+      expect(result).toEqual(expect.any(Number));
+      expect(err).toBe(undefined);
+    });
+
+    test('agregar bodega con anyo incorrecto', async () => {
+      let result;
+      let err;
+
+      try {
+        result = await modelBodega.add(['Azpilicueta', '*&*&(', 'Rioja', 'Muy bonito', 'Rioja', 0]);
+      } catch (e) {
+        err = e;
+      }
+      expect(result).toBe(undefined);
+      expect(err).toBeInstanceOf(Error);
     });
   });
 
