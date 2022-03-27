@@ -9,4 +9,11 @@ modelBodega.find = async (id) => {
   return result;
 };
 
+modelBodega.add = async (rows) => {
+  const sql = pool.format('INSERT INTO bodegas (nombre,anyoCreacion,localizGeo,descripcion,denominOrigen,foto) VALUES (?)', [rows]);
+  const [result] = await pool.promise().query(sql);
+  console.log(sql.substring(0, 500));
+  return result.insertId;
+};
+
 module.exports = modelBodega;

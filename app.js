@@ -5,11 +5,10 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const multer = require('multer');
 
 const indexRouter = require('./routes/index');
 const bodegaRouter = require('./routes/bodega');
-const vinosRouter = require('./routes/vinos');
+const vinoRouter = require('./routes/vino');
 
 const app = express();
 
@@ -22,13 +21,12 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 if (app.get('env') !== 'test') app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(multer().any());
 app.use(cookieParser());
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/bodega', bodegaRouter);
-app.use('/vinos', vinosRouter);
+app.use('/vino', vinoRouter);
 
 // catch 404 and forward to error handler
 

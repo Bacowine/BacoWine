@@ -5,12 +5,9 @@ const controllerBodega = {};
 controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
   const { id } = request.query;
 
-  if (id === undefined || id == null) {
+  if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
     response.status(500);
-    next(new Error('El id no puede estar vacío'));
-  } else if (Number.isNaN(id)) {
-    response.status(500);
-    next(new Error('El id tiene que ser un número'));
+    next(new Error('El id tiene que ser un número válido'));
   } else {
     try {
       const [row] = await modelBodega.find(id);
@@ -34,6 +31,31 @@ controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
       e.message = 'Error interno de acceso a la base de datos';
       next(e);
     }
+  }
+};
+
+controllerBodega.insertarBodega = async (request, response, next) => {
+  const alert = request.errors;
+  if (alert.length > 0) {
+    response.render('agregarBodega', { alert });
+    return;
+  }
+
+  const {
+    nombre, anyoCreacion, localizGeo, descripcion, denominOrigen,
+  } = request.body;
+  const imagen = (request.file) ? request.file.buffer : null;
+  try {
+    const id = await modelBodega.add([
+      nombre, anyoCreacion, localizGeo, descripcion, denominOrigen, imagen,
+    ]);
+    response.render('agregarBodega', { id });
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    const err = new Error('Error interno de acceso a la base de datos');
+    err.stack = e.stack;
+    next(err);
   }
 };
 

@@ -9,8 +9,8 @@ describe('GET Endpoints', () => {
     });
   });
 
-  describe('/vinos', () => {
-    test('/vinos/agregarVinos should return 200', async () => {
+  describe('/vino', () => {
+    test('/vino/agregarVinos should return 200', async () => {
       const vino = {
         nombre: 'B',
         gradoAlcohol: '0.26',
@@ -19,8 +19,49 @@ describe('GET Endpoints', () => {
         clase: 'Blanco',
         tipo: 'Espirituoso',
       };
-      const response = await request(app).post('/vinos/agregarVino').send(vino);
+      const response = await request(app).post('/vino/agregarVino').send(vino);
+      expect(response.statusCode).toBe(200);
+    });
+
+    test('/vino/detalles should return 200', async () => {
+      const response = await request(app).get('/vino/detalles?id=1').send();
       expect(response.statusCode).toBe(200);
     });
   });
+
+  describe('/bodega', () => {
+    test('/bodega/agregarBodega should return 200', async () => {
+      const bodega = {
+        nombre: 'Callao',
+        anyoCreacion: '2018',
+        localizGeo: 'Madrid',
+        descripcion: 'Huele rico',
+        denominOrigen: 'Madrid',
+      };
+      const response = await request(app).post('/bodega/agregarBodega').send(bodega);
+      expect(response.statusCode).toBe(200);
+    });
+
+    test('/bodega/agregarBodega should return 200', async () => {
+      const bodega = {
+        nombre: 'Callao',
+        anyoCreacion: '201338',
+        localizGeo: 'Madrid',
+        descripcion: 'Huele rico',
+        denominOrigen: 'Madrid',
+        foto: null,
+      };
+      const response = await request(app).post('/bodega/agregarBodega').send(bodega);
+      expect(response.statusCode).toBe(500);
+    });
+
+    test('/bodega/mostrarBodega should return 200', async () => {
+      const response = await request(app).get('/bodega/detalles?id=1').send();
+      expect(response.statusCode).toBe(200);
+    });
+
+  });
+
+  
+
 });
