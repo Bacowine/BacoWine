@@ -15,4 +15,6 @@ router.get('/detalles', cVinos.verVino);
 router.get('/agregarVino', (_req, res) => res.render('agregarVino'));
 router.post('/agregarVino', upload.single('imagen'), validate(vinoSchema), cVinos.agregarVino);
 
+router.get('/borrarVino', cVinos.borrarVino);
+
 module.exports = router;
