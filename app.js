@@ -5,7 +5,6 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const multer = require('multer');
 
 const indexRouter = require('./routes/index');
 const bodegaRouter = require('./routes/bodega');
@@ -22,7 +21,6 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 if (app.get('env') !== 'test') app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(multer().any());
 app.use(cookieParser());
 app.use('/static', express.static(path.join(__dirname, 'public')));
 

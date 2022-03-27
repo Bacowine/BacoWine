@@ -38,8 +38,7 @@ controllerBodega.insertarBodega = async (request, response, next) => {
   const {
     nombre, anyoCreacion, localizGeo, descripcion, denominOrigen,
   } = request.body;
-  let imagen;
-  if (request.files) imagen = request.files[0] ? request.files[0].buffer : null;
+  const imagen = (request.file) ? request.file.buffer : null;
   try {
     const id = await modelBodega.add([
       nombre, anyoCreacion, localizGeo, descripcion, denominOrigen, imagen,
