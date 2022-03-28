@@ -16,7 +16,7 @@ controllerVino.verVino = async (request, response, next) => {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
       } else {
-        rows.foto = rows.foto.toString('base64');
+        rows.foto = rows.foto ? rows.foto.toString('base64') : '';
         response.render('vino_detalles', { res: null, vino: rows, title: 'Detalles del vino' });
       }
     } catch (e) {
@@ -51,5 +51,32 @@ controllerVino.agregarVino = async (request, response, next) => {
     next(e);
   }
 };
+
+controllerVino.borrarVino = async (request, response, next) => {
+  const { id } = request.body;
+  if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
+    response.status(500);
+    next(new Error('El id tiene que ser un número válido'));
+  } else {
+    try {
+      const [rows] = await modelVino.findID(id);
+      console.log(rows);
+      if (rows === undefined) {
+        response.status(500);
+        next(new Error('No existe el vino con ese ID'));
+      } else {
+        await modelVino.borrarVino(id);
+        response.redirect('/');
+      }
+    }
+    catch (e) {
+      console.error(e);
+      response.status(500);
+      e.message = 'Error interno de acceso a la base de datos';
+      next(e);
+    }
+  }
+};
+
 
 module.exports = controllerVino;
