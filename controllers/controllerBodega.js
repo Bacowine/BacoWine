@@ -72,7 +72,7 @@ controllerBodega.borrarBodega = async (request, response, next) => {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
       } else { 
-        await modelBodega.borrarVino(id);
+        await modelBodega.borrarBodega(id);
         response.redirect('/');
       }
     } catch (e) {

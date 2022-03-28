@@ -66,8 +66,8 @@
                 </div>
                 <div class="modal-footer">
 
-                  <form action="bodega/borrarBodega">
-                    <input type="hidden" name="id" value="<%=bodega.id%>" />
+                  <form action="borrarBodega">
+                    <input type="hidden" name="id" id="id" value="<%=id%>" />
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                   </form>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
