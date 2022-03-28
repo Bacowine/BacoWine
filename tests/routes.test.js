@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../app');
 const pool = require('../models/db');
+const modelBodega = require('../models/modelBodega');
 const modelVino = require('../models/modelVino');
 
 afterAll(() => {
@@ -37,7 +38,7 @@ test('POST /vino/agregarVinos POST should return 200', async () => {
   expect(response.statusCode).toBe(200);
 });
 
-test('POST /vino/borrarVino should return 200', async () => {
+test('POST /vino/borrarVino should return 302', async () => {
   const vino = ['B', 'Blanco', 'Espirituoso', '0.26', 'UCM', 'Madrid, Granada', null];
   const resultId = await modelVino.insert(vino);
   const response = await request(app).post('/vino/borrarVino').send({ id: resultId });
@@ -69,4 +70,13 @@ test('POST /bodega/agregarBodega should return 500', async () => {
   };
   const response = await request(app).post('/bodega/agregarBodega').send(bodega);
   expect(response.statusCode).toBe(500);
+});
+
+test('POST /bodega/borrarBodega should return 302', async () => {
+  const bodega = ['SeAcabo', 1970, 'Rioja', 'PorFin', 'Rioja', null];
+  const resultId = await modelBodega.add(bodega);
+  const response = await request(app).post('/bodega/borrarBodega').send({ id: resultId });
+
+  expect(resultId).not.toBeNaN();
+  expect(response.statusCode).toBe(302);
 });

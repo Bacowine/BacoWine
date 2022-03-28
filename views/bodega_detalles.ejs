@@ -9,7 +9,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-5">
-          <img src="data:image/png;base64, <%= bodega.foto %>" class="img-fluid" alt="Foto bodega">
+
+          <% if (bodega.foto !== null) { %> 
+            <img src="data:image/png;base64, <%= bodega.foto %>" class="img-fluid" alt="Foto bodega">
+          <% } else { %>
+            <img src="/static/images/bodega.jpg" class="img-fluid" alt="Foto bodega">
+          <% } %> 
+
         </div>
         <div class="col-7">
 
@@ -47,9 +53,39 @@
             </div>
             <input type="text" value="<%=bodega.origen%>" class="form-control" readonly>
           </div>
+
+
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class="bi bi-trash"></i>
+          </button>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Eliminar bodega</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Estas seguro de que quieres borrar la bodega?
+                </div>
+                <div class="modal-footer">
+
+                  <form action="borrarBodega" method="post">
+                    <input type="hidden" name="id" id="id" value="<%=id%>" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                  </form>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                </div>
+              </div>
+            </div>
+          </div> 
                     
         </div>
       </div>
     </div>
+    <script src="/static/javascripts/bootstrap.bundle.min.js"></script>
   </body>
 </html>

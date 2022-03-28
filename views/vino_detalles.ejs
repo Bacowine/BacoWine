@@ -9,7 +9,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-5">
-          <img src="data:image/png;base64, <%= vino.foto %>" class="img-fluid" alt="Foto vino">
+
+          <% if (vino.foto !== null) { %> 
+            <img src="data:image/png;base64, <%= vino.foto %>" class="img-fluid" alt="Foto vino">
+          <% } else { %>
+            <img src="/static/images/vino.jpg" class="img-fluid" alt="Foto vino">
+          <% } %> 
+
         </div>
         <div class="col-7">
 

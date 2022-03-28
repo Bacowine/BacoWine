@@ -1,3 +1,4 @@
+// const fs = require('fs');
 const modelVino = require('../models/modelVino');
 
 const controllerVino = {};
@@ -16,7 +17,7 @@ controllerVino.verVino = async (request, response, next) => {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
       } else {
-        rows.foto = rows.foto ? rows.foto.toString('base64') : '';
+        rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         response.render('vino_detalles', { res: null, vino: rows, title: 'Detalles del vino' });
       }
     } catch (e) {
@@ -38,8 +39,10 @@ controllerVino.agregarVino = async (request, response, next) => {
   const {
     nombre, clase, tipo, gradoAlcohol, bodega, localidad,
   } = request.body;
-  const imagen = (request.file) ? request.file.buffer : null;
   try {
+    // const imagen = (request.file)
+    // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
+    const imagen = (request.file) ? request.file.buffer : null;
     const id = await modelVino.insert([
       nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen,
     ]);
