@@ -1,3 +1,4 @@
+// const fs = require('fs');
 const modelBodega = require('../models/modelBodega');
 
 const controllerBodega = {};
@@ -13,7 +14,7 @@ controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
       const [row] = await modelBodega.find(id);
       if (row !== undefined) {
         const bodega = {
-          foto: row.foto ? row.foto.toString('base64') : '',
+          foto: row.foto ? row.foto.toString('base64') : null,
           nombre: row.nombre,
           anyo: row.anyoCreacion,
           localizacion: row.localizGeo,
@@ -44,8 +45,10 @@ controllerBodega.insertarBodega = async (request, response, next) => {
   const {
     nombre, anyoCreacion, localizGeo, descripcion, denominOrigen,
   } = request.body;
-  const imagen = (request.file) ? request.file.buffer : null;
   try {
+    // const imagen = (request.file)
+    // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/bodega.jpg`);
+    const imagen = (request.file) ? request.file.buffer : null;
     const id = await modelBodega.add([
       nombre, anyoCreacion, localizGeo, descripcion, denominOrigen, imagen,
     ]);
@@ -60,18 +63,17 @@ controllerBodega.insertarBodega = async (request, response, next) => {
 };
 
 controllerBodega.borrarBodega = async (request, response, next) => {
-  
   const { id } = request.body;
   if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
     response.status(500);
     next(new Error('El id tiene que ser un número válido'));
-  }else{
+  } else {
     try {
       const [rows] = await modelBodega.findID(id);
       if (rows === undefined) {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
-      } else { 
+      } else {
         await modelBodega.borrarBodega(id);
         response.redirect('/');
       }
