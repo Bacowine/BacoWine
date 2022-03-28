@@ -13,7 +13,7 @@ controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
       const [row] = await modelBodega.find(id);
       if (row !== undefined) {
         const bodega = {
-          foto: row.foto.toString('base64'),
+          foto: row.foto ? row.foto.toString('base64') : '',
           nombre: row.nombre,
           anyo: row.anyoCreacion,
           localizacion: row.localizGeo,
