@@ -61,7 +61,7 @@ controllerBodega.insertarBodega = async (request, response, next) => {
 
 controllerBodega.borrarBodega = async (request, response, next) => {
   
-  const { id } = request.query;
+  const { id } = request.body;
   if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
     response.status(500);
     next(new Error('El id tiene que ser un número válido'));

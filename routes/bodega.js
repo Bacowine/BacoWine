@@ -12,6 +12,6 @@ router.get('/', (_req, res) => res.redirect('/bodega/agregarBodega'));
 router.get('/detalles', controllerBodega.mostrarDetallesBodega);
 router.get('/agregarBodega', (_req, res) => res.render('agregarBodega'));
 router.post('/agregarBodega', upload.single('imagen'), validate(bodegaSchema), controllerBodega.insertarBodega);
-router.get('/borrarBodega', controllerBodega.borrarBodega);
+router.post('/borrarBodega', controllerBodega.borrarBodega);
 
 module.exports = router;
