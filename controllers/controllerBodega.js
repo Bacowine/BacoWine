@@ -59,4 +59,30 @@ controllerBodega.insertarBodega = async (request, response, next) => {
   }
 };
 
+controllerBodega.borrarBodega = async (request, response, next) => {
+  
+  const { id } = request.query;
+  if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
+    response.status(500);
+    next(new Error('El id tiene que ser un número válido'));
+  }else{
+    try {
+      const [rows] = await modelBodega.findID(id);
+      if (rows === undefined) {
+        response.status(500);
+        next(new Error('No existe el vino con ese ID'));
+      } else { 
+        await modelBodega.borrarVino(id);
+        response.redirect('/');
+      }
+    } catch (e) {
+      console.error(e);
+      response.status(500);
+      const err = new Error('Error interno de acceso a la base de datos');
+      err.stack = e.stack;
+      next(err);
+    }
+  }
+};
+
 module.exports = controllerBodega;
