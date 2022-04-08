@@ -1,6 +1,15 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+html, body {
+  height: 100%;
+  height: -webkit-fill-available;
   min-height: 100vh;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  min-height: -moz-available;
+  min-height: -webkit-fill-available;
+}
+
+body { 
+  font: 14px 'Open Sans', sans-serif;
   background-color: #f8f9fa;
 }
 
