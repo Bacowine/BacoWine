@@ -1,4 +1,5 @@
 const express = require('express');
+const controllerUser = require('../controllers/controllerUser');
 
 const router = express.Router();
 
@@ -8,7 +9,9 @@ router.get('/', (_req, res) => {
 });
 
 router.get('/login', (_req, res) => {
-  res.render('login', { title: 'Iniciar sesión' });
+  res.render('login');
 });
+
+router.post('/login', controllerUser.login);
 
 module.exports = router;

@@ -30,6 +30,4 @@ modelVino.borrarVino = async (id) => {
   return result;
 };
 
-
-
 module.exports = modelVino;

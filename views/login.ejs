@@ -2,7 +2,7 @@
 <html lang="es-ES">
 
 <head>
-  <%- include('./partials/_head',{title}); %>
+  <%- include('./partials/_head',{title:'Iniciar sesión'}); %>
   <style>
     body {
       background: radial-gradient(circle, rgba(119,23,49,1) 0%, rgba(0,0,0,1) 100%);
@@ -64,7 +64,14 @@
   <div class="container h-100">
     <div class="row pb-5 h-100 px-5 align-items-center justify-content-center">
       <div class="col-md-6 col-lg-4">
-          <h3 class="mb-4 text-center text-white">Iniciar Sesión</h3>
+        <h3 class="mb-4 text-center text-white">Iniciar Sesión</h3>
+
+        <% if(typeof errors != 'undefined') { %> 
+          <div class="alert alert-light " role="alert">
+            <%= errors %>
+          </div>
+        <% } %> 
+        
           <form action="/login" method="POST" class="row g-3">
             <div class="col-12">
               <input type="text" class="form-control login-form" placeholder="Usuario" name="user" required />
@@ -82,7 +89,7 @@
                 Iniciar sesión
               </button>
             </div>
-          </form>
+          </form>          
       </div>
     </div>
   </div>

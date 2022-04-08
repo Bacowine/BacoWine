@@ -3,6 +3,11 @@
     <a class="navbar-brand" href="/">
       <img src="/static/logo.svg" height="30px" class="d-inline-block align-text-top">
     </a>
-    <a href="/login" class="btn btn-outline-dark">Login</a>
+
+    <% if (!session.user || !session.user.name || !session.user.role) {%> 
+      <a href="/login" class="btn btn-outline-dark">Login</a>
+    <% } else { %>
+      <button class="btn btn-outline-dark"> <%= session.user.name %> | <%= session.user.role %></button>
+    <% } %> 
   </div>
 </nav>
