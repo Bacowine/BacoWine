@@ -6,15 +6,21 @@ const cVinos = require('../controllers/controllerVino');
 const vinoSchema = require('../validators/vino.validator');
 const validate = require('../middlewares/schemaValidator');
 
+const { ROLE, authRole } = require('../middlewares/auth');
+
 const router = express.Router();
 
-router.get('/', (_req, res) => res.redirect('/vino/agregarVino'));
+router.route('/')
+  .get((_req, res) => res.redirect('/vino/agregarVino'));
 
-router.get('/detalles', cVinos.verVino);
+router.route('/detalles')
+  .get(cVinos.verVino);
 
-router.get('/agregarVino', (_req, res) => res.render('agregarVino'));
-router.post('/agregarVino', upload.single('imagen'), validate(vinoSchema), cVinos.agregarVino);
+router.route('/agregarVino')
+  .get(authRole(ROLE.ADMIN), (_req, res) => res.render('agregarVino'))
+  .post(authRole(ROLE.ADMIN), upload.single('imagen'), validate(vinoSchema), cVinos.agregarVino);
 
-router.post('/borrarVino', cVinos.borrarVino);
+router.route('/borrarVino')
+  .post(authRole(ROLE.ADMIN), cVinos.borrarVino);
 
 module.exports = router;

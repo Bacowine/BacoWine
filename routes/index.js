@@ -1,17 +1,15 @@
 const express = require('express');
 const controllerUser = require('../controllers/controllerUser');
 
+const { authRole } = require('../middlewares/auth');
+
 const router = express.Router();
 
-/* GET home page. */
-router.get('/', (_req, res) => {
-  res.render('index', { title: 'BacoWine DEV' });
-});
+router.route('/')
+  .get((_req, res) => res.render('index', { title: 'BacoWine DEV' }));
 
-router.get('/login', (_req, res) => {
-  res.render('login');
-});
-
-router.post('/login', controllerUser.login);
+router.route('/login')
+  .get(authRole(), (_req, res) => res.render('login'))
+  .post(authRole(), controllerUser.login);
 
 module.exports = router;

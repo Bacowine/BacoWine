@@ -3,9 +3,8 @@ const express = require('express');
 const compression = require('compression');
 const path = require('path');
 const favicon = require('serve-favicon');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const session = require('express-session')
+const session = require('express-session');
 
 const indexRouter = require('./routes/index');
 const bodegaRouter = require('./routes/bodega');
@@ -22,19 +21,16 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 if (app.get('env') !== 'test') app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(cookieParser());
-app.use(session({ secret: 'scrum', resave: false, saveUninitialized: false, }));
+app.use(session({ secret: 'scrum', resave: false, saveUninitialized: false }));
 app.use('/static', express.static(path.join(__dirname, 'public')));
-
 app.use((req, res, next) => {
-  res.locals.session = req.session
+  res.locals.session = req.session;
   next();
 });
 
 app.use('/', indexRouter);
 app.use('/bodega', bodegaRouter);
 app.use('/vino', vinoRouter);
-
 
 // catch 404 and forward to error handler
 app.use((_req, _res, next) => {
