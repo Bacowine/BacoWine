@@ -12,8 +12,9 @@ const authRole = (role) => (req, res, next) => {
       res.redirect('/');
     } else if (user.role !== role) {
       // Si el rol no coincide no se permite acceso
-      res.status(403);
-      next(new Error('Forbidden'));
+      const err = new Error('Forbidden');
+      err.status = 403;
+      next(err);
     } else {
       // Si el rol es correcto se permite
       next();
