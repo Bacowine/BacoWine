@@ -5,7 +5,9 @@
     </a>
 
     <% if (!session.user || !session.user.name || !session.user.role) {%> 
-      <a href="/login" class="btn btn-outline-dark">Login</a>
+     <div> <a href="/login" class="btn btn-outline-dark">Login</a>
+      <a href="/signup" class="btn btn-outline-dark">Registrarse</a>
+    </div>
     <% } else { %>      
       <div class="dropdown">
       <button class="btn btn-outline-dark  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> 

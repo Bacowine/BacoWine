@@ -36,6 +36,19 @@ controllerUser.login = async (request, response, next) => {
     next(e);
   }
 };
+controllerUser.signup = async (request, response, next) => {
+  const { user, password } = request.body;
+  console.log(request.body);
+  try {
+    const hash = await bcrypt.hash(password, 10); //me devuelve la contraseña, llama a la funcion model e inserto el usuario (con hash)
+    const [row] = await modelUser.create([user,hash,'UR']);
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
 
 controllerUser.logout = async (request, response, next) => {
   request.session.destroy(() => {
