@@ -81,4 +81,29 @@ controllerVino.borrarVino = async (request, response, next) => {
   }
 };
 
+controllerVino.comentarVino = async (request, response, next) => {
+  const alert = request.errors;
+  if (alert.length > 0) {
+    response.render('comentarVino', { alert });
+    return;
+  }
+
+  const {
+    user, idVino, texto, fecha
+  } = request.body;
+
+  try {
+    const id = await modelVino.comentarVino([
+      user, idVino, texto, fecha
+    ]);
+    response.render('comentarVino', { id });
+  }
+  catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+}
+
 module.exports = controllerVino;
