@@ -1,12 +1,5 @@
 use bacowine;
 
---PROTOTIPO
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(45) NOT NULL,
-    correos VARCHAR(45) NOT NULL
-);
-
 --APLICACION
 CREATE TABLE vino (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,4 +22,11 @@ CREATE TABLE bodegas (
   denominOrigen VARCHAR(40) NOT NULL,
   foto LONGBLOB,
   activo BOOLEAN DEFAULT true NOT NULL
+);
+
+CREATE TABLE usuario (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user VARCHAR(40) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(10) NOT NULL
 );

@@ -24,12 +24,10 @@ modelVino.findID = async (id) => {
 };
 
 modelVino.borrarVino = async (id) => {
-  const sql = pool.format('UPDATE vino SET activo = 0 WHERE id = ?',[id]);
+  const sql = pool.format('UPDATE vino SET activo = 0 WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
   return result;
 };
-
-
 
 module.exports = modelVino;

@@ -1,7 +1,22 @@
 <nav class="navbar navbar-light bg-white shadow-sm mb-3">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">
-      <img src="/static/logo.svg" height="70" class="d-inline-block align-text-top">
+      <img src="/static/logo.svg" height="30px" class="d-inline-block align-text-top">
     </a>
+
+    <% if (!session.user || !session.user.name || !session.user.role) {%> 
+      <a href="/login" class="btn btn-outline-dark">Login</a>
+    <% } else { %>      
+      <div class="dropdown">
+      <button class="btn btn-outline-dark  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+        <%= session.user.name %> | <%= session.user.role %>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+        <!-- <li><hr class="dropdown-divider"></li>--> 
+        <form action="/logout" method="post">
+          <button type="submit" class="dropdown-item text-center" href="/logout">Cerrar sesión</a>
+        </form>       
+    </div>
+    <% } %> 
   </div>
 </nav>
