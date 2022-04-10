@@ -37,4 +37,11 @@ controllerUser.login = async (request, response, next) => {
   }
 };
 
+controllerUser.logout = async (request, response, next) => {
+  request.session.destroy(() => {
+    response.clearCookie('connect.sid');
+    response.redirect('/');
+  });
+};
+
 module.exports = controllerUser;

@@ -6,8 +6,17 @@
 
     <% if (!session.user || !session.user.name || !session.user.role) {%> 
       <a href="/login" class="btn btn-outline-dark">Login</a>
-    <% } else { %>
-      <button class="btn btn-outline-dark"> <%= session.user.name %> | <%= session.user.role %></button>
+    <% } else { %>      
+      <div class="dropdown">
+      <button class="btn btn-outline-dark  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+        <%= session.user.name %> | <%= session.user.role %>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+        <!-- <li><hr class="dropdown-divider"></li>--> 
+        <form action="/logout" method="post">
+          <button type="submit" class="dropdown-item text-center" href="/logout">Cerrar sesión</a>
+        </form>       
+    </div>
     <% } %> 
   </div>
 </nav>

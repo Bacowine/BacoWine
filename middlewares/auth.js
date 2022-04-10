@@ -10,7 +10,7 @@ const authRole = (role) => (req, res, next) => {
     if (!role) {
       // Si registrado intenta acceder a una ruta para NO registrados se redirige a pagina principal
       res.redirect('/');
-    } else if (user.role !== role) {
+    } else if (!role.includes(user.role)) {
       // Si el rol no coincide no se permite acceso
       const err = new Error('Forbidden');
       err.status = 403;
