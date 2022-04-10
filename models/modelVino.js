@@ -31,10 +31,17 @@ modelVino.borrarVino = async (id) => {
 };
 
 modelVino.comentarVino = async(rows) => {
-  const sql = pool.format('INSERT INTO comentario(user, idVino, texto, activo) VALUES(?,1)', [rows]);
+  const sql = pool.format('INSERT INTO comentario(user, idVino, texto, fecha, activo) VALUES(?,1)', [rows]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
   return result;
 };
+
+modelVino.buscarComentariosVino = async(id) => {
+  const sql = pool.format('SELECT user, texto, fecha FROM comentario WHERE idVino = ? AND activo = 1', [id]);
+  const [result] = await pool.promise().query(sql);
+  console.log(sql);
+  return result;
+}
 
 module.exports = modelVino;
