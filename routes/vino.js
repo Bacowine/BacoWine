@@ -24,7 +24,6 @@ router.route('/borrarVino')
   .post(authRole(ROLE.ADMIN), cVinos.borrarVino);
 
 router.route('/comentarVino')
-  .get(authRole([ROLE.USER, ROLE.ADMIN]), (_req, res) => res.render('comentarVino'))
-  .post(authRole([ROLE.USER, ROLE.ADMIN]), cVinos.comentarVino);
+  .post(authRole(ROLE.USER), cVinos.comentarVino);
 
 module.exports = router;

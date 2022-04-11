@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <%- include('./partials/_head',{title}); %>
     <style>
       body {
-        background: radial-gradient(circle, rgb(139, 55, 77) 0%, rgb(71, 18, 33) 100%);
+        background: radial-gradient(circle, rgb(107, 107, 107) 0%, rgb(42, 42, 42) 100%);
       }
     </style>
-    <%- include('./partials/_head',{title}); %>
   </head>
   <body>
     <%- include('./partials/_header'); %>
@@ -102,6 +102,7 @@
         <div class="col-1"></div>
         <div class="col-10 pb-3  border-bottom">
           <form action="/vino/comentarVino" method="POST">
+            <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
             <div class="row">
               <input type="text" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" />
             </div>
@@ -111,53 +112,24 @@
       </div>
 
       <div class="row text-white pb-5">
-        <!-- HAY QUE METER AQUI EL BUCLE -->
-        <div class="row mt-3">
+        <% vino.comentarios.forEach(comentario => { %>
+        <div class="row">
           <div class="col-1"></div>
           <div class="col-10">
             <div class="row">
-              <h5><strong>Pepe<!-- NOMBRE DE USUARIO --></strong> <span class="badge">23 de Marzo de 2022<!-- FECHA --> </span></h5> 
+              <p id="<%= comentario.id %>"></p>
+              <h5><strong><%= comentario.user %><!-- NOMBRE DE USUARIO --></strong> <span class="badge"><%= comentario.fecha.toLocaleString('es-ES') %><!-- FECHA --> </span></h5> 
             </div>
             <div class="row">
               <div class="border border-2 rounded p-3">
-                <h5>Texto aqui <!-- METER EL TEXTO AQUI --></h5>
+                <h5><%= comentario.texto %><!-- METER EL TEXTO AQUI --></h5>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="row mt-3">
-          <div class="col-1"></div>
-          <div class="col-10">
-            <div class="row">
-              <h5><strong>Pepe<!-- NOMBRE DE USUARIO --></strong> <span class="badge">23 de Marzo de 2022<!-- FECHA --> </span></h5> 
-            </div>
-            <div class="row">
-              <div class="border border-2 rounded p-3">
-                <h5>Texto aqui <!-- METER EL TEXTO AQUI --></h5>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-3">
-          <div class="col-1"></div>
-          <div class="col-10">
-            <div class="row">
-              <h5><strong>Pepe<!-- NOMBRE DE USUARIO --></strong> <span class="badge">23 de Marzo de 2022<!-- FECHA --> </span></h5> 
-            </div>
-            <div class="row">
-              <div class="border border-2 rounded p-3">
-                <h5>Texto aqui <!-- METER EL TEXTO AQUI --></h5>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- AQUI TERMINA EL BUCLE -->
+        <% }) %>
       </div>
-
       
-
     </div>
     <%- include('./partials/_footer'); %>
   </body>

@@ -31,16 +31,16 @@ modelVino.borrarVino = async (id) => {
 };
 
 modelVino.comentarVino = async(rows) => {
-  const sql = pool.format('INSERT INTO comentario(user, idVino, texto, fecha) VALUES(?, SYSDATE())', [rows]);
+  const sql = pool.format('INSERT INTO comentario(user, idVino, texto, fecha) VALUES(?, CONVERT_TZ(NOW(), @@session.time_zone, "+02:00"))', [rows]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
-  return result;
+  return result.insertId;
 };
 
 modelVino.buscarComentariosVino = async(id) => {
-  const sql = pool.format('SELECT user, texto, fecha FROM comentario WHERE idVino = ? AND activo = 1', [id]);
+  const sql = pool.format('SELECT id, user, texto, fecha FROM comentario WHERE idVino = ? ORDER BY fecha desc', [id]);
   const [result] = await pool.promise().query(sql);
-  console.log(sql);
+  console.log(result);
   return result;
 }
 
