@@ -6,11 +6,19 @@ CREATE TABLE vino (
     nombre VARCHAR(45) NOT NULL,
     clase VARCHAR(45) NOT NULL,
     tipo VARCHAR(45) NOT NULL, 
+    maceracion VARCHAR(45) NOT NULL, 
     graduacion DECIMAL(4,2) UNSIGNED NOT NULL CHECK (graduacion <= 100), 
     bodega VARCHAR(100) NOT NULL, 
     localidades VARCHAR(500) NOT NULL,
-    foto LONGBLOB,
-    activo BOOLEAN DEFAULT true NOT NULL
+    foto LONGBLOB
+);
+
+CREATE TABLE variedad_vino (
+  vino INT,
+  nombre_variedad VARCHAR(45),
+  porcentaje INT NULL CHECK (porcentaje < 100),
+  PRIMARY KEY (vino, nombre_variedad),
+  FOREIGN KEY (vino) REFERENCES bacowine.vino(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bodegas (
