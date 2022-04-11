@@ -24,9 +24,11 @@ controllerUser.login = async (request, response, next) => {
         request.session.user = { name: row.user, role: row.role };
         response.redirect('/');
       } else {
+        response.status(400);
         response.render('login', { errors: ['Usuario o contraseña incorrectas'] });
       }
     } else {
+      response.status(400);
       response.render('login', { errors: ['Usuario o contraseña incorrectas'] });
     }
   } catch (e) {
@@ -49,6 +51,7 @@ controllerUser.signup = async (request, response, next) => {
       request.session.user = {name: user, role: 'UR'};
       response.redirect('/');
     } else {
+      response.status(400);
       response.render('signup', { errors: ['Usuario ya existente.'] });
     }
   } catch (e) {

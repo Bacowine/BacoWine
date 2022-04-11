@@ -196,3 +196,35 @@ describe('Rutas protegidas autenticado como USER', () => {
     expect(response.statusCode).toBe(403);
   });
 });
+
+
+describe('Registro como USER', () => {
+  const login = { user: 'UnitTestRegistro', password: 'UnitTestRegistro', role: 'UR' };
+  beforeAll(async () => {
+    agent = request.agent(app);
+    const response = await request(app).post('/signup').send({ user: login.user, password: login.password });
+
+    expect(response.statusCode).toBe(302);
+  });
+
+  afterAll(async () => {
+    await modelUser.delete('UnitTestRegistro');
+  });
+
+  test('GET /login should return 302 REDIRECT', async () => {
+    const response = await agent.post('/login').send({ user: login.user, password: login.password });
+    const res = await agent.get('/login');
+    const res2 = await agent.post('/logout');
+    console.log(res);
+    expect(res.statusCode).toBe(302);
+    expect(res.headers.location).toBe('/');
+  });
+
+  test('GET /login should return 400 BAD SINTAX', async () => {
+    const response = await agent.post('/login').send({ user: login.user+"BADUSERTEST", password: login.password });
+    const res = await agent.get('/login');
+    expect(response.statusCode).toBe(400);
+    expect(res.statusCode).toBe(200);
+  });
+
+});
