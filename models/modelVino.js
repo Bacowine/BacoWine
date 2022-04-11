@@ -31,7 +31,7 @@ modelVino.borrarVino = async (id) => {
 };
 
 modelVino.comentarVino = async(rows) => {
-  const sql = pool.format('INSERT INTO comentario(user, idVino, texto, fecha, activo) VALUES(?,1)', [rows]);
+  const sql = pool.format('INSERT INTO comentario(user, idVino, texto, fecha) VALUES(?, SYSDATE())', [rows]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
   return result;
