@@ -58,47 +58,42 @@
                     <label for="validationCustom04" class="form-label">Localidad:</label>
                     <input class="form-control" id="validationCustom04" minlength="1" maxlength="20" name="localidad" type="text" required/>
                     <div class="valid-feedback">
-                        Localidad correcta!
+                        ¡Localidad correcta!
                     </div>
                     <div class="invalid-feedback">
-                        Localidad incorrecta!
+                        ¡Localidad incorrecta!
                     </div>
                 </div>
                 <div class="row mt-1">
-                    <label for="validationCustom04" class="form-label">Clase:</label>
-                    <select class="selectpicker form-select" name="clase" data-style="btn-danger">
+                    <label for="selectClase" class="form-label">Clase:</label>
+                    <select id="selectClase" class="selectpicker form-select" name="clase" data-style="btn-danger">
                         <option>Blanco</option>
                         <option>Rosado</option>
                         <option>Tinto</option>
                         <option>Clarete</option>
                         <option>Blanc de blanc</option>
                         <option>Blanc de noirs</option>
-                        <option>vino de nueces</option>
-                        <option>vino especiado</option>
-                        <option>Otros</option>
+                        <option>Vino de nueces</option>
+                        <option>Vino especiado</option>
+                        <option>Ninguna clase</option>
                     </select>
                 </div>
                 <div class="row mt-1">
-                    <label for="validationCustom05" class="form-label">Tipo:</label>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Tranquilo" checked>Tranquilo
-                        <label class="form-check-label" for="radio1"></label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Espumoso">Espumoso
-                        <label class="form-check-label" for="radio2"></label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Espirituoso">Espirituoso
-                        <label class="form-check-label"></label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Vino oloroso">Vino oloroso
-                        <label class="form-check-label"></label>
-                    </div>
+                  <label for="tipo" class="form-label">Tipo:</label>
+                  <input id="tipo" class="form-control" type="text" value="Tranquilo" disabled>
                 </div>
                 <div class="row mt-1">
-                    <label for="validationCustom06" class="form-label">Imagen:</label>
+                  <label for="selectMaceracion" class="form-label">Maceración:</label>
+                  <select id="selectMaceracion" class="selectpicker form-select" name="maceracion" data-style="btn-danger">
+                      <option>Crianza</option>
+                      <option>Joven</option>
+                      <option>Roble</option>
+                      <option>Reserva</option>
+                      <option>Gran Reserva</option>
+                  </select>
+              </div>
+                <div class="row mt-1">
+                    <label for="file" class="form-label">Imagen:</label>
                     <input type="file" name="imagen" class="form-control" accept="image/png,image/jpeg">
                 </div>
                 <div class="row mt-4">
@@ -113,25 +108,52 @@
         </div>
     </div>
     <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function () {
-        'use strict'
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
-    
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-                }
-    
-                form.classList.add('was-validated')
-            }, false)
-            })
-        })()
+      document.addEventListener('DOMContentLoaded',()=>{
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function () {
+      'use strict'
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+  
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+          .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+              if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+              }
+  
+              form.classList.add('was-validated')
+          }, false)
+          })
+      })()
+
+      let selector = document.querySelector("#selectClase");
+      let tipo = document.querySelector("#tipo");
+      let tiposVinos = ['Tranquilo','Espumoso','Espirituoso','Vino oloroso'];
+      selector.addEventListener("change", (evt) => {
+        switch (evt.currentTarget.value) {
+          case 'Blanco':
+            case 'Rosado':
+            case 'Tinto':
+            case 'Clarete':
+              tipo.value=tiposVinos[0];
+            break;
+          case 'Blanc de blanc':
+          case 'Blanc de noirs':
+            tipo.value=tiposVinos[1];
+            break;
+          case 'Vino de nueces':
+          case 'Vino especiado':
+            tipo.value=tiposVinos[2];
+            break;
+          case 'Ninguna clase':
+            tipo.value=tiposVinos[3];
+            break;
+        }
+      });
+    })        
     </script>
     <%- include('./partials/_footer'); %>
 </body>
