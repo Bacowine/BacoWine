@@ -38,7 +38,7 @@ const vinoSchema = checkSchema({
     notEmpty: true,
     errorMessage: 'Clase no puede estar vacio',
     isIn: {
-      options: [['Blanco', 'Rosado', 'Tinto', 'Clarete', 'Blanc de blanc', 'Blanc de noirs', 'vino de nueces', 'vino especiado', 'Otros']],
+      options: [['Blanco', 'Rosado', 'Tinto', 'Clarete', 'Blanc de blanc', 'Blanc de noirs', 'Vino de nueces', 'Vino especiado', 'Otros']],
       errorMessage: 'Clase no contiene una clase correcta',
     },
   },

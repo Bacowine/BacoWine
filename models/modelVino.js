@@ -11,8 +11,9 @@ modelVino.find = async (id) => {
   return result;
 };
 
-modelVino.insert = async (rows) => {
-  const sql = pool.format('INSERT INTO vino(nombre, clase, tipo, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
+modelVino.insert = async (rows,variedad) => {
+  console.log(variedad)
+  const sql = pool.format('INSERT INTO vino(nombre, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
   //Hacer controller antes
   console.log(sql.substring(0, 500));
   const [result] = await pool.promise().query(sql);
