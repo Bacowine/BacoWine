@@ -36,5 +36,5 @@ CREATE TABLE comentario (
   user VARCHAR(40) NOT NULL,
   idVino INT NOT NULL,
   texto VARCHAR(1000) NOT NULL,
-  fecha DATE NOT NULL
+  fecha TIMESTAMP NOT NULL
 );
