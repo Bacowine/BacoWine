@@ -41,7 +41,16 @@ controllerUser.signup = async (request, response, next) => {
   console.log(request.body);
   try {
     const hash = await bcrypt.hash(password, 10); //me devuelve la contraseña, llama a la funcion model e inserto el usuario (con hash)
-    const [row] = await modelUser.create([user,hash,'UR']);
+    const [userRead] = await modelUser.read(user);
+
+    if(userRead === undefined){ //El usuario no existo
+      const insertedId = await modelUser.create([user,hash,'UR']); //Lo insertamos
+      request.session.cookie.maxAge = 1 * 24 * 60 * 60 * 1000; // Cookie expires after 1 day
+      request.session.user = {name: user, role: 'UR'};
+      response.redirect('/');
+    } else {
+      response.render('signup', { errors: ['Usuario ya existente.'] });
+    }
   } catch (e) {
     console.error(e);
     response.status(500);

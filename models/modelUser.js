@@ -13,7 +13,8 @@ modelUser.create = async (user) => {
   const sql = pool.format('INSERT INTO usuario(user,password,role) VALUES(?)', [user]);
   console.log(sql);
   const [result] = await pool.promise().query(sql);
-  return result;
+  console.log(result.insertId);
+  return result.insertId;
 };
 
 modelUser.delete = async (user) => {
