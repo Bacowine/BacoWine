@@ -30,23 +30,30 @@ controllerVino.verVino = async (request, response, next) => {
 };
 
 controllerVino.agregarVino = async (request, response, next) => {
-  const alert = request.errors;
-  if (alert.length > 0) {
-    response.render('agregarVino', { alert });
-    return;
-  }
-
-  let {
+  const {
     nombre, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad,
   } = request.body;
-  variedad = {"a":50,"b":10};
+
+  const alert = request.errors;
+  if (alert.length === 0) { // >0
+    const imagen = request.file;
+    response.render('agregarVino', {
+      alert,
+      body: {
+        nombre, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad, imagen,
+      },
+    });
+  }
+
   try {
     // const imagen = (request.file)
     // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
     const imagen = (request.file) ? request.file.buffer : null;
+
     const id = await modelVino.insert([
       nombre, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
-    ],variedad);
+    ], JSON.parse(variedad));
+
     response.render('agregarVino', { id });
   } catch (e) {
     console.error(e);
@@ -72,8 +79,7 @@ controllerVino.borrarVino = async (request, response, next) => {
         await modelVino.borrarVino(id);
         response.redirect('/');
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       response.status(500);
       e.message = 'Error interno de acceso a la base de datos';
