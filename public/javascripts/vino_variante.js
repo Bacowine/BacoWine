@@ -72,7 +72,10 @@ class Variedad extends HTMLElement {
     i.classList.add('form-control');
     i.valueAsNumber = remaining;
     i.onchange = () => {
-      if (i.valueAsNumber < 0) i.valueAsNumber = 0;
+      if (i.valueAsNumber < 0 || i.valueAsNumber >= 100
+          || Number.isNaN(i.valueAsNumber)) {
+        i.valueAsNumber = 0;
+      }
       const remain = this.calculateRemaining();
       if (i.valueAsNumber === 0) {
         i.valueAsNumber = remain;
