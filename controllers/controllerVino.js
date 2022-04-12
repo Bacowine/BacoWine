@@ -1,4 +1,5 @@
 // const fs = require('fs');
+const e = require('express');
 const modelVino = require('../models/modelVino');
 
 const controllerVino = {};
@@ -109,4 +110,42 @@ controllerVino.comentarVino = async (request, response, next) => {
   }
 };
 
+
+controllerVino.borrarComentario = async (request, response, next) => {
+
+  //console.log(request.session);
+
+  const {
+    idVino, idComentario,
+  } = request.body;
+
+  const {
+    user
+  } = request.session;
+  //console.log(user);
+
+  try {
+    //Comprobar que soy el propietario
+    let [comentario] = await modelVino.buscarComentario([
+      idComentario
+    ]);
+    //console.log(comentario.user);
+    if(comentario.user !== user.name && user.role !== 'GC'){
+      const e = new Error('Forbidden');
+      e.status = 403;
+      next(e);
+    }else{
+      await modelVino.borrarComentario([
+        idComentario
+      ]);
+      response.redirect(`/vino/detalles?id=${idVino}#inputComentario`);
+    }
+  }
+  catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
 module.exports = controllerVino;

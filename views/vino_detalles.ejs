@@ -102,7 +102,7 @@
           <form action="/vino/comentarVino" method="POST">
             <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
             <div class="row">
-              <input type="text" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" />
+              <input type="text" id="inputComentario" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" />
             </div>
             <button type="submit" class="btn btn-primary mt-2 align-items-center">Publicar</button>
           </form>
@@ -122,12 +122,15 @@
               <div class="border col-10 border-2 rounded p-3">
                 <h5><%= comentario.texto %><!-- METER EL TEXTO AQUI --></h5>
               </div>
-              <div class="col-2 border-2 rounded p-3">
+              <% if (typeof(session.user) !== 'undefined' && (comentario.user === session.user.name || session.user.role == 'GC' )) { %> 
+                <div class="col-2 border-2 rounded p-3">
                   <form action="borrarComentario" method="POST">
+                    <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
                     <input type="hidden" name="idComentario" id="idComentario" value="<%=comentario.id %>" />
                     <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                   </form>
               </div>
+              <% }%>
             </div>
           </div>
         </div>

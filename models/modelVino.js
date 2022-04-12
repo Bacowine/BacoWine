@@ -43,5 +43,17 @@ modelVino.buscarComentariosVino = async(id) => {
   console.log(result);
   return result;
 }
+modelVino.buscarComentario = async(id) => {
+  const sql = pool.format('SELECT * FROM comentario WHERE id = ?', [id]);
+  const [result] = await pool.promise().query(sql);
+  console.log(result);
+  return result;
+}
+modelVino.borrarComentario = async(id) => {
+  const sql = pool.format('DELETE FROM comentario WHERE id = ?', [id]);
+  const [result] = await pool.promise().query(sql);
+  console.log(result);
+  return result;
+}
 
 module.exports = modelVino;

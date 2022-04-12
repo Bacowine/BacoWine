@@ -36,5 +36,7 @@ CREATE TABLE comentario (
   user VARCHAR(40) NOT NULL,
   idVino INT NOT NULL,
   texto VARCHAR(1000) NOT NULL,
-  fecha TIMESTAMP NOT NULL
+  fecha TIMESTAMP NOT NULL,
+  FOREIGN KEY (user) REFERENCES bacowine.usuario(user) ON DELETE CASCADE,
+  FOREIGN KEY (idVino) REFERENCES bacowine.vino(id) ON DELETE CASCADE
 );
