@@ -97,7 +97,7 @@
 
         </div>
       </div>
-
+      <% if (typeof(session.user) !== 'undefined' && session.user.role !== 'GC' ) { %> 
       <div class="row mt-5 text-white">
         <div class="col-1"></div>
         <div class="col-10 pb-3  border-bottom">
@@ -110,7 +110,7 @@
           </form>
         </div>
       </div>
-
+      <% } %>
       <div class="row text-white pb-5">
         <% vino.comentarios.forEach(comentario => { %>
         <div class="row">

@@ -84,9 +84,7 @@ controllerVino.borrarVino = async (request, response, next) => {
 };
 
 controllerVino.comentarVino = async (request, response, next) => {
-
-  console.log(request.session);
-
+  
   const {
     idVino, texto
   } = request.body;
@@ -96,10 +94,16 @@ controllerVino.comentarVino = async (request, response, next) => {
   } = request.session;
 
   try {
-    const id = await modelVino.comentarVino([
-      user.name, idVino, texto
-    ]);
-    response.redirect(`/vino/detalles?id=${idVino}#${id}`);
+    if(user === undefined || user.role === 'GC'){
+      const e = new Error('Forbidden');
+      e.status = 403;
+      next(e);
+    }else{
+      const id = await modelVino.comentarVino([
+        user.name, idVino, texto
+      ]);
+      response.redirect(`/vino/detalles?id=${idVino}#${id}`);
+    }
   }
   catch (e) {
     console.error(e);
