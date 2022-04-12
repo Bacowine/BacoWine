@@ -24,6 +24,7 @@ class Variedad extends HTMLElement {
 
     this.updateInputVariedad = this.updateInputVariedad.bind(this);
     this.clickAddVariant = this.clickAddVariant.bind(this);
+    this.sumHundred = this.sumHundred.bind(this);
   }
 
   calculateRemaining() {
@@ -43,6 +44,20 @@ class Variedad extends HTMLElement {
     this.querySelector('#variedad').value = JSON.stringify(red);
   }
 
+  sumHundred(toOther) {
+    const remain = this.calculateRemaining();
+    const inputs = [...this.shadowRoot.querySelectorAll('#containerVariedad input')];
+    const other = inputs.filter((val) => val.previousElementSibling.textContent === 'Otros');
+    const rest = inputs.filter((val) => val.previousElementSibling.textContent !== 'Otros');
+    if (rest.length >= 1 && !toOther) {
+      rest[rest.length - 1].valueAsNumber += remain;
+    } else if (other.length === 1) {
+      other[0].valueAsNumber += remain;
+    } else {
+      this.shadowRoot.querySelector('#containerVariedad').append(this.createVariedad('Otros', remain));
+    }
+  }
+
   createVariedad(name, remaining) {
     const d = document.createElement('div');
     const s = document.createElement('span');
@@ -59,11 +74,10 @@ class Variedad extends HTMLElement {
     i.onchange = () => {
       if (i.valueAsNumber < 0) i.valueAsNumber = 0;
       const remain = this.calculateRemaining();
-      if (remain < 0) {
-        i.valueAsNumber = -remain;
-      } else if (i.valueAsNumber === 0) {
+      if (i.valueAsNumber === 0) {
         i.valueAsNumber = remain;
       }
+      this.sumHundred(true); // apañitos :)
       this.updateInputVariedad();
     };
     b.type = 'button';
@@ -71,6 +85,7 @@ class Variedad extends HTMLElement {
     b.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
     b.onclick = () => {
       d.remove();
+      this.sumHundred();
       this.updateInputVariedad();
     };
 
@@ -84,8 +99,12 @@ class Variedad extends HTMLElement {
     const addInput = this.shadowRoot.querySelector('#nameVariedad');
     const inputs = [...container.querySelectorAll('input')];
     const inp = inputs.length - 1;
+
+    addInput.value = addInput.value.trim();
+    const oth = inputs.filter((val) => val.previousElementSibling.textContent === addInput.value);
+
     let remaining = this.calculateRemaining();
-    if (remaining <= 0 && addInput.value.trim() !== '' && inp !== -1 && inputs[inp].value / 2 > 0.009) {
+    if (remaining <= 0 && addInput.value.trim() !== '' && oth.length === 0 && inp !== -1 && inputs[inp].value / 2 > 0.009) {
       inputs[inp].valueAsNumber /= 2;
       remaining = inputs[inp].valueAsNumber;
     } else {
@@ -93,7 +112,7 @@ class Variedad extends HTMLElement {
       addInput.click();
     }
     if (remaining !== 0) {
-      if (addInput.value.trim() !== '') {
+      if (addInput.value.trim() !== '' && oth.length === 0) {
         container.append(this.createVariedad(addInput.value, remaining));
         this.updateInputVariedad();
       }
@@ -123,8 +142,9 @@ class Variedad extends HTMLElement {
     const container = this.shadowRoot.querySelector('#containerVariedad');
     const variedad = JSON.parse(this.value);
     Object.keys(variedad).forEach((key) => {
-      container.append(this.createVariedad(key, variedad[key]));
+      container.append(this.createVariedad(key.trim(), variedad[key]));
     });
+    this.sumHundred();
   }
 }
 
