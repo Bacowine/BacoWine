@@ -95,20 +95,20 @@
 
         </div>
       </div>
-
+      <% if (typeof(session.user) !== 'undefined' && session.user.role !== 'GC' ) { %> 
       <div class="row mt-5 text-white">
         <div class="col-1"></div>
         <div class="col-10 pb-3  border-bottom">
           <form action="/vino/comentarVino" method="POST">
             <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
             <div class="row">
-              <input type="text" id="inputComentario" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" />
+              <input type="text" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" minlength="5" maxlength="280" />
             </div>
             <button type="submit" class="btn btn-primary mt-2 align-items-center">Publicar</button>
           </form>
         </div>
       </div>
-
+      <% } %>
       <div class="row text-white pb-5">
         <% vino.comentarios.forEach(comentario => { %>
         <div class="row">
