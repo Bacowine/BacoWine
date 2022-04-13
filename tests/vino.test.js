@@ -13,7 +13,7 @@ test('Añadir vino ejemplo modelo', async () => {
   const id = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', img], { a: 10 });
   expect(id).not.toBe(undefined);
   const sql = pool.format('DELETE FROM vino WHERE nombre = ?', ['CM 2017']);
-  pool.promise().query(sql);
+  await pool.promise().query(sql);
 });
 
 test('Añadir vino ejemplo controlador', async () => {
@@ -67,16 +67,20 @@ test('mostrar vino que no existe', async () => {
 });
 
 test('Añadir comentario a un vino como UR, modelo', async () => {
-  const id = await modelVinos.comentarVino(['a', '7', 'Test de comentar vino modelo']);
+  const idVino = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  const id = await modelVinos.comentarVino(['a', idVino, 'Test de comentar vino modelo']);
   expect(id).not.toBe(undefined);
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
   const sql = pool.format('DELETE FROM comentario WHERE id = ?', [id]);
   await pool.promise().query(sql);
 });
 
 test('Añadir comentario a un vino como UR, controlador', async () => {
+  const idVino = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
   const mReq = {
     body: {
-      idVino: '7', texto: 'Test de comentar vino controlador'
+      idVino: idVino, texto: 'Test de comentar vino controlador'
     },
     session: {
       user: { name: 'a', role: 'UR' }
@@ -87,6 +91,8 @@ test('Añadir comentario a un vino como UR, controlador', async () => {
   const mNext = jest.fn();
   await CVinos.comentarVino(mReq, mRes, mNext);
   expect(mRes.redirect).toBeCalled();
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
   const sql = pool.format('DELETE FROM comentario WHERE texto = ?', ['Test de comentar vino controlador']);
   await pool.promise().query(sql);
 });
@@ -94,7 +100,7 @@ test('Añadir comentario a un vino como UR, controlador', async () => {
 test('Añadir comentario a un vino como GC, controlador', async () => {
   const mReq = {
     body: {
-      idVino: '7', texto: 'Test de comentar vino controlador como GC'
+      idVino: '-1', texto: 'Test de comentar vino controlador como GC'
     },
     session: { 
       user: { name: 'b', role: 'GC' }
@@ -110,7 +116,7 @@ test('Añadir comentario a un vino como GC, controlador', async () => {
 test('Añadir comentario a un vino como UNR, controlador', async () => {
   const mReq = {
     body: {
-      idVino: '7', texto: 'Test de comentar vino controlador como UNR'
+      idVino: '-1', texto: 'Test de comentar vino controlador como UNR'
     },
     session: { },
     errors: { lenght: 0 },
