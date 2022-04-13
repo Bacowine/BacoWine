@@ -11,12 +11,14 @@ controllerVino.verVino = async (request, response, next) => {
     next(new Error('El id tiene que ser un número válido'));
   } else {
     try {
-      const [rows, variedades] = await modelVino.find(request.query.id);
+      const [rows, variedades] = await modelVino.find(id);
       if (rows === undefined || variedades === undefined) {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
       } else {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
+        rows.comentarios = await modelVino.buscarComentariosVino(id);
+        if (rows.comentarios === undefined) rows.comentarios = [];
         response.render('vino_detalles', {
           res: null, vino: rows, variedades, title: 'Detalles del vino',
         });
@@ -90,4 +92,53 @@ controllerVino.borrarVino = async (request, response, next) => {
   }
 };
 
+controllerVino.comentarVino = async (request, response, next) => {
+  const {
+    idVino, texto,
+  } = request.body;
+
+  const { user } = request.session;
+
+  try {
+    if (user === undefined || user.role === 'GC') {
+      const e = new Error('Forbidden');
+      e.status = 403;
+      response.status(403);
+      next(e);
+    } else {
+      const id = await modelVino.comentarVino([
+        user.name, idVino, texto,
+      ]);
+      response.redirect(`/vino/detalles?id=${idVino}#${id}`);
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
+
+controllerVino.borrarComentario = async (request, response, next) => {
+  const { idVino, idComentario } = request.body;
+
+  const { user } = request.session;
+
+  try {
+    const [comentario] = await modelVino.buscarComentario([idComentario]);
+    if (comentario.user !== user.name && user.role !== 'GC') {
+      const e = new Error('Forbidden');
+      e.status = 403;
+      next(e);
+    } else {
+      await modelVino.borrarComentario([idComentario]);
+      response.redirect(`/vino/detalles?id=${idVino}#inputComentario`);
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
 module.exports = controllerVino;

@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="es-ES">
   <head>
+    <style>
+      body {
+        background: radial-gradient(circle, rgb(139, 55, 77) 0%, rgb(71, 18, 33) 100%);
+      }
+    </style>
     <%- include('./partials/_head',{title}); %>
   </head>
   <body>
     <%- include('./partials/_header'); %>
-    <h1>Detalles bodega <%= bodega.id %></h1>
+    <h1 class="text-white">Detalles bodega <%= bodega.nombre %></h1>
     <div class="container-fluid">
       <div class="row">
         <div class="col-5">
