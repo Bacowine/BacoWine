@@ -1,138 +1,163 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <%- include('./partials/_head',{title:'Agregar Vino'}); %>
+  <%- include('./partials/_head',{title:'Agregar Vino'}); %>
 </head>
+
 <body>
-    <%- include('./partials/_header'); %>
-    <div class="text-center"><h1>Agregar Vino</h1></div>
-    <div class="container">
-        <div class="row"> 
-
-            <% if(typeof id !== 'undefined') { %>                
-                <div class="alert alert-success" role="alert">
-                    Insertado vino correctamente con id <%= id %>
-                </div>                
-            <% } %> 
-
-            <% if(typeof alert != 'undefined') { %> 
-                <% alert.forEach( (error) => { %>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <%= error.msg %>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <% }); %> 
-            <% } %> 
-            <form class="needs-validation" action="/vino/agregarVino" enctype="multipart/form-data" method="POST" novalidate>
-                <div class="row mt-1">
-                    <label for="validationCustom01" class="form-label">Nombre</label>
-                    <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" name="nombre" required>
-                    <div class="valid-feedback">
-                        Nombre correcto!
-                    </div>
-                    <div class="invalid-feedback">
-                        Nombre incorrecto!
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <label for="validationCustom02" class="form-label">Grado alcoholico:</label>
-                    <input class="form-control" id="validationCustom02" minlength="1" maxlength="2" name="gradoAlcohol" type="number" step="0.01" min="0" max="20" required >
-                    <div class="valid-feedback">
-                        Grado alcoholico correcto!
-                    </div>
-                    <div class="invalid-feedback">
-                        Grado alcoholico incorrecto!
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <label for="validationCustom03" class="form-label">Bodega:</label>
-                    <input class="form-control" id="validationCustom03" minlength="1" maxlength="59" name="bodega" type="text" required/>
-                    <div class="valid-feedback">
-                        Bodega correcta!
-                    </div>
-                    <div class="invalid-feedback">
-                        Bodega incorrecta!
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <label for="validationCustom04" class="form-label">Localidad:</label>
-                    <input class="form-control" id="validationCustom04" minlength="1" maxlength="20" name="localidad" type="text" required/>
-                    <div class="valid-feedback">
-                        Localidad correcta!
-                    </div>
-                    <div class="invalid-feedback">
-                        Localidad incorrecta!
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <label for="validationCustom04" class="form-label">Clase:</label>
-                    <select class="selectpicker form-select" name="clase" data-style="btn-danger">
-                        <option>Blanco</option>
-                        <option>Rosado</option>
-                        <option>Tinto</option>
-                        <option>Clarete</option>
-                        <option>Blanc de blanc</option>
-                        <option>Blanc de noirs</option>
-                        <option>vino de nueces</option>
-                        <option>vino especiado</option>
-                        <option>Otros</option>
-                    </select>
-                </div>
-                <div class="row mt-1">
-                    <label for="validationCustom05" class="form-label">Tipo:</label>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Tranquilo" checked>Tranquilo
-                        <label class="form-check-label" for="radio1"></label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Espumoso">Espumoso
-                        <label class="form-check-label" for="radio2"></label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Espirituoso">Espirituoso
-                        <label class="form-check-label"></label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="tipo" value="Vino oloroso">Vino oloroso
-                        <label class="form-check-label"></label>
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <label for="validationCustom06" class="form-label">Imagen:</label>
-                    <input type="file" name="imagen" class="form-control" accept="image/png,image/jpeg">
-                </div>
-                <div class="row mt-4">
-                    <div class="col d-grid">
-                        <button type="submit" class="btn menu boton-buscar btn-dark "><h2>Agregar</h2></button>
-                    </div>
-                    <div class="col d-grid">
-                        <a type="button" href="/" class="btn btn-lg btn-dark " ><h2>Volver</h2></a>
-                    </div>
-                </div>
-            </form>
+  <%- include('./partials/_header'); %>
+  <div class="text-center">
+    <h1>Agregar Vino</h1>
+  </div>
+  <div class="container">
+    <div class="row">
+      <% if(typeof id !== 'undefined') { %>
+        <div class="alert alert-success" role="alert">
+          Insertado vino correctamente con id <%= id %>
         </div>
+      <% } %> 
+      <% if(typeof alert != 'undefined') { %> 
+        <% alert.forEach( (error) => { %>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <%= error.msg %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% }); %> 
+      <% } %>
+      <form class="needs-validation" action="/vino/agregarVino" enctype="multipart/form-data" method="POST" novalidate>
+        <div class="row mt-1">
+          <label for="validationCustom01" class="form-label">Nombre</label>
+          <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" name="nombre" value="<%= typeof(body) !== 'undefined' ? body.nombre : ''%>"
+            required />
+          <div class="valid-feedback">Nombre correcto!</div>
+          <div class="invalid-feedback">Nombre incorrecto!</div>
+        </div>
+        <div class="row mt-1">
+          <label for="validationCustom02" class="form-label">Grado alcoholico:</label>
+          <input class="form-control" id="validationCustom02" minlength="1" maxlength="2" name="gradoAlcohol" value="<%= typeof(body) !== 'undefined' ? body.gradoAlcohol : ''%>"
+            type="number" step="0.01" min="0" max="20" required />
+          <div class="valid-feedback">Grado alcoholico correcto!</div>
+          <div class="invalid-feedback">Grado alcoholico incorrecto!</div>
+        </div>
+        <div class="row mt-1">
+          <label for="validationCustom03" class="form-label">Bodega:</label>
+          <input class="form-control" id="validationCustom03" minlength="1" maxlength="59" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodega : ''%>" type="text"
+            required />
+          <div class="valid-feedback">Bodega correcta!</div>
+          <div class="invalid-feedback">Bodega incorrecta!</div>
+        </div>
+        <div class="row mt-1">
+          <label for="validationCustom04" class="form-label">Localidad:</label>
+          <input class="form-control" id="validationCustom04" minlength="1" maxlength="20" name="localidad" value="<%= typeof(body) !== 'undefined' ? body.localidad : ''%>" type="text"
+            required />
+          <div class="valid-feedback">¡Localidad correcta!</div>
+          <div class="invalid-feedback">¡Localidad incorrecta!</div>
+        </div>
+        <div class="row mt-1">
+          <label for="selectClase" class="form-label">Clase:</label>
+          <select id="selectClase" class="selectpicker form-select" name="clase" value="<%= typeof(body) !== 'undefined' ? body.clase : ''%>" data-style="btn-danger">
+            <option>Blanco</option>
+            <option>Rosado</option>
+            <option>Tinto</option>
+            <option>Clarete</option>
+            <option>Blanc de blanc</option>
+            <option>Blanc de noirs</option>
+            <option>Vino de nueces</option>
+            <option>Vino especiado</option>
+            <option>Ninguna clase</option>
+          </select>
+        </div>
+        <div class="row mt-1">
+          <label for="tipo" class="form-label">Tipo:</label>
+          <input id="tipo" class="form-control" type="text" name="tipo" value="<%= typeof(body) !== 'undefined' ? body.tipo : ''%>" readonly />
+        </div>
+        <div class="row mt-1">
+          <label for="selectMaceracion" class="form-label">Maceración:</label>
+          <select id="selectMaceracion" class="selectpicker form-select" name="maceracion" value="<%= typeof(body) !== 'undefined' ? body.maceracion : ''%>" data-style="btn-danger">
+            <option>Crianza</option>
+            <option>Joven</option>
+            <option>Roble</option>
+            <option>Reserva</option>
+            <option>Gran Reserva</option>
+          </select>
+        </div>
+        <div class="row mt-1">          
+          <label for="variedad" class="form-label">Variedad:</label>
+          <add-variant value="<%= typeof(body) !== 'undefined' ? body.variedad : '{}'%>" class="p-0">
+          </add-variant>
+        </div>
+        <div class="row mt-1">
+          <label for="file" class="form-label">Imagen:</label>
+          <input type="file" name="imagen" value="<%= typeof(body) !== 'undefined' ? body.imagen : '' %>" class="form-control" accept="image/png,image/jpeg" />
+        </div>
+        <div class="row mt-4">
+          <div class="col d-grid">
+            <button type="submit" class="btn menu boton-buscar btn-dark">
+              <h2>Agregar</h2>
+            </button>
+          </div>
+          <div class="col d-grid">
+            <a type="button" href="/" class="btn btn-lg btn-dark">
+              <h2>Volver</h2>
+            </a>
+          </div>
+        </div>
+      </form>
     </div>
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function () {
-        'use strict'
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
-    
+  </div>
+  <script type="text/javascript" src="/static/javascripts/vino_variante.js"></script>
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+      validarFormulario();
+      cambiarTipoSegunClase();
+
+      function validarFormulario() {
+        var forms = document.querySelectorAll(".needs-validation");
         // Loop over them and prevent submission
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-                }
-    
-                form.classList.add('was-validated')
-            }, false)
-            })
-        })()
-    </script>
-    <%- include('./partials/_footer'); %>
+        forms.forEach((form) => {
+          form.addEventListener("submit", (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },false);
+        });
+      }
+
+      function cambiarTipoSegunClase() {
+        let selector = document.querySelector("#selectClase");
+        let tipo = document.querySelector("#tipo");
+        let tiposVinos = [
+          "Tranquilo",
+          "Espumoso",
+          "Espirituoso",
+          "Vino oloroso",
+        ];
+        let clases = {
+          "Blanco": 0,
+          "Rosado": 0,
+          "Tinto": 0,
+          "Clarete": 0,
+          "Blanc de blanc": 1,
+          "Blanc de noirs": 1,
+          "Vino de nueces": 2,
+          "Vino especiado": 2,
+          "Ninguna clase": 3,
+        };
+        selector.addEventListener("change", (evt) => changeTipo(evt.currentTarget.value));
+        changeTipo(selector.value);
+
+        function changeTipo(val) {
+          tipo.value = clases.hasOwnProperty(val) ?
+            tiposVinos[clases[val]] :
+            tiposVinos[3];
+        }
+      }
+    });
+  </script>
+  <%- include('./partials/_footer'); %>
 </body>
+
 </html>
