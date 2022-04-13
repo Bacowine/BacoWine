@@ -23,4 +23,7 @@ router.route('/agregarVino')
 router.route('/borrarVino')
   .post(authRole(ROLE.ADMIN), cVinos.borrarVino);
 
+router.route('/comentarVino')
+  .post(authRole(ROLE.USER), cVinos.comentarVino);
+
 module.exports = router;

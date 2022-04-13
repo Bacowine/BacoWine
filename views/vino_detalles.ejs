@@ -2,10 +2,15 @@
 <html>
   <head>
     <%- include('./partials/_head',{title}); %>
+    <style>
+      body {
+        background: radial-gradient(circle, rgb(107, 107, 107) 0%, rgb(42, 42, 42) 100%);
+      }
+    </style>
   </head>
   <body>
     <%- include('./partials/_header'); %>
-    <h1>Detalles vino <%= vino.id %></h1>
+    <h1 class="text-white">Detalles vino <%= vino.nombre %></h1>
     <div class="container-fluid">
       <div class="row">
         <div class="col-5">
@@ -92,6 +97,39 @@
 
         </div>
       </div>
+      <% if (typeof(session.user) !== 'undefined' && session.user.role !== 'GC' ) { %> 
+      <div class="row mt-5 text-white">
+        <div class="col-1"></div>
+        <div class="col-10 pb-3  border-bottom">
+          <form action="/vino/comentarVino" method="POST">
+            <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
+            <div class="row">
+              <input type="text" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" minlength="5" maxlength="280" />
+            </div>
+            <button type="submit" class="btn btn-primary mt-2 align-items-center">Publicar</button>
+          </form>
+        </div>
+      </div>
+      <% } %>
+      <div class="row text-white pb-5">
+        <% vino.comentarios.forEach(comentario => { %>
+        <div class="row">
+          <div class="col-1"></div>
+          <div class="col-10">
+            <div class="row">
+              <p id="<%= comentario.id %>"></p>
+              <h5><strong><%= comentario.user %><!-- NOMBRE DE USUARIO --></strong> <span class="badge"><%= comentario.fecha.toLocaleString('es-ES') %><!-- FECHA --> </span></h5> 
+            </div>
+            <div class="row">
+              <div class="border border-2 rounded p-3">
+                <h5><%= comentario.texto %><!-- METER EL TEXTO AQUI --></h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      
     </div>
     <%- include('./partials/_footer'); %>
   </body>
