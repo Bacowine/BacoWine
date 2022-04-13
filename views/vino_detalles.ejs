@@ -102,7 +102,7 @@
           <form action="/vino/comentarVino" method="POST">
             <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
             <div class="row">
-              <input type="text" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" minlength="5" maxlength="280" />
+              <input type="text" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" minlength="5" maxlength="280" required/>
             </div>
             <button type="submit" class="btn btn-primary mt-2 align-items-center">Publicar</button>
           </form>
