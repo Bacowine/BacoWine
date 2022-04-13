@@ -103,6 +103,7 @@ controllerVino.comentarVino = async (request, response, next) => {
     if (user === undefined || user.role === 'GC') {
       const e = new Error('Forbidden');
       e.status = 403;
+      response.status(403);
       next(e);
     } else {
       const id = await modelVino.comentarVino([

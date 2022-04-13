@@ -65,3 +65,58 @@ test('mostrar vino que no existe', async () => {
   expect(result).toBe(undefined);
   expect(err).toBe(undefined);
 });
+
+test('Añadir comentario a un vino como UR, modelo', async () => {
+  const id = await modelVinos.comentarVino(['a', '7', 'Test de comentar vino modelo']);
+  expect(id).not.toBe(undefined);
+  const sql = pool.format('DELETE FROM comentario WHERE id = ?', [id]);
+  await pool.promise().query(sql);
+});
+
+test('Añadir comentario a un vino como UR, controlador', async () => {
+  const mReq = {
+    body: {
+      idVino: '7', texto: 'Test de comentar vino controlador'
+    },
+    session: {
+      user: { name: 'a', role: 'UR' }
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.comentarVino(mReq, mRes, mNext);
+  expect(mRes.redirect).toBeCalled();
+  const sql = pool.format('DELETE FROM comentario WHERE texto = ?', ['Test de comentar vino controlador']);
+  await pool.promise().query(sql);
+});
+
+test('Añadir comentario a un vino como GC, controlador', async () => {
+  const mReq = {
+    body: {
+      idVino: '7', texto: 'Test de comentar vino controlador como GC'
+    },
+    session: { 
+      user: { name: 'b', role: 'GC' }
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes = { status: jest.fn(), render: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.comentarVino(mReq, mRes, mNext);
+  expect(mRes.status).toBeCalledWith(403);
+});
+
+test('Añadir comentario a un vino como UNR, controlador', async () => {
+  const mReq = {
+    body: {
+      idVino: '7', texto: 'Test de comentar vino controlador como UNR'
+    },
+    session: { },
+    errors: { lenght: 0 },
+  };
+  const mRes = { status: jest.fn(), render: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.comentarVino(mReq, mRes, mNext);
+  expect(mRes.status).toBeCalledWith(403);
+});
