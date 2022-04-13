@@ -4,6 +4,12 @@
       <img src="/static/logo.svg" height="30px" class="d-inline-block align-text-top">
     </a>
 
+    <div class="navbar navbar-expand mt-2">
+      <a class="nav-link active h4" href="/">Vinos</a>
+      <a class="nav-link h4" href="/bodegas">Bodegas</a>
+    </div>
+   
+
     <% if (!session.user || !session.user.name || !session.user.role) {%> 
      <div> <a href="/login" class="btn btn-outline-dark">Login</a>
       <a href="/signup" class="btn btn-outline-dark">Registrarse</a>
