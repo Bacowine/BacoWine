@@ -11,7 +11,7 @@ controllerVino.verVino = async (request, response, next) => {
     next(new Error('El id tiene que ser un número válido'));
   } else {
     try {
-      const [rows, variedades] = await modelVino.find(request.query.id);
+      const [rows, variedades] = await modelVino.find(id);
       if (rows === undefined || variedades === undefined) {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
@@ -119,4 +119,26 @@ controllerVino.comentarVino = async (request, response, next) => {
   }
 };
 
+controllerVino.borrarComentario = async (request, response, next) => {
+  const { idVino, idComentario } = request.body;
+
+  const { user } = request.session;
+
+  try {
+    const [comentario] = await modelVino.buscarComentario([idComentario]);
+    if (comentario.user !== user.name && user.role !== 'GC') {
+      const e = new Error('Forbidden');
+      e.status = 403;
+      next(e);
+    } else {
+      await modelVino.borrarComentario([idComentario]);
+      response.redirect(`/vino/detalles?id=${idVino}#inputComentario`);
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
 module.exports = controllerVino;

@@ -79,16 +79,14 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  Estas seguro de que quieres borrar el vino?
+                  <p class="text-body">Estas seguro de que quieres borrar el vino?</p> 
                 </div>
                 <div class="modal-footer">
-
                   <form action="borrarVino" method="POST">
                     <input type="hidden" name="id" id="id" value="<%=vino.id%>" />
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                   </form>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-
                 </div>
               </div>
             </div>
@@ -121,9 +119,18 @@
               <h5><strong><%= comentario.user %><!-- NOMBRE DE USUARIO --></strong> <span class="badge"><%= comentario.fecha.toLocaleString('es-ES') %><!-- FECHA --> </span></h5> 
             </div>
             <div class="row">
-              <div class="border border-2 rounded p-3">
+              <div class="border col-10 border-2 rounded p-3">
                 <h5><%= comentario.texto %><!-- METER EL TEXTO AQUI --></h5>
               </div>
+              <% if (typeof(session.user) !== 'undefined' && (comentario.user === session.user.name || session.user.role == 'GC' )) { %> 
+                <div class="col-2 border-2 rounded p-3">
+                  <form action="borrarComentario" method="POST">
+                    <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
+                    <input type="hidden" name="idComentario" id="idComentario" value="<%=comentario.id %>" />
+                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                  </form>
+              </div>
+              <% }%>
             </div>
           </div>
         </div>
