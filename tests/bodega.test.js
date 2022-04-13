@@ -1,22 +1,25 @@
 const pool = require('../models/db');
 const CBodega = require('../controllers/controllerBodega');
 const modelBodega = require('../models/modelBodega');
+const { MockBodega } = require('./_mocks');
 
 afterAll(() => {
   pool.end();
 });
+
+/* Falla si no hay
 test('model bodega / ver bodega con id=1', async () => {
   const [result] = await modelBodega.find(1);
   expect(result).not.toBe(undefined);
   expect(result.id).toBe(1);
-});
+}); */
 
-test('model bodega / agregar bodega con alfanumericos', async () => {
+test('model bodega / agregar bodega con año correcto', async () => {
   let result;
   let err;
 
   try {
-    result = await modelBodega.add(['Azpilicueta', 1929, 'Rioja', 'Muy bonito', 'Rioja', 0]);
+    result = await modelBodega.add(Object.values(MockBodega));
     console.log(result);
   } catch (e) {
     console.log(e);
@@ -29,9 +32,11 @@ test('model bodega / agregar bodega con alfanumericos', async () => {
 test('model bodega / agregar bodega con anyo incorrecto', async () => {
   let result;
   let err;
+  const bodega = MockBodega;
+  bodega.anyoCreacion = '*&*&(';
 
   try {
-    result = await modelBodega.add(['Azpilicueta', '*&*&(', 'Rioja', 'Muy bonito', 'Rioja', 0]);
+    result = await modelBodega.add(Object.values(bodega));
   } catch (e) {
     err = e;
   }

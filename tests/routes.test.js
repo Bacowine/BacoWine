@@ -5,6 +5,9 @@ const pool = require('../models/db');
 const modelBodega = require('../models/modelBodega');
 const modelUser = require('../models/modelUser');
 const modelVino = require('../models/modelVino');
+const {
+  MockVino, MockVariedad, MockBodega, MockLogin,
+} = require('./_mocks');
 
 let agent;
 
@@ -18,8 +21,7 @@ test('GET / should return 200', async () => {
 });
 
 test('GET /vino/detalles should return 200', async () => {
-  const vino = ['B', 'Blanco', 'Espirituoso', '0.26', 'UCM', 'Madrid, Granada', null];
-  const resultId = await modelVino.insert(vino);
+  const resultId = await modelVino.insert(Object.values(MockVino), MockVariedad);
   const response = await request(app).get(`/vino/detalles?id=${resultId}`).send();
   expect(response.statusCode).toBe(200);
 });
@@ -43,22 +45,13 @@ describe('Rutas protegidas sin autenticarse', () => {
   });
 
   test('POST /vino/agregarVinos POST should return 302', async () => {
-    const vino = {
-      nombre: 'B',
-      gradoAlcohol: '0.26',
-      bodega: 'UCM',
-      localidad: 'Madrid, Granada',
-      clase: 'Blanco',
-      tipo: 'Espirituoso',
-    };
-    const response = await request(app).post('/vino/agregarVino').send(vino);
+    const response = await request(app).post('/vino/agregarVino').send(MockVino);
     expect(response.statusCode).toBe(302);
     expect(response.headers.location).toBe('/login');
   });
 
   test('POST /vino/borrarVino should return 302', async () => {
-    const vino = ['B', 'Blanco', 'Espirituoso', '0.26', 'UCM', 'Madrid, Granada', null];
-    const resultId = await modelVino.insert(vino);
+    const resultId = await modelVino.insert(Object.values(MockVino), MockVariedad);
     const response = await request(app).post('/vino/borrarVino').send({ id: resultId });
 
     expect(resultId).not.toBeNaN();
@@ -67,21 +60,13 @@ describe('Rutas protegidas sin autenticarse', () => {
   });
 
   test('POST /bodega/agregarBodega should return 302', async () => {
-    const bodega = {
-      nombre: 'Callao',
-      anyoCreacion: '2018',
-      localizGeo: 'Madrid',
-      descripcion: 'Huele rico',
-      denominOrigen: 'Madrid',
-    };
-    const response = await request(app).post('/bodega/agregarBodega').send(bodega);
+    const response = await request(app).post('/bodega/agregarBodega').send(MockBodega);
     expect(response.statusCode).toBe(302);
     expect(response.headers.location).toBe('/login');
   });
 
   test('POST /bodega/borrarBodega should return 302', async () => {
-    const bodega = ['SeAcabo', 1970, 'Rioja', 'PorFin', 'Rioja', null];
-    const resultId = await modelBodega.add(bodega);
+    const resultId = await modelBodega.add(Object.values(MockBodega));
     const response = await request(app).post('/bodega/borrarBodega').send({ id: resultId });
 
     expect(resultId).not.toBeNaN();
@@ -91,20 +76,23 @@ describe('Rutas protegidas sin autenticarse', () => {
 });
 
 describe('Rutas protegidas autenticado como admin', () => {
+  const login = MockLogin;
   beforeAll(async () => {
     agent = request.agent(app);
-    const login = { user: 'UnitTest', password: 'UnitTest', role: 'GC' };
     const hash = await bcrypt.hash(login.password, 10);
+    const { password } = login;
+    login.role = 'GC';
+    login.password = hash;
 
-    const resultId = await modelUser.create([login.user, hash, login.role]);
-    const response = await agent.post('/login').send({ user: login.user, password: login.password });
+    const resultId = await modelUser.create(Object.values(login));
+    const response = await agent.post('/login').send({ user: login.user, password });
 
     expect(response.statusCode).toBe(302);
     expect(resultId).not.toBeNaN();
   });
 
   afterAll(async () => {
-    await modelUser.delete('UnitTest');
+    await modelUser.delete(login.user);
   });
 
   test('GET /login GET should return 302, redirect to /', async () => {
@@ -114,21 +102,13 @@ describe('Rutas protegidas autenticado como admin', () => {
   });
 
   test('POST /vino/agregarVinos POST should return 200', async () => {
-    const vino = {
-      nombre: 'B',
-      gradoAlcohol: '0.26',
-      bodega: 'UCM',
-      localidad: 'Madrid, Granada',
-      clase: 'Blanco',
-      tipo: 'Espirituoso',
-    };
+    const vino = { ...MockVino, variedad: JSON.stringify(MockVariedad) };
     const response = await agent.post('/vino/agregarVino').send(vino);
     expect(response.statusCode).toBe(200);
   });
 
   test('POST /vino/borrarVino should return 302', async () => {
-    const vino = ['B', 'Blanco', 'Espirituoso', '0.26', 'UCM', 'Madrid, Granada', null];
-    const resultId = await modelVino.insert(vino);
+    const resultId = await modelVino.insert(Object.values(MockVino), MockVariedad);
     const response = await agent.post('/vino/borrarVino').send({ id: resultId });
 
     expect(resultId).not.toBeNaN();
@@ -136,33 +116,21 @@ describe('Rutas protegidas autenticado como admin', () => {
   });
 
   test('POST /bodega/agregarBodega should return 200', async () => {
-    const bodega = {
-      nombre: 'Callao',
-      anyoCreacion: '2018',
-      localizGeo: 'Madrid',
-      descripcion: 'Huele rico',
-      denominOrigen: 'Madrid',
-    };
-    const response = await agent.post('/bodega/agregarBodega').send(bodega);
+    const response = await agent.post('/bodega/agregarBodega').send(MockBodega);
     expect(response.statusCode).toBe(200);
   });
 
-  test('POST /bodega/agregarBodega should return 500', async () => {
-    const bodega = {
-      nombre: 'Callao',
-      anyoCreacion: '201338',
-      localizGeo: 'Madrid',
-      descripcion: 'Huele rico',
-      denominOrigen: 'Madrid',
-      foto: null,
-    };
+  test('POST /bodega/agregarBodega with invalid year should return 500', async () => {
+    const bodega = MockBodega;
+    bodega.anyoCreacion = '201338';
+
     const response = await agent.post('/bodega/agregarBodega').send(bodega);
+
     expect(response.statusCode).toBe(500);
   });
 
   test('POST /bodega/borrarBodega should return 302', async () => {
-    const bodega = ['SeAcabo', 1970, 'Rioja', 'PorFin', 'Rioja', null];
-    const resultId = await modelBodega.add(bodega);
+    const resultId = await modelBodega.add(Object.values(MockBodega));
     const response = await agent.post('/bodega/borrarBodega').send({ id: resultId });
 
     expect(resultId).not.toBeNaN();
@@ -173,18 +141,21 @@ describe('Rutas protegidas autenticado como admin', () => {
 describe('Rutas protegidas autenticado como USER', () => {
   beforeAll(async () => {
     agent = request.agent(app);
-    const login = { user: 'UnitTestUR', password: 'UnitTestUR', role: 'UR' };
+    const login = MockLogin;
+    login.role = 'UR';
     const hash = await bcrypt.hash(login.password, 10);
+    const { password } = login;
+    login.password = hash;
 
-    const resultId = await modelUser.create([login.user, hash, login.role]);
-    const response = await agent.post('/login').send({ user: login.user, password: login.password });
+    const resultId = await modelUser.create(Object.values(login));
+    const response = await agent.post('/login').send({ user: login.user, password });
 
     expect(response.statusCode).toBe(302);
     expect(resultId).not.toBeNaN();
   });
 
   afterAll(async () => {
-    await modelUser.delete('UnitTestUR');
+    await modelUser.delete(MockLogin.user);
   });
 
   test('GET /vino/agregarVino should return 403 FORBIDDEN', async () => {
@@ -197,9 +168,10 @@ describe('Rutas protegidas autenticado como USER', () => {
   });
 });
 
-
 describe('Registro como USER', () => {
-  const login = { user: 'UnitTestRegistro', password: 'UnitTestRegistro', role: 'UR' };
+  const login = MockLogin;
+  login.role = 'UR';
+
   beforeAll(async () => {
     agent = request.agent(app);
     const response = await request(app).post('/signup').send({ user: login.user, password: login.password });
@@ -208,23 +180,22 @@ describe('Registro como USER', () => {
   });
 
   afterAll(async () => {
-    await modelUser.delete('UnitTestRegistro');
+    await modelUser.delete(login.user);
   });
 
   test('GET /login should return 302 REDIRECT', async () => {
-    const response = await agent.post('/login').send({ user: login.user, password: login.password });
+    await agent.post('/login').send({ user: login.user, password: login.password });
     const res = await agent.get('/login');
-    const res2 = await agent.post('/logout');
+    await agent.post('/logout');
     console.log(res);
     expect(res.statusCode).toBe(302);
     expect(res.headers.location).toBe('/');
   });
 
   test('GET /login should return 400 BAD SINTAX', async () => {
-    const response = await agent.post('/login').send({ user: login.user+"BADUSERTEST", password: login.password });
+    const response = await agent.post('/login').send({ user: `${login.user}BADUSERTEST`, password: login.password });
     const res = await agent.get('/login');
     expect(response.statusCode).toBe(400);
     expect(res.statusCode).toBe(200);
   });
-
 });

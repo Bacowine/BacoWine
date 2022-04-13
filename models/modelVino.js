@@ -3,12 +3,32 @@ const pool = require('./db');
 const modelVino = {};
 
 modelVino.find = async (id) => {
-  const sql = pool.format(`SELECT * 
-                          FROM vino JOIN variedad_vino ON vino.id = variedad_vino.vino
-                          where id = ? and activo = 1`, [id]);
-  console.log(sql);
-  const [result] = await pool.promise().query(sql);
-  return result;
+  let conn;
+  try {
+    conn = await pool.promise().getConnection();
+    await conn.beginTransaction();
+    const sql = pool.format('SELECT * FROM vino where id = ? and activo = 1', [id]);
+    console.log(sql);
+    const [result] = await conn.query(sql);
+
+    if (result.length === 0) {
+      await conn.rollback();
+      return [];
+    }
+
+    const sql2 = pool.format('SELECT nombre_variedad, porcentaje FROM variedad_vino where vino = ?', [id]);
+    console.log(sql2);
+    const [result2] = await conn.query(sql2);
+
+    await conn.commit();
+    return result.concat([result2]);
+  } catch (err) {
+    if (conn) {
+      await conn.rollback();
+      await conn.release();
+    }
+    throw err;
+  }
 };
 
 modelVino.insert = async (rows, variedad) => {

@@ -11,14 +11,15 @@ controllerVino.verVino = async (request, response, next) => {
     next(new Error('El id tiene que ser un número válido'));
   } else {
     try {
-      const [rows] = await modelVino.find(request.query.id);
-      console.log(rows);
-      if (rows === undefined) {
+      const [rows, variedades] = await modelVino.find(request.query.id);
+      if (rows === undefined || variedades === undefined) {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
       } else {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
-        response.render('vino_detalles', { res: null, vino: rows, title: 'Detalles del vino' });
+        response.render('vino_detalles', {
+          res: null, vino: rows, variedades, title: 'Detalles del vino',
+        });
       }
     } catch (e) {
       console.error(e);
@@ -43,6 +44,7 @@ controllerVino.agregarVino = async (request, response, next) => {
         nombre, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad, imagen,
       },
     });
+    return;
   }
 
   try {
