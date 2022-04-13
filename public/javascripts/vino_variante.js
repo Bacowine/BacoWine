@@ -44,18 +44,26 @@ class Variedad extends HTMLElement {
     this.querySelector('#variedad').value = JSON.stringify(red);
   }
 
-  sumHundred(toOther) {
+  sumHundred() {
     const remain = this.calculateRemaining();
     const inputs = [...this.shadowRoot.querySelectorAll('#containerVariedad input')];
     const other = inputs.filter((val) => val.previousElementSibling.textContent === 'Otros');
     const rest = inputs.filter((val) => val.previousElementSibling.textContent !== 'Otros');
-    if (rest.length >= 1 && !toOther) {
+    let ret = 0;
+    if (rest.length >= 1 && other.length !== 1) {
       rest[rest.length - 1].valueAsNumber += remain;
     } else if (other.length === 1) {
       other[0].valueAsNumber += remain;
+      if (other[0].valueAsNumber <= 0) {
+        ret = other[0].valueAsNumber;
+        other[0].parentElement.remove();
+      }
+    } else if (remain <= 0) {
+      ret = remain;
     } else {
       this.shadowRoot.querySelector('#containerVariedad').append(this.createVariedad('Otros', remain));
     }
+    return ret;
   }
 
   createVariedad(name, remaining) {
@@ -80,7 +88,8 @@ class Variedad extends HTMLElement {
       if (i.valueAsNumber === 0) {
         i.valueAsNumber = remain;
       }
-      this.sumHundred(true); // apañitos :)
+      const ret = this.sumHundred();
+      if (ret !== 0) i.valueAsNumber += ret;
       this.updateInputVariedad();
     };
     b.type = 'button';
@@ -116,7 +125,7 @@ class Variedad extends HTMLElement {
     }
     if (remaining !== 0) {
       if (addInput.value.trim() !== '' && oth.length === 0) {
-        container.append(this.createVariedad(addInput.value, remaining));
+        container.prepend(this.createVariedad(addInput.value, remaining));
         this.updateInputVariedad();
       }
       addInput.value = '';
@@ -141,7 +150,7 @@ class Variedad extends HTMLElement {
     } else {
       document.querySelector('#variedad').value = this.value;
     }
-    console.log(typeof this.value);
+
     const container = this.shadowRoot.querySelector('#containerVariedad');
     const variedad = JSON.parse(this.value);
     Object.keys(variedad).forEach((key) => {
