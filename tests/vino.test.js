@@ -2,6 +2,7 @@ const fs = require('fs');
 const pool = require('../models/db');
 const modelVinos = require('../models/modelVino');
 const CVinos = require('../controllers/controllerVino');
+const { MockVino, MockVariedad } = require('./_mocks');
 
 afterAll(() => {
   pool.end();
@@ -9,7 +10,7 @@ afterAll(() => {
 
 test('Añadir vino ejemplo modelo', async () => {
   const img = fs.readFileSync(`${__dirname}/img/shopping.jpg`);
-  const id = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 14, 'Carlos Moro', 'rioja', img]);
+  const id = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', img], { a: 10 });
   expect(id).not.toBe(undefined);
   const sql = pool.format('DELETE FROM vino WHERE nombre = ?', ['CM 2017']);
   pool.promise().query(sql);
@@ -18,7 +19,7 @@ test('Añadir vino ejemplo modelo', async () => {
 test('Añadir vino ejemplo controlador', async () => {
   const mReq = {
     body: {
-      nombre: 'CM 2017', clase: 'Tinto', tipo: 'Tranquilo', gradoAlcohol: 14, bodega: 'Carlos Moro', localidad: 'rioja',
+      ...MockVino, variedad: JSON.stringify(MockVariedad),
     },
     errors: { lenght: 0 },
     files: [fs.readFileSync(`${__dirname}/img/shopping.jpg`)],
@@ -28,7 +29,7 @@ test('Añadir vino ejemplo controlador', async () => {
   await CVinos.agregarVino(mReq, mRes, mNext);
   expect(mRes.render).toBeCalled();
   const sql = pool.format('DELETE FROM vino WHERE nombre = ?', ['CM 2017']);
-  pool.promise().query(sql);
+  await pool.promise().query(sql);
 });
 
 test('añadir vino con datos invalidos', async () => {

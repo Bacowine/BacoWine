@@ -1,5 +1,4 @@
 // const fs = require('fs');
-const e = require('express');
 const modelVino = require('../models/modelVino');
 
 const controllerVino = {};
@@ -12,16 +11,17 @@ controllerVino.verVino = async (request, response, next) => {
     next(new Error('El id tiene que ser un número válido'));
   } else {
     try {
-      const [rows] = await modelVino.find(id);
-      console.log(rows);
-      if (rows === undefined) {
+      const [rows, variedades] = await modelVino.find(id);
+      if (rows === undefined || variedades === undefined) {
         response.status(500);
         next(new Error('No existe el vino con ese ID'));
       } else {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         rows.comentarios = await modelVino.buscarComentariosVino(id);
-        if(rows.comentarios === undefined) rows.comentarios = [];
-        response.render('vino_detalles', { res: null, vino: rows, title: 'Detalles del vino' });
+        if (rows.comentarios === undefined) rows.comentarios = [];
+        response.render('vino_detalles', {
+          res: null, vino: rows, variedades, title: 'Detalles del vino',
+        });
       }
     } catch (e) {
       console.error(e);
@@ -33,22 +33,31 @@ controllerVino.verVino = async (request, response, next) => {
 };
 
 controllerVino.agregarVino = async (request, response, next) => {
+  const {
+    nombre, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad,
+  } = request.body;
+
   const alert = request.errors;
-  if (alert.length > 0) {
-    response.render('agregarVino', { alert });
+  if (alert.length > 0) { // >0
+    const imagen = request.file;
+    response.render('agregarVino', {
+      alert,
+      body: {
+        nombre, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad, imagen,
+      },
+    });
     return;
   }
 
-  const {
-    nombre, clase, tipo, gradoAlcohol, bodega, localidad,
-  } = request.body;
   try {
     // const imagen = (request.file)
     // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
     const imagen = (request.file) ? request.file.buffer : null;
+
     const id = await modelVino.insert([
-      nombre, clase, tipo, gradoAlcohol, bodega, localidad, imagen,
-    ]);
+      nombre, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
+    ], JSON.parse(variedad));
+
     response.render('agregarVino', { id });
   } catch (e) {
     console.error(e);
@@ -74,8 +83,7 @@ controllerVino.borrarVino = async (request, response, next) => {
         await modelVino.borrarVino(id);
         response.redirect('/');
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       response.status(500);
       e.message = 'Error interno de acceso a la base de datos';
@@ -85,24 +93,13 @@ controllerVino.borrarVino = async (request, response, next) => {
 };
 
 controllerVino.comentarVino = async (request, response, next) => {
-
-  console.log(request.session);
-
-  const {
-    idVino, texto
-  } = request.body;
-
-  const {
-    user
-  } = request.session;
+  const { idVino, texto } = request.body;
+  const { user } = request.session;
 
   try {
-    const id = await modelVino.comentarVino([
-      user.name, idVino, texto
-    ]);
+    const id = await modelVino.comentarVino([user.name, idVino, texto]);
     response.redirect(`/vino/detalles?id=${idVino}#${id}`);
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
     response.status(500);
     e.message = 'Error interno de acceso a la base de datos';
@@ -110,38 +107,22 @@ controllerVino.comentarVino = async (request, response, next) => {
   }
 };
 
-
 controllerVino.borrarComentario = async (request, response, next) => {
+  const { idVino, idComentario } = request.body;
 
-  //console.log(request.session);
-
-  const {
-    idVino, idComentario,
-  } = request.body;
-
-  const {
-    user
-  } = request.session;
-  //console.log(user);
+  const { user } = request.session;
 
   try {
-    //Comprobar que soy el propietario
-    let [comentario] = await modelVino.buscarComentario([
-      idComentario
-    ]);
-    //console.log(comentario.user);
-    if(comentario.user !== user.name && user.role !== 'GC'){
+    const [comentario] = await modelVino.buscarComentario([idComentario]);
+    if (comentario.user !== user.name && user.role !== 'GC') {
       const e = new Error('Forbidden');
       e.status = 403;
       next(e);
-    }else{
-      await modelVino.borrarComentario([
-        idComentario
-      ]);
+    } else {
+      await modelVino.borrarComentario([idComentario]);
       response.redirect(`/vino/detalles?id=${idVino}#inputComentario`);
     }
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
     response.status(500);
     e.message = 'Error interno de acceso a la base de datos';
