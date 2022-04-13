@@ -1,18 +1,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
-html, body {
-  height: 100%;
-  height: -webkit-fill-available;
+body {
   min-height: 100vh;
-  min-height: -moz-available;
-  min-height: -webkit-fill-available;
+  background: rgb(66,65,65);
+  background: linear-gradient(135deg, rgba(66,65,65,1) 0%, rgba(48,48,48,1) 35%, rgba(48,48,48,1) 100%);
 }
 
 body { 
   font: 14px 'Open Sans', sans-serif;
   background-color: #e9e9e9;
+  color: white;
 }
 
 a {
   color: #00B7FF;
+}
+
+/*Clase de bootstrap*/
+.form-floating {
+  color: black;
+}
+
+/*Estilo Barra de navegacion*/
+.navbar-shadow {
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.65); 
+}
+
+.link-animation{
+  position: relative;
+  padding: 0.5rem 0rem!important;
+  margin: 0rem 0.5rem!important;
+  box-shadow: 0px 0px 0px 0px #FC5185;
+  transition: box-shadow 0.6s linear;
+  color: #FC5185!important;
+}
+
+.link-animation::after{
+  content: '';
+  background: #FC5185;
+  display: block;
+  position: absolute;
+  bottom: -5px;
+  height: 3px;
+  width: 0px;
+  transition: width 0.15s linear;
+}
+
+.link-animation:hover::after{
+  width: 100%;
 }

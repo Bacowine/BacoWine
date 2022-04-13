@@ -23,11 +23,10 @@ modelVino.find = async (id) => {
     await conn.commit();
     return result.concat([result2]);
   } catch (err) {
-    if (conn) {
-      await conn.rollback();
-      await conn.release();
-    }
+    if (conn) await conn.rollback();
     throw err;
+  } finally {
+    if (conn) await conn.release();
   }
 };
 
@@ -46,14 +45,13 @@ modelVino.insert = async (rows, variedad) => {
       await conn.query(sql2);
     }));
 
-    conn.commit();
+    await conn.commit();
     return result.insertId;
   } catch (error) {
-    if (conn) {
-      await conn.rollback();
-      await conn.release();
-    }
+    if (conn) await conn.rollback();
     throw error;
+  } finally {
+    if (conn) await conn.release();
   }
 };
 
@@ -71,30 +69,32 @@ modelVino.borrarVino = async (id) => {
   return result;
 };
 
-modelVino.comentarVino = async(rows) => {
+modelVino.comentarVino = async (rows) => {
   const sql = pool.format('INSERT INTO comentario(user, idVino, texto, fecha) VALUES(?, CONVERT_TZ(NOW(), @@session.time_zone, "+02:00"))', [rows]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
   return result.insertId;
 };
 
-modelVino.buscarComentariosVino = async(id) => {
+modelVino.buscarComentariosVino = async (id) => {
   const sql = pool.format('SELECT id, user, texto, fecha FROM comentario WHERE idVino = ? ORDER BY fecha desc', [id]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;
-}
-modelVino.buscarComentario = async(id) => {
+};
+
+modelVino.buscarComentario = async (id) => {
   const sql = pool.format('SELECT * FROM comentario WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;
-}
-modelVino.borrarComentario = async(id) => {
+};
+
+modelVino.borrarComentario = async (id) => {
   const sql = pool.format('DELETE FROM comentario WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;
-}
+};
 
 module.exports = modelVino;
