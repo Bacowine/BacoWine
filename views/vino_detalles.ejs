@@ -2,141 +2,116 @@
 <html>
   <head>
     <%- include('./partials/_head',{title}); %>
-    <style>
-      body {
-        background: radial-gradient(circle, rgb(107, 107, 107) 0%, rgb(42, 42, 42) 100%);
-      }
-    </style>
   </head>
   <body>
     <%- include('./partials/_header'); %>
-    <h1 class="text-white">Detalles vino <%= vino.nombre %></h1>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-5">
 
-          <% if (vino.foto !== null) { %> 
-            <img src="data:image/png;base64, <%= vino.foto %>" class="img-fluid" alt="Foto vino">
-          <% } else { %>
-            <img src="/static/images/vino.jpg" class="img-fluid" alt="Foto vino">
-          <% } %> 
+    <div class="container-md px-4">
+      <div class="card bg-dark p-3">
+        <div class="row">
+          <div class="col-12 col-sm-4 my-auto">
 
-        </div>
-        <div class="col-7">
+            <% if (vino.foto !== null) { %> 
+              <img src="data:image/png;base64, <%= vino.foto %>" class="img-fluid rounded" alt="Foto vino">
+            <% } else { %>
+              <img src="/static/images/vino.jpg" class="img-fluid rounded" alt="Foto vino">
+            <% } %> 
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">Nombre</span>
-            </div>
-            <input type="text" value="<%=vino.nombre%>" class="form-control" readonly>
           </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">Clase</span>
+          <div class="col-12 col-sm-8 pt-3">
+            <div class="row gx-0">
+              <h1 class="col-10 col-lg-11 text-white text-capitalize"><%= vino.nombre %></h1>
+              <% if (typeof(session.user) !== 'undefined' && session.user.role === 'GC' ) { %> 
+                <!-- Button trigger modal -->
+                <button type="button" class="col-2 col-lg-1 btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  <i class="bi bi-trash"></i>
+                </button>
+              <% } %>
             </div>
-            <input type="text" value="<%=vino.clase%>" class="form-control" readonly>
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">tipo</span>
+            <hr class="text-muted">
+            <div class="row">
+              <% Object.keys(vino).forEach((atr) => { %>
+                <% if(!['id','comentarios','foto','activo'].includes(atr)) { %> 
+                  <div class="col-6">
+                    <div class="row">
+                      <span class="col-6 text-capitalize text-muted text-nowrap fw-bold"><%= atr %></span>
+                      <span class="col-6 text-uppercase text-white fw-bold"><%= vino[atr] %></span>
+                    </div>
+                  </div>
+                <% } %> 
+              <% }) %>               
             </div>
-            <input type="text" value="<%=vino.tipo%>" class="form-control" readonly>
-          </div>
+            <hr class="text-muted">
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">graduacion</span>
-            </div>
-            <input type="text" value="<%=vino.graduacion%>" class="form-control" readonly>
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">bodega</span>
-            </div>
-            <input type="text" value="<%=vino.bodega%>" class="form-control" readonly>
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">localidades</span>
-            </div>
-            <input type="text" value="<%=vino.localidades%>" class="form-control" readonly>
-          </div>   
-
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <i class="bi bi-trash"></i>
-          </button>
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Eliminar vino</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p class="text-body">Estas seguro de que quieres borrar el vino?</p> 
-                </div>
-                <div class="modal-footer">
-                  <form action="borrarVino" method="POST">
-                    <input type="hidden" name="id" id="id" value="<%=vino.id%>" />
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                  </form>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Eliminar vino</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p class="text-body">Estas seguro de que quieres borrar el vino?</p> 
+                  </div>
+                  <div class="modal-footer">
+                    <form action="borrarVino" method="POST">
+                      <input type="hidden" name="id" id="id" value="<%=vino.id%>" />
+                      <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div> 
-
-
+            </div> 
+          </div>
         </div>
-      </div>
+    </div>
+
+    <div class="card bg-dark my-5">
+      <div class="card-body">
+        <h5 class="card-title text-white">Comentarios</h5>
+
       <% if (typeof(session.user) !== 'undefined' && session.user.role !== 'GC' ) { %> 
-      <div class="row mt-5 text-white">
-        <div class="col-1"></div>
-        <div class="col-10 pb-3  border-bottom">
+      <div class="row gx-0 text-white mt-1">
+        <div class="pb-3 border-bottom">
           <form action="/vino/comentarVino" method="POST">
             <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
-            <div class="row">
-              <input type="text" class="bg-transparent border border-2 rounded p-3 text-white" name="texto" minlength="5" maxlength="280" />
+            <div class="row gx-0">
+              <textarea class="bg-transparent border border-2 rounded p-3 text-white" name="texto" minlength="5" maxlength="280" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary mt-2 align-items-center">Publicar</button>
           </form>
         </div>
       </div>
       <% } %>
-      <div class="row text-white pb-5">
+      <div class="row text-white gx-0 pb-5">
         <% vino.comentarios.forEach(comentario => { %>
-        <div class="row">
-          <div class="col-1"></div>
-          <div class="col-10">
-            <div class="row">
+        <div class="row g-0">
+            <div class="row g-0">
               <p id="<%= comentario.id %>"></p>
-              <h5><strong><%= comentario.user %><!-- NOMBRE DE USUARIO --></strong> <span class="badge"><%= comentario.fecha.toLocaleString('es-ES') %><!-- FECHA --> </span></h5> 
+              <p class="fw-bold"><%= comentario.user %><span class="badge"><%= comentario.fecha.toLocaleString('es-ES') %></span></p> 
             </div>
-            <div class="row">
-              <div class="border col-10 border-2 rounded p-3">
-                <h5><%= comentario.texto %><!-- METER EL TEXTO AQUI --></h5>
+            <div class="row g-0">
+              <div class="col-10 col-sm-11 border border-2 rounded p-1">
+                <p class="m-0"><%= comentario.texto %></p>
               </div>
               <% if (typeof(session.user) !== 'undefined' && (comentario.user === session.user.name || session.user.role == 'GC' )) { %> 
-                <div class="col-2 border-2 rounded p-3">
+                <div class="col-2 col-sm-1 text-center border-2 rounded p-2">
                   <form action="borrarComentario" method="POST">
                     <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
                     <input type="hidden" name="idComentario" id="idComentario" value="<%=comentario.id %>" />
-                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                    <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
                   </form>
               </div>
               <% }%>
             </div>
-          </div>
         </div>
         <% }) %>
       </div>
-      
+                
+    </div> 
+    </div>
     </div>
     <%- include('./partials/_footer'); %>
   </body>

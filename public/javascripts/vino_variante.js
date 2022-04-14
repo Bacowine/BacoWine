@@ -50,7 +50,10 @@ class Variedad extends HTMLElement {
     const other = inputs.filter((val) => val.previousElementSibling.textContent === 'Otros');
     const rest = inputs.filter((val) => val.previousElementSibling.textContent !== 'Otros');
     let ret = 0;
-    if (rest.length >= 1 && other.length !== 1) {
+
+    if (rest.length < 1 && other.length !== 1 && remain > 0) {
+      this.shadowRoot.querySelector('#containerVariedad').append(this.createVariedad('Otros', remain));
+    } if (rest.length >= 1 && other.length !== 1) {
       rest[rest.length - 1].valueAsNumber += remain;
     } else if (other.length === 1) {
       other[0].valueAsNumber += remain;
@@ -60,8 +63,6 @@ class Variedad extends HTMLElement {
       }
     } else if (remain <= 0) {
       ret = remain;
-    } else {
-      this.shadowRoot.querySelector('#containerVariedad').append(this.createVariedad('Otros', remain));
     }
     return ret;
   }

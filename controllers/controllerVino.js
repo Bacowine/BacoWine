@@ -19,8 +19,9 @@ controllerVino.verVino = async (request, response, next) => {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         rows.comentarios = await modelVino.buscarComentariosVino(id);
         if (rows.comentarios === undefined) rows.comentarios = [];
+        rows.variedades = variedades.map((item) => `${item.porcentaje}% ${item.nombre_variedad}`, '').join(', ');
         response.render('vino_detalles', {
-          res: null, vino: rows, variedades, title: 'Detalles del vino',
+          res: null, vino: rows, title: 'Detalles del vino',
         });
       }
     } catch (e) {
