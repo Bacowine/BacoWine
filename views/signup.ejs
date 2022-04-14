@@ -74,7 +74,7 @@
         
           <form action="/signup" method="POST" class="row g-3">
             <div class="col-12">
-              <input type="text" class="form-control login-form" placeholder="Usuario" name="user" pattern="^[a-zA-Z0-9]*$" oninvalid="setCustomValidity('Solo se permiten caracteres alfanuméricos')" required />
+              <input type="text" class="form-control login-form" placeholder="Usuario" name="user" pattern="^[a-zA-Z0-9]*$" oninput="setCustomValidity('')" oninvalid="setCustomValidity('Solo se permiten caracteres alfanuméricos')" required />
             </div>
             <div class="col-12 input-group">
               <input id="password" type="password" class="form-control login-form" placeholder="Contraseña" name="password" required />              
