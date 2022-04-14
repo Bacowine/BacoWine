@@ -54,8 +54,8 @@ const vinoSchema = checkSchema({
     errorMessage: 'Variedad no tiene un formato válido',
     custom: {
       options: (value) => {
-        const json = JSON.parse(value);
-        const sum = Object.values(json).reduce((prev, cur) => prev + parseInt(cur, 10), 0);
+        const json = Object.values(JSON.parse(value));
+        const sum = json.reduce((prev, cur) => prev + Math.abs(parseInt(cur, 10)), 0);
         return sum === 100;
       },
       errorMessage: 'Variedad la suma de los porcentajes no es 100%',
