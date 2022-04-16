@@ -47,3 +47,10 @@ CREATE TABLE comentario (
   FOREIGN KEY (user) REFERENCES bacowine.usuario(user) ON DELETE CASCADE,
   FOREIGN KEY (idVino) REFERENCES bacowine.vino(id) ON DELETE CASCADE
 );
+
+CREATE TABLE valoracion_vino (
+  vino INT NOT NULL,
+  valoracion DECIMAL(3,1) NOT NULL,
+  usuario VARCHAR(40) NOT NULL,
+  PRIMARY KEY (vino, usuario)
+);
