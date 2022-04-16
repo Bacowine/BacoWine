@@ -39,8 +39,8 @@ modelVino.insert = async (rows, variedad, valoracion, idUsuario) => {
     console.log(sql1.substring(0, 500));
     const [result] = await conn.query(sql1);
     
-    const sql2 = pool.format('INSERT INTO valoracion_vino(vino, usuario, valoracion) VALUES(?,?, ?)',[rows[0],idUsuario, valoracion]);
-    await conn.query(sql2);
+    //const sql2 = pool.format('INSERT INTO valoracion_vino(vino, usuario, valoracion) VALUES(?,?, ?)',[rows[0],idUsuario, valoracion]);
+    //await conn.query(sql2);
 
     await Promise.all(Object.entries(variedad).map(async ([key, value]) => {
       const sql2 = pool.format('INSERT INTO variedad_vino(vino,nombre_variedad,porcentaje) VALUES(?,?,?)', [result.insertId, key, value]);
@@ -104,27 +104,35 @@ modelVino.valorarVino = async (rows) => {
   const sql = pool.format('INSERT INTO valoracion_vino(vino,usuario,valoracion) VALUES(?)', [rows]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
-  return result.insertId;
+  return result;
 };
 
 modelVino.modificarvalorarVino = async (idVino, idUsuario, valoracion) => {
   const sql = pool.format('UPDATE valoracion_vino SET valoracion = ? where vino = ? AND usuario =  ?', [valoracion, idVino, idUsuario]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
-  return result.insertId;
+  return result;
 };
 
-modelVino.buscarValoracionVino= async (idVino) => {
-  const sql = pool.format('SELECT * FROM valoracion_vino WHERE vino = ?', [id]);
+modelVino.buscarValoracionesVino= async (idVino) => {
+  const sql = pool.format('SELECT AVG(valoracion) "Media", count(valoracion) "Num Valoraciones" FROM valoracion_vino WHERE vino = ?', [idVino]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
-  let sum=0;
+  return result;
+  /*let sum=0;
   let cont=0;
   result.forEach(row => {//Calcular media
     sum+=row.valoracion;
     cont++;
   });
-  return sum/cont;
+  return sum/cont;*/
+};
+
+modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
+  const sql = pool.format('SELECT COUNT(valoracion) FROM valoracion_vino WHERE usuario = ? AND vino = ?', [idUsuario, idVino]);
+  const [result] = await pool.promise().query(sql);
+  console.log(result);
+  return result;
 };
 
 module.exports = modelVino;
