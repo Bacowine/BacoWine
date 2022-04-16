@@ -142,4 +142,37 @@ controllerVino.borrarComentario = async (request, response, next) => {
     next(e);
   }
 };
+
+controllerVino.valorarVino = async (request, response, next) => {
+  const {
+    idVino, valoracion,
+  } = request.body;
+
+  const { user } = request.session;
+
+  try {
+    if (user === undefined || user.role === 'GC') {
+      const e = new Error('Forbidden');
+      e.status = 403;
+      response.status(403);
+      next(e);
+    }
+    else {
+      const existe = await modelVino.confirmarValoracionVino([idVino, user.name]);
+      
+      if (existe == 0) {
+        await modelVino.valorarVino([idVino, user.name, valoracion]);
+      }
+      else {
+        await modelVino.modificarvalorarVino([idVino, user.name, valoracion]);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+}
+
 module.exports = controllerVino;
