@@ -63,9 +63,16 @@ const vinoSchema = checkSchema({
         const json = Object.values(JSON.parse(value));
         const sum = json.reduce((prev, cur) => prev + Math.abs(parseFloat(cur).toFixed(2)), 0);
         const countEmpty = json.filter((v) => parseFloat(v) === 0).length;
+
+        if (json.length === 0) throw new Error('Debe haber al menos una variedad');
+        if (sum === 100 && countEmpty > 0) {
+          throw new Error('Para que haya variedades sin porcentaje la suma de los porcentajes debe ser inferior al 100%');
+        }
+        if (sum !== 100 && countEmpty === 0) {
+          throw new Error('La suma de los porcentajes es distinta del 100%');
+        }
         return (sum === 100 && countEmpty === 0) || (sum < 100 && countEmpty > 0);
       },
-      errorMessage: 'Variedad la suma de los porcentajes no es 100%',
     },
   },
 });
