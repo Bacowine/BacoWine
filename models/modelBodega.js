@@ -24,7 +24,7 @@ modelBodega.findID = async (id) => {
 };
 
 modelBodega.borrarBodega = async (id) => {
-  const sql = pool.format('UPDATE bodegas SET activo = 0 WHERE id = ?',[id]);
+  const sql = pool.format('UPDATE bodegas SET activo = 0 WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
   return result;

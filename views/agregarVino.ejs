@@ -11,7 +11,7 @@
     <h1>Agregar Vino</h1>
   </div>
   <div class="container">
-    <div class="row">
+    <div class="row px-5">
       <% if(typeof id !== 'undefined') { %>
         <div class="alert alert-success" role="alert">
           Insertado vino correctamente con id <%= id %>
@@ -25,40 +25,37 @@
           </div>
         <% }); %> 
       <% } %>
-      <form class="needs-validation" action="/vino/agregarVino" enctype="multipart/form-data" method="POST" novalidate>
+      <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
         <div class="row mt-1">
           <label for="validationCustom01" class="form-label">Nombre</label>
           <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" name="nombre" value="<%= typeof(body) !== 'undefined' ? body.nombre : ''%>"
             required />
-          <div class="valid-feedback">Nombre correcto!</div>
-          <div class="invalid-feedback">Nombre incorrecto!</div>
+        </div>
+        <div class="row mt-1">
+          <label for="añada" class="form-label">Añada</label>
+          <input class="form-control" id="añada" min="1800" max="<%= new Date().getFullYear() %>" type="number" name="añada" value="<%= typeof(body) !== 'undefined' ? body.añada : ''%>"
+            required />
         </div>
         <div class="row mt-1">
           <label for="validationCustom02" class="form-label">Grado alcoholico:</label>
-          <input class="form-control" id="validationCustom02" minlength="1" maxlength="2" name="gradoAlcohol" value="<%= typeof(body) !== 'undefined' ? body.gradoAlcohol : ''%>"
-            type="number" step="0.01" min="0" max="20" required />
-          <div class="valid-feedback">Grado alcoholico correcto!</div>
-          <div class="invalid-feedback">Grado alcoholico incorrecto!</div>
+          <input class="form-control" id="validationCustom02" name="gradoAlcohol" value="<%= typeof(body) !== 'undefined' ? body.gradoAlcohol : ''%>"
+            type="number" step="0.01" min="5" max="20" required />
         </div>
         <div class="row mt-1">
 
           <label for="validationCustom03" class="form-label">Bodega:</label>
-          <input class="form-control" id="validationCustom03" minlength="1" maxlength="59" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodega : ''%>" type="text"
+          <input class="form-control" id="validationCustom03" minlength="1" maxlength="50" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodega : ''%>" type="text"
             required />
 
           <label for="validationCustom03_1" class="form-label">Id Bodega:</label>
           <input class="form-control" id="validationCustom03_1" min="1" step="1" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodegaID : ''%>" type="number"
             required />
-
-          <div class="valid-feedback">Bodega correcta!</div>
-          <div class="invalid-feedback">Bodega incorrecta!</div>
         </div>
         <div class="row mt-1">
           <label for="validationCustom04" class="form-label">Localidad:</label>
-          <input class="form-control" id="validationCustom04" minlength="1" maxlength="20" name="localidad" value="<%= typeof(body) !== 'undefined' ? body.localidad : ''%>" type="text"
+          <input class="form-control" id="validationCustom04" minlength="1" maxlength="50" name="localidad" value="<%= typeof(body) !== 'undefined' ? body.localidad : ''%>" type="text"
             required />
-          <div class="valid-feedback">¡Localidad correcta!</div>
-          <div class="invalid-feedback">¡Localidad incorrecta!</div>
+
         </div>
         <div class="row mt-1">
           <label for="selectClase" class="form-label">Clase:</label>
@@ -71,12 +68,12 @@
             <option>Blanc de noirs</option>
             <option>Vino de nueces</option>
             <option>Vino especiado</option>
-            <option>Ninguna clase</option>
+            <option>Vino oloroso</option>
           </select>
         </div>
         <div class="row mt-1">
           <label for="tipo" class="form-label">Tipo:</label>
-          <input id="tipo" class="form-control" type="text" name="tipo" value="<%= typeof(body) !== 'undefined' ? body.tipo : ''%>" readonly />
+          <input id="tipo" class="form-control" type="text" name="tipo" value="<%= typeof(body) !== 'undefined' ? body.tipo : ''%>" readonly/>
         </div>
         <div class="row mt-1">
           <label for="selectMaceracion" class="form-label">Maceración:</label>
@@ -88,11 +85,38 @@
             <option>Gran Reserva</option>
           </select>
         </div>
+
         <div class="row mt-1">          
           <label for="variedad" class="form-label">Variedad:</label>
-          <add-variant value="<%= typeof(body) !== 'undefined' ? body.variedad : '{}'%>" class="p-0">
-          </add-variant>
+          <div id="js-input-variedad" class="p-0">
+            <input type="hidden" class="form-control" name="variedad" id="variedad" value="<%= typeof(body) !== 'undefined' ? body.variedad : '{}'%>">
+            <div class="table-responsive">
+              <table class="table table-hover table-dark w-auto">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Porcentaje</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="containerVariedad">
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3">
+                      <div class="input-group">
+                        <input type="text" minlength="1" maxlength="25" class="form-control" placeholder="Nombre..." id="nameVariedad">
+                      </div>
+                    </td>
+                    <td><button id="addVariedad" class="btn btn-info" type="button"><i class="bi bi-plus-circle"></i></button></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
         </div>
+
         <div class="row mt-1">
           <label for="file" class="form-label">Imagen:</label>
           <input type="file" name="imagen" value="<%= typeof(body) !== 'undefined' ? body.imagen : '' %>" class="form-control" accept="image/png,image/jpeg" />
@@ -119,16 +143,15 @@
       cambiarTipoSegunClase();
 
       function validarFormulario() {
-        var forms = document.querySelectorAll(".needs-validation");
+        const forms = document.querySelectorAll(".needs-validation");
         // Loop over them and prevent submission
         forms.forEach((form) => {
           form.addEventListener("submit", (event) => {
-              if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-              form.classList.add("was-validated");
-            },false);
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          },false);
         });
       }
 
@@ -150,7 +173,7 @@
           "Blanc de noirs": 1,
           "Vino de nueces": 2,
           "Vino especiado": 2,
-          "Ninguna clase": 3,
+          "Vino oloroso": 3,
         };
         selector.addEventListener("change", (evt) => changeTipo(evt.currentTarget.value));
         changeTipo(selector.value);
