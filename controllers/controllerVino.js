@@ -19,7 +19,7 @@ controllerVino.verVino = async (request, response, next) => {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         rows.comentarios = await modelVino.buscarComentariosVino(id);
         if (rows.comentarios === undefined) rows.comentarios = [];
-        rows.variedades = variedades.map((item) => `${item.porcentaje}% ${item.nombre_variedad}`, '').join(', ');
+        rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
         response.render('vino_detalles', {
           res: null, vino: rows, title: 'Detalles del vino',
         });
@@ -35,7 +35,7 @@ controllerVino.verVino = async (request, response, next) => {
 
 controllerVino.agregarVino = async (request, response, next) => {
   const {
-    nombre, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad,
+    nombre, añada, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad,
   } = request.body;
 
   const alert = request.errors;
@@ -44,7 +44,7 @@ controllerVino.agregarVino = async (request, response, next) => {
     response.render('agregarVino', {
       alert,
       body: {
-        nombre, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad, imagen,
+        nombre, añada, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad, imagen,
       },
     });
     return;
@@ -56,10 +56,11 @@ controllerVino.agregarVino = async (request, response, next) => {
     const imagen = (request.file) ? request.file.buffer : null;
 
     const id = await modelVino.insert([
-      nombre, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
+      nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
     ], JSON.parse(variedad));
 
-    response.render('agregarVino', { id });
+    // response.render('agregarVino', { id });
+    response.redirect(`/vino/detalles?id=${id}`);
   } catch (e) {
     console.error(e);
     response.status(500);
