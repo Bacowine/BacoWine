@@ -38,9 +38,13 @@ function createVariedad(nombre, value = 0) {
 
 function loadValue() {
   const variedad = JSON.parse(inputSend.value);
-  Object.keys(variedad).forEach((key) => {
-    createVariedad(key.trim(), variedad[key]);
-  });
+  if (Object.keys(variedad).length === 0) {
+    nameVariedad.setCustomValidity('Debe haber al menos una variedad');
+  } else {
+    Object.keys(variedad).forEach((key) => {
+      createVariedad(key.trim(), variedad[key]);
+    });
+  }
 }
 
 new MutationObserver(() => {
