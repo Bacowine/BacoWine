@@ -104,7 +104,7 @@ describe('Rutas protegidas autenticado como admin', () => {
   test('POST /vino/agregarVinos POST should return 200', async () => {
     const vino = { ...MockVino, variedad: JSON.stringify(MockVariedad) };
     const response = await agent.post('/vino/agregarVino').send(vino);
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
   });
 
   test('POST /vino/borrarVino should return 302', async () => {
