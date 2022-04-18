@@ -30,7 +30,7 @@ modelVino.find = async (id) => {
   }
 };
 
-modelVino.insert = async (rows, variedad, valoracion, idUsuario) => {
+modelVino.insert = async (rows, variedad) => {
   let conn;
   try {
     conn = await pool.promise().getConnection();
@@ -100,8 +100,8 @@ modelVino.borrarComentario = async (id) => {
   return result;
 };
 
-modelVino.valorarVino = async (rows) => {
-  const sql = pool.format('INSERT INTO valoracion_vino(vino,usuario,valoracion) VALUES(?)', [rows]);
+modelVino.valorarVino = async (idVino, idUsuario, valoracion) => {
+  const sql = pool.format('INSERT INTO valoracion_vino(vino,usuario,valoracion) VALUES(?)', [idVino, idUsuario, valoracion]);
   const [result] = await pool.promise().query(sql);
   console.log(sql);
   return result;
@@ -115,7 +115,7 @@ modelVino.modificarvalorarVino = async (idVino, idUsuario, valoracion) => {
 };
 
 modelVino.buscarValoracionesVino= async (idVino) => {
-  const sql = pool.format('SELECT AVG(valoracion) "Media", count(valoracion) "Num Valoraciones" FROM valoracion_vino WHERE vino = ?', [idVino]);
+  const sql = pool.format('SELECT AVG(valoracion) "media", count(*) "numVal" FROM valoracion_vino WHERE vino = ?', [idVino]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;
@@ -129,7 +129,7 @@ modelVino.buscarValoracionesVino= async (idVino) => {
 };
 
 modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
-  const sql = pool.format('SELECT COUNT(valoracion) FROM valoracion_vino WHERE usuario = ? AND vino = ?', [idUsuario, idVino]);
+  const sql = pool.format('SELECT COUNT(*) FROM valoracion_vino WHERE usuario = ? AND vino = ?', [idUsuario, idVino]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;

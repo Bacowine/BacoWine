@@ -161,10 +161,10 @@ controllerVino.valorarVino = async (request, response, next) => {
       const existe = await modelVino.confirmarValoracionVino([idVino, user.name]);
       
       if (existe == 0) {
-        await modelVino.valorarVino([idVino, user.name, valoracion]);
+        await modelVino.valorarVino(idVino, user.id, valoracion);
       }
       else {
-        await modelVino.modificarvalorarVino([idVino, user.name, valoracion]);
+        await modelVino.modificarvalorarVino(idVino, user.id, valoracion);
       }
     }
   } catch (e) {
