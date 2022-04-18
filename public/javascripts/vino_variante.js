@@ -49,7 +49,7 @@ function loadValue() {
 
 new MutationObserver(() => {
   const sum = Array.from(percentageInputs, ({ valueAsNumber }) => valueAsNumber)
-    .reduce((a, b) => parseFloat(a).toFixed(2) + parseFloat(b).toFixed(2), 0);
+    .reduce((a, b) => Math.abs(parseFloat(a).toFixed(2)) + Math.abs(parseFloat(b).toFixed(2)), 0);
   const countEmpt = [...percentageInputs].filter(({ valueAsNumber }) => valueAsNumber === 0).length;
   if (sum !== 100 && countEmpt === 0) {
     nameVariedad.setCustomValidity('La suma de los porcentajes es distinta del 100%');
