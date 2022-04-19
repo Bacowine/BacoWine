@@ -16,7 +16,7 @@ router.route('/detalles')
   .get(cVinos.verVino);
 
 router.route('/agregarVino')
-  .get(authRole(ROLE.ADMIN), (_req, res) => res.render('agregarVino'))
+  .get(authRole(ROLE.ADMIN), cVinos.irAgregarVino)
   .post(authRole(ROLE.ADMIN), upload.single('imagen'), imageHandler, validate(vinoSchema), cVinos.agregarVino);
 
 router.route('/borrarVino')

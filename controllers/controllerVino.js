@@ -1,5 +1,6 @@
 // const fs = require('fs');
 const modelVino = require('../models/modelVino');
+const modelBodega = require('../models/modelBodega');
 
 const controllerVino = {};
 
@@ -93,6 +94,24 @@ controllerVino.agregarVino = async (request, response, next) => {
   }
 };
 
+controllerVino.irAgregarVino = async (request, response, next) => {
+  try {
+    const [rows] = await modelBodega.findAll();
+    if (rows === undefined) {
+      response.status(500);
+      next(new Error('No existe el vino con ese ID'));
+    } else {
+      response.render('agregarVino', {
+        res: null, bodega: JSON.stringify(rows), title: 'Agregar vino',
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
 controllerVino.modificarVino = async (request, response, next) => {
   const { id } = request.query;
   const { url } = request;
