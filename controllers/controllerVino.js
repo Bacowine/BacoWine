@@ -18,6 +18,7 @@ controllerVino.verVino = async (request, response, next) => {
       } else {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         rows.comentarios = await modelVino.buscarComentariosVino(id);
+        rows.valoracion = await modelVino.buscarValoracionesVino(id);
         if (rows.comentarios === undefined) rows.comentarios = [];
         rows.variedades = variedades.map((item) => `${item.porcentaje}% ${item.nombre_variedad}`, '').join(', ');
         response.render('vino_detalles', {
