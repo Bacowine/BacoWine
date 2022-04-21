@@ -10,7 +10,7 @@ const { ROLE, authRole } = require('../middlewares/auth');
 const router = express.Router();
 
 router.route('/')
-  .get((_req, res) => res.redirect('/bodega/agregarBodega'));
+  .get(controllerBodega.mostrarBodegas);
 
 router.route('/detalles')
   .get(controllerBodega.mostrarDetallesBodega);
