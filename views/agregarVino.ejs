@@ -27,6 +27,7 @@
     right: 0;
     color: black;
     padding: 2px;
+    /*height: 20vh;*/
   }
   
   .autocomplete-items div {
@@ -72,10 +73,10 @@
         <% }); %> 
       <% } %>
       <%if ( typeof body !== 'undefined' && body.edit ) { %>
-        <form class="needs-validation was-validated" action="/vino/modificarVino" enctype="multipart/form-data" method="POST">
+        <form class="needs-validation was-validated" autocomplete="off" action="/vino/modificarVino" enctype="multipart/form-data" method="POST">
           <input type="hidden" name="id" value="<%=body.id%>" />
         <% } else { %>
-        <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
+        <form class="needs-validation was-validated" autocomplete="off" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
         <% } %>
         <div class="row mt-1">
           <label for="validationCustom01" class="form-label">Nombre</label>
@@ -83,7 +84,7 @@
             required />
         </div>
         <div class="row mt-1">
-          <label for="anyada" class="form-label">Anyada</label>
+          <label for="anyada" class="form-label">Añada</label>
           <input class="form-control" id="anyada" min="1800" max="<%= new Date().getFullYear() %>" type="number" name="anyada" value="<%= typeof(body) !== 'undefined' ? body.anyada : ''%>"
             required />
         </div>
@@ -98,11 +99,6 @@
           <input class="form-control" id="validationCustom03" minlength="1" maxlength="50" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodega : ''%>" type="text"
             required />
 
-          <!-- 
-          <label for="validationCustom03_1" class="form-label">Id Bodega:</label>
-          <input class="form-control" id="validationCustom03_1" min="1" step="1" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodegaID : ''%>" type="number"
-            required />
-          -->
         </div>
         <div class="row mt-1">
           <label for="validationCustom04" class="form-label">Localidad:</label>
@@ -127,7 +123,7 @@
         </div>
         <div class="row mt-1">
           <label for="tipo" class="form-label">Tipo:</label>
-          <input id="tipo" class="form-control" type="text" name="tipo" value="<%= typeof(body) !== 'undefined' ? body.tipo : ''%>" readonly/>
+          <input id="tipo" class="form-control" type="text" value="<%= typeof(body) !== 'undefined' ? body.tipo : ''%>" readonly/>
         </div>
         <div class="row mt-1">
           <label for="selectMaceracion" class="form-label">Maceración:</label>
@@ -231,46 +227,46 @@
         });
       }
 
-      function cambiarTipoSegunClase() {
-        let selector = document.querySelector("#selectClase");
-        let tipo = document.querySelector("#tipo");
-        let tiposVinos = [
-          "Tranquilo",
-          "Espumoso",
-          "Espirituoso",
-          "Vino oloroso",
-        ];
-        let clases = {
-          "Blanco": 0,
-          "Rosado": 0,
-          "Tinto": 0,
-          "Clarete": 0,
-          "Blanc de blanc": 1,
-          "Blanc de noirs": 1,
-          "Vino de nueces": 2,
-          "Vino especiado": 2,
-          "Vino oloroso": 3,
-        };
+      async function fetchClasesVino() {
+        let clases = {};
+        try {
+          const res = await fetch('/vino/clasesVino');
+          if(!res.ok) throw new Error();
+          const json = await res.json();
+          
+          clases = json.reduce((obj,item) => {
+            obj[item.clase] = item.tipo;
+            return obj;
+          },{})
+        } catch (error) {
+          clases = {};
+        }
+       
+        return clases;
+      }
+
+      async function cambiarTipoSegunClase() {
+        const selector = document.querySelector("#selectClase");
+        const tipo = document.querySelector("#tipo");
+        const clases = await fetchClasesVino();
+
+        Object.keys(clases).map(key => {
+          selector.insertAdjacentHTML( 'beforeend', `<option>${key}</option>` )
+        })
+
         selector.addEventListener("change", (evt) => changeTipo(evt.currentTarget.value));
         changeTipo(selector.value);
 
         function changeTipo(val) {
           tipo.value = clases.hasOwnProperty(val) ?
-            tiposVinos[clases[val]] :
-            tiposVinos[3];
+            clases[val] :
+            'No definido';
         }
       }
     });
 
-    var decodeHtmlEntity = function(x) {
-      return x.replace(/&#(\d+);/g, function(match, dec) {
-        return String.fromCharCode(dec);
-      });
-    };
-
     function autocomplete(inp, arr) {
-      let bodegas = decodeHtmlEntity(arr);
-      bodegas = JSON.parse(bodegas);
+      let bodegas = arr;
       /*the autocomplete function takes two arguments,
       the text field element and an array of possible autocompleted values:*/
       var currentFocus;
@@ -284,18 +280,21 @@
           /*create a DIV element that will contain the items (values):*/
           a = document.createElement("DIV");
           a.setAttribute("id", this.id + "autocomplete-list");
-          a.setAttribute("class", "autocomplete-items");
+          a.setAttribute("class", "autocomplete-items overflow-auto");
           /*append the DIV element as a child of the autocomplete container:*/
           this.parentNode.appendChild(a);
           /*for each item in the array...*/
           for (i = 0; i < bodegas.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
-            if (bodegas[i].nombre.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            //if (bodegas[i].nombre.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            if (bodegas[i].nombre.toUpperCase().includes(val.toUpperCase())) {
               /*create a DIV element for each matching element:*/
               b = document.createElement("DIV");
               /*make the matching letters bold:*/
-              b.innerHTML = bodegas[i].id + " - <strong>" + bodegas[i].nombre.substr(0, val.length) + "</strong>";
-              b.innerHTML += bodegas[i].nombre.substr(val.length);
+              let idx = bodegas[i].nombre.toUpperCase().indexOf(val.toUpperCase())
+              b.innerHTML = bodegas[i].id + " - " + bodegas[i].nombre.substr(0,idx);
+              b.innerHTML += "<strong>" + bodegas[i].nombre.substr(idx,val.length) + "</strong>";
+              b.innerHTML += bodegas[i].nombre.substr(idx+val.length);
               /*insert a input field that will hold the current array item's value:*/
               b.innerHTML += "<input type='hidden' value='" + bodegas[i].nombre + "'>";
               /*execute a function when someone clicks on the item value (DIV element):*/
@@ -368,8 +367,8 @@
     }
 
     /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-    autocomplete(document.getElementById("validationCustom03"), '<%=bodega%>');
-    
+    autocomplete(document.getElementById("validationCustom03"), <%-bodega%>);
+
   </script>
   <%- include('./partials/_footer'); %>
 </body>

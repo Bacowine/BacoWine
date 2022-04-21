@@ -10,7 +10,7 @@ const vinoSchema = checkSchema({
   },
   anyada: {
     isInt: {
-      options: { gt: 1800, lt: new Date().getFullYear() },
+      options: { min: 1800, max: new Date().getFullYear() },
       errorMessage: 'Añada debe estar entre 1800 y el año actual',
     },
   },
@@ -32,20 +32,6 @@ const vinoSchema = checkSchema({
     isLength: {
       options: { min: 1, max: 50 },
       errorMessage: 'Localidad debe tener entre 1 y 50 caracteres',
-    },
-  },
-  clase: {
-    trim: true,
-    isIn: {
-      options: [['Blanco', 'Rosado', 'Tinto', 'Clarete', 'Blanc de blanc', 'Blanc de noirs', 'Vino de nueces', 'Vino especiado', 'Vino oloroso']],
-      errorMessage: 'Clase no contiene una clase correcta',
-    },
-  },
-  tipo: {
-    trim: true,
-    isIn: {
-      options: [['Tranquilo', 'Espumoso', 'Espirituoso', 'Vino oloroso']],
-      errorMessage: 'Tipo no contiene un tipo correcto',
     },
   },
   maceracion: {

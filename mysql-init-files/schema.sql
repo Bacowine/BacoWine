@@ -1,17 +1,24 @@
 use bacowine;
 
+DROP TABLE vino;
+DROP TABLE variedad_vino;
+DROP TABLE clase_vino;
+DROP TABLE bodegas;
+DROP TABLE usuario;
+DROP TABLE comentario;
+
 --APLICACION
 CREATE TABLE vino (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(45) NOT NULL,
-    anyada VARCHAR(100) NOT NULL,
+    anyada YEAR NOT NULL,
     clase VARCHAR(45) NOT NULL,
-    tipo VARCHAR(45) NOT NULL, 
     maceracion VARCHAR(45) NOT NULL, 
     graduacion DECIMAL(4,2) UNSIGNED NOT NULL CHECK (graduacion <= 100), 
     bodega VARCHAR(100) NOT NULL, 
     localidades VARCHAR(500) NOT NULL,
-    foto LONGBLOB
+    foto LONGBLOB,
+    FOREIGN KEY (clase) REFERENCES bacowine.clase(clase_vino) ON UPDATE CASCADE
 );
 
 CREATE TABLE variedad_vino (
@@ -22,10 +29,16 @@ CREATE TABLE variedad_vino (
   FOREIGN KEY (vino) REFERENCES bacowine.vino(id) ON DELETE CASCADE
 );
 
+CREATE TABLE clase_vino (
+  clase VARCHAR(45) NOT NULL,
+  tipo VARCHAR(45) NOT NULL,
+  PRIMARY KEY(clase)
+);
+
 CREATE TABLE bodegas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(40) NOT NULL,
-  anyoCreacion INT NOT NULL,
+  anyoCreacion YEAR NOT NULL,
   localizGeo VARCHAR(40) NOT NULL,
   descripcion VARCHAR(700) NOT NULL,
   denominOrigen VARCHAR(40) NOT NULL,
@@ -57,3 +70,14 @@ CREATE TABLE valoracion_vino (
   FOREIGN KEY (usuario) REFERENCES bacowine.usuario(user) ON DELETE CASCADE,
   FOREIGN KEY (vino) REFERENCES bacowine.vino(id) ON DELETE CASCADE
 );
+
+INSERT INTO clase_vino(clase, tipo) VALUES
+("Blanco","Tranquilo"),
+("Rosado","Tranquilo"),
+("Tinto","Tranquilo"),
+("Clarete","Tranquilo"),
+("Blanc de blanc","Espumoso"),
+("Blanc de noirs","Espumoso"),
+("Vino de nueces","Espirituoso"),
+("Vino especiado","Espirituoso"),
+("Vino oloroso","Vino oloroso");

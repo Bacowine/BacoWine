@@ -7,7 +7,7 @@ modelVino.find = async (id) => {
   try {
     conn = await pool.promise().getConnection();
     await conn.beginTransaction();
-    const sql = pool.format('SELECT * FROM vino where id = ? and activo = 1', [id]);
+    const sql = conn.format('SELECT * FROM vino v JOIN clase_vino cv ON v.clase = cv.clase where id = ? and activo = 1', [id]);
     console.log(sql);
     const [result] = await conn.query(sql);
 
@@ -16,7 +16,7 @@ modelVino.find = async (id) => {
       return [];
     }
 
-    const sql2 = pool.format('SELECT nombre_variedad, porcentaje FROM variedad_vino where vino = ?', [id]);
+    const sql2 = conn.format('SELECT nombre_variedad, porcentaje FROM variedad_vino where vino = ?', [id]);
     console.log(sql2);
     const [result2] = await conn.query(sql2);
 
@@ -30,21 +30,25 @@ modelVino.find = async (id) => {
   }
 };
 
+modelVino.readClasesVino = async () => {
+  const sql = pool.format('SELECT clase,tipo FROM clase_vino');
+  console.log(sql);
+  const [result] = await pool.promise().query(sql);
+  return result;
+}
+
 modelVino.insert = async (rows, variedad) => {
   console.log(rows)
   let conn;
   try {
     conn = await pool.promise().getConnection();
     await conn.beginTransaction();
-    const sql1 = pool.format('INSERT INTO vino(nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
+    const sql1 = pool.format('INSERT INTO vino(nombre, anyada, clase, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
     console.log(sql1.substring(0, 500));
     const [result] = await conn.query(sql1);
-    
-    //const sql2 = pool.format('INSERT INTO valoracion_vino(vino, usuario, valoracion) VALUES(?,?, ?)',[rows[0],idUsuario, valoracion]);
-    //await conn.query(sql2);
 
     await Promise.all(Object.entries(variedad).map(async ([key, value]) => {
-      const sql2 = pool.format('INSERT INTO variedad_vino(vino,nombre_variedad,porcentaje) VALUES(?,?,?)', [result.insertId, key, value]);
+      const sql2 = conn.format('INSERT INTO variedad_vino(vino,nombre_variedad,porcentaje) VALUES(?,?,?)', [result.insertId, key, value]);
       console.log(sql2);
       await conn.query(sql2);
     }));
