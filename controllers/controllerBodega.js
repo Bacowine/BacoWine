@@ -6,7 +6,7 @@ const controllerBodega = {};
 controllerBodega.mostrarBodegas = async (req, res, after) => {
   const search = req.query.search || '';
   const page = +req.query.page - 1 || 0;
-  const size = 10;
+  const size = 9;
 
   const limit = size < 0 ? 1 : size;
   const offset = page < 0 ? 0 : page * size;
