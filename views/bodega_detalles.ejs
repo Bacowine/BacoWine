@@ -16,7 +16,7 @@
         <div class="col-5">
 
           <% if (bodega.foto !== null) { %> 
-            <img src="data:image/png;base64, <%= bodega.foto %>" class="img-fluid" alt="Foto bodega">
+            <img src="data:image/webp;base64, <%= bodega.foto %>" class="img-fluid" alt="Foto bodega">
           <% } else { %>
             <img src="/static/images/bodega.jpg" class="img-fluid" alt="Foto bodega">
           <% } %> 

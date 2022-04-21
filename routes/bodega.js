@@ -1,7 +1,6 @@
 const express = require('express');
-const multer = require('multer');
 
-const upload = multer();
+const { upload, imageHandler } = require('../middlewares/upload');
 const controllerBodega = require('../controllers/controllerBodega');
 const bodegaSchema = require('../validators/bodega.validator');
 const validate = require('../middlewares/schemaValidator');
@@ -18,7 +17,7 @@ router.route('/detalles')
 
 router.route('/agregarBodega')
   .get(authRole(ROLE.ADMIN), (_req, res) => res.render('agregarBodega'))
-  .post(authRole(ROLE.ADMIN), upload.single('imagen'), validate(bodegaSchema), controllerBodega.insertarBodega);
+  .post(authRole(ROLE.ADMIN), upload.single('imagen'), imageHandler, validate(bodegaSchema), controllerBodega.insertarBodega);
 
 router.route('/borrarBodega')
   .post(authRole(ROLE.ADMIN), controllerBodega.borrarBodega);
