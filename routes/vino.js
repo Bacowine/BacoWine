@@ -13,6 +13,7 @@ const router = express.Router();
 router.route('/')
   .get((_req, res) => res.redirect('/vino/agregarVino'));
 
+
 router.route('/detalles')
   .get(cVinos.verVino);
 
@@ -29,5 +30,8 @@ router.route('/comentarVino')
 
 router.route('/borrarComentario')
   .post(authRole([ROLE.USER, ROLE.ADMIN]), cVinos.borrarComentario);
+
+router.route('/')
+  .get(cVinos.mostrarVinos);
 
 module.exports = router;
