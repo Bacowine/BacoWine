@@ -3,6 +3,35 @@ const modelBodega = require('../models/modelBodega');
 
 const controllerBodega = {};
 
+controllerBodega.mostrarBodegas = async (req, res, after) => {
+  const search = req.query.search || '';
+  const page = +req.query.page - 1 || 0;
+  const size = 9;
+
+  const limit = size < 0 ? 1 : size;
+  const offset = page < 0 ? 0 : page * size;
+
+  try {
+    const { bodegas, count } = await modelBodega.readAll({ search, limit, offset });
+
+    const current = page + 1;
+    const pages = Math.ceil(count / size);
+    const next = current + 1 > pages ? pages : current + 1;
+    const prev = current - 1 < 0 ? 0 : current - 1;
+    const pagination = {
+      current, next, prev, pages,
+    };
+
+    res.render('bodegas', { bodegas, pagination, search });
+  } catch (e) {
+    console.error(e);
+    res.status(500);
+    const err = new Error('Error interno de acceso a la base de datos');
+    err.stack = e.stack;
+    after(err);
+  }
+};
+
 controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
   const { id } = request.query;
 
