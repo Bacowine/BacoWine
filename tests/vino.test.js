@@ -126,3 +126,74 @@ test('Añadir comentario a un vino como UNR, controlador', async () => {
   await CVinos.comentarVino(mReq, mRes, mNext);
   expect(mRes.status).toBeCalledWith(403);
 });
+
+//---------------------test valorar vino---------------
+
+test('Añadir una valoracion a un vino, modelo', async () => {
+  const idVino = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  expect(idVino).not.toBe(undefined);
+  const idVal = await modelVinos.valorarVino(idVino,'a', 5);
+  expect(idVal).not.toBe(undefined);
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
+ 
+});
+ 
+test('Añadir valoracion a un vino como UR, controlador', async () => {
+  const idVino = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  const mReq = {
+    body: {
+      idVino: idVino, valoracion: 10
+    },
+    session: {
+      user: { name: 'a', role: 'UR' }
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.valorarVino(mReq, mRes, mNext);
+  expect(mRes.redirect).toBeCalled();
+ 
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
+});
+ 
+test('modificar valoracion a un vino como UR, controlador', async () => {
+  const idVino = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  
+  const mReq = {
+    body: {
+      idVino: idVino, valoracion: 10
+    },
+    session: {
+      user: { name: 'a', role: 'UR' }
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.valorarVino(mReq, mRes, mNext);
+  expect(mRes.redirect).toBeCalled();
+ 
+  const mReq2 = {
+    body: {
+      idVino: idVino, valoracion: 8
+    },
+    session: {
+      user: { name: 'a', role: 'UR' }
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes2 = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
+  const mNext2 = jest.fn();
+  await CVinos.valorarVino(mReq2, mRes2, mNext2);
+  expect(mRes2.redirect).toBeCalled();
+ 
+  const [valVino] = await modelVinos.confirmarValoracionVino(idVino, 'a');
+  expect(valVino.valoracion).toBe('8.0');
+ 
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
+});
+
