@@ -6,7 +6,8 @@
     }
 
     #valorar {
-      margin: 0 auto;
+      display: inline-block;
+      margin: 0 -4px;
     }
 
     #valorar label {
@@ -28,14 +29,20 @@
 
     label:hover,
     label:hover ~ label {
-      color: orange;
+      color: rgb(144, 93, 0) !important;
     }
 
     input[type="radio"]:checked ~ label {
       color: orange;
     }
+
     .val{
       color:rgb(157, 157, 157);
+    }
+
+    #acciones{
+      max-height: 60px;
+      max-width: 60px;
     }
   </style>
   <head>
@@ -58,7 +65,7 @@
           </div>
           <div class="col-12 col-sm-8 pt-3">
             <div class="row gx-0">
-              <div class="col-6 col-lg-8" >
+              <div class="col-6 col-lg-9" >
                 <div class="row">
                   <h1 class="text-white text-capitalize"><%= vino.nombre %></h1>
                 </div>
@@ -77,40 +84,45 @@
                 <% } %>
               </div>
               <% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
-              <div class="col-6 col-lg-4 text-center">
+              <div class="col-6 col-lg-3 text-center">
                 <h4 class="val">Tu valoración</h4>
                 <form id="valorar" name="valorar" method="post" action="/vino/valorarVino">
                   <p class="clasificacion">
                     <% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 5) { %>
-                      <input id="radio1" type="radio" name="valoracion" value="5" checked>
-                    <% } else { %>
-                      <input id="radio1" type="radio" name="valoracion" value="5">
-                    <% } %>
-                    <label for="radio1">★</label>
-                    <% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 4) { %>
-                      <input id="radio2" type="radio" name="valoracion" value="4" checked>
-                    <% } else { %>
-                      <input id="radio2" type="radio" name="valoracion" value="4">
-                    <% } %>
-                    <label for="radio2">★</label>
-                    <% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 3) { %>
-                      <input id="radio3" type="radio" name="valoracion" value="3" checked>
-                    <% } else { %>
-                      <input id="radio3" type="radio" name="valoracion" value="3">
-                    <% } %>
-                    <label for="radio3">★</label>
-                    <% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 2) { %>
-                      <input id="radio4" type="radio" name="valoracion" value="2" checked>
-                    <% } else { %>
-                      <input id="radio4" type="radio" name="valoracion" value="2">
-                    <% } %>
-                    <label for="radio4">★</label>
-                    <% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 1) { %>
-                      <input id="radio5" type="radio" name="valoracion" value="1" checked>
-                    <% } else { %>
-                      <input id="radio5" type="radio" name="valoracion" value="1">
-                    <% } %>
-                    <label for="radio5">★</label>
+                      <input id="radio1" type="radio" name="valoracion" value="5" checked><!--
+                      --><label for="radio1">★</label><!--
+                    --><% } else { %><!--
+                      --><input id="radio1" type="radio" name="valoracion" value="5"><!--
+                      --><label for="radio1">★</label><!--
+                    --><% } %><!--
+                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 4) { %><!--
+                      --><input id="radio2" type="radio" name="valoracion" value="4" checked><!--
+                      --><label for="radio2">★</label><!--
+                    --><% } else { %><!--
+                      --><input id="radio2" type="radio" name="valoracion" value="4"><!--
+                      --><label for="radio2">★</label><!--
+                    --><% } %><!--
+                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 3) { %><!--
+                      --><input id="radio3" type="radio" name="valoracion" value="3" checked><!--
+                      --><label for="radio3">★</label><!--
+                    --><% } else { %><!--
+                      --><input id="radio3" type="radio" name="valoracion" value="3"><!--
+                      --><label for="radio3">★</label><!--
+                    --><% } %><!--
+                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 2) { %><!--
+                      --><input id="radio4" type="radio" name="valoracion" value="2" checked><!--
+                      --><label for="radio4">★</label><!--
+                    --><% } else { %><!--
+                      --><input id="radio4" type="radio" name="valoracion" value="2"><!--
+                      --><label for="radio4">★</label><!--
+                    --><% } %><!--
+                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 1) { %><!--
+                      --><input id="radio5" type="radio" name="valoracion" value="1" checked><!--
+                      --><label for="radio5">★</label><!--
+                    --><% } else { %><!--
+                      --><input id="radio5" type="radio" name="valoracion" value="1"><!--
+                      --><label for="radio5">★</label><!--
+                    --><% } %>
                     <input type="hidden" value="<%= vino.id %>" name="idVino" />
                   </p>
                 </form>
@@ -118,7 +130,7 @@
               <% } %>
               <% if (typeof(session.user) !== 'undefined' && session.user.role === 'GC' ) { %> 
                 <!-- Button trigger modal -->
-                <button type="button" class="col-3 col-lg-1 btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" class="col-2 col-lg-1 btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" id="acciones">
                   <i class="bi bi-trash"></i>
                 </button>
               <% } %>
