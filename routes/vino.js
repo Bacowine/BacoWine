@@ -1,7 +1,6 @@
 const express = require('express');
-const multer = require('multer');
 
-const upload = multer();
+const { upload, imageHandler } = require('../middlewares/upload');
 const cVinos = require('../controllers/controllerVino');
 const vinoSchema = require('../validators/vino.validator');
 const validate = require('../middlewares/schemaValidator');
@@ -18,7 +17,7 @@ router.route('/detalles')
 
 router.route('/agregarVino')
   .get(authRole(ROLE.ADMIN), (_req, res) => res.render('agregarVino'))
-  .post(authRole(ROLE.ADMIN), upload.single('imagen'), validate(vinoSchema), cVinos.agregarVino);
+  .post(authRole(ROLE.ADMIN), upload.single('imagen'), imageHandler, validate(vinoSchema), cVinos.agregarVino);
 
 router.route('/borrarVino')
   .post(authRole(ROLE.ADMIN), cVinos.borrarVino);

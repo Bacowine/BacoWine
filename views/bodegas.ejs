@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+  <%- include('./partials/_head',{title: 'Bodegas'}); %>
+  <style>
+    .pagination-dark .page-item .page-link{
+      color: #fff;
+      background-color: #343a40;
+    }
+
+    .pagination-dark .page-item .page-link:hover{
+      color: #fff;
+      background-color: #212529;
+    }
+
+    .pagination-dark .page-item.active .page-link {
+      color: #fff;
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+    .pagination-dark .page-item.disabled .page-link {
+      color: #6c757d;
+      background-color: #343a40;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('./partials/_header'); %>
+  <div id="main" class="container p-4">
+    <form method="get">
+      <div class="row mb-2">
+        <div class="input-group">
+          <input class="form-control" name="search" type="search" placeholder="Bodega...">
+          <button class="btn btn-outline-secondary bg-dark" type="submit">
+              <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <% if(bodegas.length === 0) { %> 
+      <h5>No se encontraron resultados</h5>
+    <% } else { %> 
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-5">
+        <% bodegas.forEach((bod, i) => { %> 
+          <div class="col">
+            <div class="card h-100 bg-dark p-1">
+              <a href="/bodega/detalles?id=<%= bod.id %> ">
+                <% if (bod.foto !== null) { %> 
+                  <img src="data:image/webp;base64, <%= bod.foto %>" class="img-fluid" alt="Foto bodega">
+                <% } else { %>
+                  <img src="/static/images/bodega.jpg" class="img-fluid" alt="Foto bodega" height="100">
+                <% } %> 
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a class="text-decoration-none" href="/bodega/detalles?id=<%= bod.id %> "><%= bod.nombre %></a>
+                  <span class="text-muted"><%= bod.anyoCreacion %></span>
+                </h5>
+                <p class="card-text"><%= bod.descripcion %></p>
+                <p class="text-muted"><%= bod.localizGeo %></p>             
+              </div>
+            </div>
+          </div>
+        <% }) %>  
+      </div>
+    <% } %>
+
+    <% if(pagination.pages > 0 && bodegas.length > 0) { %> 
+      <nav class="mt-2">
+        <ul class="pagination pagination-dark justify-content-center">
+          <li class="page-item <%- pagination.current === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="<%- search !== '' ? '?search='+search+'&' : '?'%>page=<%= 1 %>" aria-label="Primera">
+              <span aria-hidden="true">&laquo;&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item <%- pagination.current === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="<%- search !== '' ? '?search='+search+'&' : '?'%>page=<%= pagination.prev %>" aria-label="Anterior">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item"><a class="page-link"><%= pagination.current %> / <%=pagination.pages%></a></li>
+          <li class="page-item <%- pagination.current + 1 > pagination.pages ? 'disabled' : '' %>">
+            <a class="page-link" href="<%- search !== '' ? '?search='+search+'&' : '?'%>page=<%= pagination.next %>" aria-label="Siguiente">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li class="page-item <%- pagination.current === pagination.pages ? 'disabled' : '' %>">
+            <a class="page-link" href="<%- search !== '' ? '?search='+search+'&' : '?'%>page=<%= pagination.pages %>" aria-label="Última">
+              <span aria-hidden="true">&raquo;&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    <% } %>
+
+  </div>
+  <%- include('./partials/_footer'); %>
+</body>
+
+</html>

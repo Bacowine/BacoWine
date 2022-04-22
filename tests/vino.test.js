@@ -10,7 +10,7 @@ afterAll(() => {
 
 test('Añadir vino ejemplo modelo', async () => {
   const img = fs.readFileSync(`${__dirname}/img/shopping.jpg`);
-  const id = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', img], { a: 10 });
+  const id = await modelVinos.insert(['CM 2017', 1999, 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', img], { a: 10 });
   expect(id).not.toBe(undefined);
   const sql = pool.format('DELETE FROM vino WHERE nombre = ?', ['CM 2017']);
   await pool.promise().query(sql);
@@ -24,10 +24,10 @@ test('Añadir vino ejemplo controlador', async () => {
     errors: { lenght: 0 },
     files: [fs.readFileSync(`${__dirname}/img/shopping.jpg`)],
   };
-  const mRes = { status: jest.fn(), render: jest.fn() };
+  const mRes = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
   const mNext = jest.fn();
   await CVinos.agregarVino(mReq, mRes, mNext);
-  expect(mRes.render).toBeCalled();
+  expect(mRes.redirect).toBeCalled();
   const sql = pool.format('DELETE FROM vino WHERE nombre = ?', ['CM 2017']);
   await pool.promise().query(sql);
 });
@@ -67,7 +67,7 @@ test('mostrar vino que no existe', async () => {
 });
 
 test('Añadir comentario a un vino como UR, modelo', async () => {
-  const idVino = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  const idVino = await modelVinos.insert(['CM 2017', 1999, 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
   const id = await modelVinos.comentarVino(['a', idVino, 'Test de comentar vino modelo']);
   expect(id).not.toBe(undefined);
   const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
@@ -77,10 +77,10 @@ test('Añadir comentario a un vino como UR, modelo', async () => {
 });
 
 test('Añadir comentario a un vino como UR, controlador', async () => {
-  const idVino = await modelVinos.insert(['CM 2017', 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  const idVino = await modelVinos.insert(['CM 2017', 1999, 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
   const mReq = {
     body: {
-      idVino: idVino, texto: 'Test de comentar vino controlador'
+      idVino: idVino, texto: 'Test de comentar vino controlador',
     },
     session: {
       user: { name: 'a', role: 'UR' }

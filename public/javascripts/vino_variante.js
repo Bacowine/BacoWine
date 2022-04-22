@@ -1,164 +1,75 @@
-const template = document.createElement('template');
-template.innerHTML = `
-  <link href="/static/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link rel='stylesheet' href='/static/stylesheets/style.css' />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-  <div class="input-group">
-    <input type="text" class="form-control" id="nameVariedad">
-    <button id="addVariedad" class="btn btn-info" type="button"><i class="bi bi-plus-circle"></i></button>
-  </div>
-  <div id="containerVariedad" class="pe-5"></div>
-`;
+const root = document.getElementById('js-input-variedad');
+const inputSend = root.querySelector('#variedad');
+const addInput = root.querySelector('#addVariedad');
+const nameVariedad = root.querySelector('#nameVariedad');
+const container = root.querySelector('#containerVariedad');
 
-class Variedad extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'variedad';
-    input.id = 'variedad';
-    input.value = '{}';
-    this.appendChild(input);
+const nameInputs = container.getElementsByTagName('th');
+const percentageInputs = container.getElementsByTagName('input');
 
-    this.updateInputVariedad = this.updateInputVariedad.bind(this);
-    this.clickAddVariant = this.clickAddVariant.bind(this);
-    this.sumHundred = this.sumHundred.bind(this);
-  }
+function createVariedad(nombre, value = 0) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <th class="align-middle text-capitalize">${nombre}</th>
+    <td><input type="number" min="0" max="100" step="0.01" value=${value} class="form-control"></td>
+    <td class="h5 text-left align-middle">%</td>
+    <td><button type="button" class="btn btn-warning"><i class="bi bi-x-circle-fill"></i></button></td>
+  `;
 
-  calculateRemaining() {
-    const inputs = this.shadowRoot.querySelectorAll('#containerVariedad input');
-    let sum = 100;
-    inputs.forEach((inp) => { sum -= inp.value; });
-    return sum;
-  }
-
-  updateInputVariedad() {
-    const inputs = this.shadowRoot.querySelectorAll('#containerVariedad input');
-    const start = inputs.length > 0 ? inputs[0] : {};
-    const red = [...inputs].reduce((obj, item) => ({
-      ...obj,
-      [item.previousElementSibling.textContent]: item.value,
-    }), start);
-    this.querySelector('#variedad').value = JSON.stringify(red);
-  }
-
-  sumHundred() {
-    const remain = this.calculateRemaining();
-    const inputs = [...this.shadowRoot.querySelectorAll('#containerVariedad input')];
-    const other = inputs.filter((val) => val.previousElementSibling.textContent === 'Otros');
-    const rest = inputs.filter((val) => val.previousElementSibling.textContent !== 'Otros');
-    let ret = 0;
-
-    if (rest.length < 1 && other.length !== 1 && remain > 0) {
-      this.shadowRoot.querySelector('#containerVariedad').append(this.createVariedad('Otros', remain));
-    } if (rest.length >= 1 && other.length !== 1) {
-      rest[rest.length - 1].valueAsNumber += remain;
-    } else if (other.length === 1) {
-      other[0].valueAsNumber += remain;
-      if (other[0].valueAsNumber <= 0) {
-        ret = other[0].valueAsNumber;
-        other[0].parentElement.remove();
+  const repetead = Array.from(nameInputs, ({ textContent }) => textContent.toLowerCase())
+    .includes(nombre);
+  if (!repetead && nombre.length > 0 && container.childElementCount < 10) {
+    tr.querySelector('button').onclick = () => tr.remove();
+    tr.querySelector('input').onchange = (e) => {
+      if (!Number.isNaN(e.target.valueAsNumber) && e.target.valueAsNumber > 0) {
+        e.target.setAttribute('value', e.target.valueAsNumber);
+        e.target.value = e.target.valueAsNumber;
+      } else {
+        e.target.setAttribute('value', 0);
+        e.target.value = 0;
       }
-    } else if (remain <= 0) {
-      ret = remain;
-    }
-    return ret;
-  }
-
-  createVariedad(name, remaining) {
-    const d = document.createElement('div');
-    const s = document.createElement('span');
-    const i = document.createElement('input');
-    const b = document.createElement('button');
-
-    s.innerText = name;
-    s.classList.add('input-group-text');
-    i.type = 'number';
-    i.min = 0;
-    i.max = 100;
-    i.classList.add('form-control');
-    i.valueAsNumber = remaining;
-    i.onchange = () => {
-      if (i.valueAsNumber < 0 || i.valueAsNumber >= 100
-          || Number.isNaN(i.valueAsNumber)) {
-        i.valueAsNumber = 0;
-      }
-      const remain = this.calculateRemaining();
-      if (i.valueAsNumber === 0) {
-        i.valueAsNumber = remain;
-      }
-      const ret = this.sumHundred();
-      if (ret !== 0) i.valueAsNumber += ret;
-      this.updateInputVariedad();
     };
-    b.type = 'button';
-    b.classList.add('btn', 'btn-warning');
-    b.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
-    b.onclick = () => {
-      d.remove();
-      this.sumHundred();
-      this.updateInputVariedad();
-    };
-
-    d.classList.add('input-group', 'pt-1');
-    d.append(s, ' ', i, ' ', b);
-    return d;
+    nameVariedad.value = '';
+    container.appendChild(tr);
   }
+  nameVariedad.click();
+  nameVariedad.focus();
+}
 
-  clickAddVariant() {
-    const container = this.shadowRoot.querySelector('#containerVariedad');
-    const addInput = this.shadowRoot.querySelector('#nameVariedad');
-    const inputs = [...container.querySelectorAll('input')];
-    const inp = inputs.length - 1;
-
-    addInput.value = addInput.value.trim();
-    const oth = inputs.filter((val) => val.previousElementSibling.textContent === addInput.value);
-
-    let remaining = this.calculateRemaining();
-    if (remaining <= 0 && addInput.value.trim() !== '' && oth.length === 0 && inp !== -1 && inputs[inp].value / 2 > 0.009) {
-      inputs[inp].valueAsNumber /= 2;
-      remaining = inputs[inp].valueAsNumber;
-    } else {
-      addInput.focus();
-      addInput.click();
-    }
-    if (remaining !== 0) {
-      if (addInput.value.trim() !== '' && oth.length === 0) {
-        container.prepend(this.createVariedad(addInput.value, remaining));
-        this.updateInputVariedad();
-      }
-      addInput.value = '';
-      addInput.focus();
-      addInput.click();
-    }
-  }
-
-  static get observedAttributes() {
-    return ['value'];
-  }
-
-  get value() {
-    return this.getAttribute('value');
-  }
-
-  connectedCallback() {
-    this.shadowRoot.querySelector('#addVariedad').addEventListener('click', this.clickAddVariant);
-
-    if (!this.hasAttribute('value')) {
-      this.setAttribute('value', '{}');
-    } else {
-      document.querySelector('#variedad').value = this.value;
-    }
-
-    const container = this.shadowRoot.querySelector('#containerVariedad');
-    const variedad = JSON.parse(this.value);
+function loadValue() {
+  const variedad = JSON.parse(inputSend.value);
+  if (Object.keys(variedad).length === 0) {
+    nameVariedad.setCustomValidity('Debe haber al menos una variedad');
+  } else {
     Object.keys(variedad).forEach((key) => {
-      container.append(this.createVariedad(key.trim(), variedad[key]));
+      createVariedad(key.trim(), variedad[key]);
     });
-    this.sumHundred();
   }
 }
 
-window.customElements.define('add-variant', Variedad);
+new MutationObserver(() => {
+  const sum = Array.from(percentageInputs, ({ valueAsNumber }) => valueAsNumber)
+    .reduce((a, b) => Math.abs(parseFloat(a).toFixed(2)) + Math.abs(parseFloat(b).toFixed(2)), 0);
+  const countEmpt = [...percentageInputs].filter(({ valueAsNumber }) => valueAsNumber === 0).length;
+  if (sum !== 100 && countEmpt === 0) {
+    nameVariedad.setCustomValidity('La suma de los porcentajes es distinta del 100%');
+  }
+  if (sum === 100 && countEmpt > 0) {
+    nameVariedad.setCustomValidity('Para que haya variedades sin porcentaje la suma de los porcentajes debe ser inferior al 100%');
+  }
+  if ((sum === 100 && countEmpt === 0) || (sum < 100 && countEmpt > 0)) {
+    nameVariedad.setCustomValidity('');
+  }
+
+  const start = percentageInputs.length > 0 ? percentageInputs[0] : {};
+  const red = [...percentageInputs].reduce((obj, item, index) => ({
+    ...obj,
+    [nameInputs[index].textContent.toLowerCase()]: item.value,
+  }), start);
+  inputSend.value = JSON.stringify(red);
+}).observe(container, {
+  childList: true, attributes: true, subtree: true, characterData: true,
+});
+
+loadValue();
+addInput.addEventListener('click', () => createVariedad(nameVariedad.value.trim().toLowerCase(), 0));

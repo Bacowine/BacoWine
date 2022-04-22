@@ -35,7 +35,7 @@ modelVino.insert = async (rows, variedad) => {
   try {
     conn = await pool.promise().getConnection();
     await conn.beginTransaction();
-    const sql1 = pool.format('INSERT INTO vino(nombre, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
+    const sql1 = pool.format('INSERT INTO vino(nombre, añada, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
     console.log(sql1.substring(0, 500));
     const [result] = await conn.query(sql1);
     
