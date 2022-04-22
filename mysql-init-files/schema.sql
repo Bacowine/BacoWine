@@ -53,4 +53,6 @@ CREATE TABLE valoracion_vino (
   valoracion DECIMAL(3,1) NOT NULL,
   usuario VARCHAR(40) NOT NULL,
   PRIMARY KEY (vino, usuario)
+  FOREIGN KEY (usuario) REFERENCES bacowine.usuario(user) ON DELETE CASCADE,
+  FOREIGN KEY (vino) REFERENCES bacowine.vino(id) ON DELETE CASCADE
 );

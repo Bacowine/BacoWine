@@ -89,21 +89,21 @@ modelVino.buscarComentariosVino = async (id) => {
 modelVino.buscarComentario = async (id) => {
   const sql = pool.format('SELECT * FROM comentario WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
-  console.log(result);
+  //console.log(result);
   return result;
 };
 
 modelVino.borrarComentario = async (id) => {
   const sql = pool.format('DELETE FROM comentario WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
-  console.log(result);
+  //console.log(result);
   return result;
 };
 
 modelVino.valorarVino = async (idVino, idUsuario, valoracion) => {
-  const sql = pool.format('INSERT INTO valoracion_vino(vino,usuario,valoracion) VALUES(?)', [idVino, idUsuario, valoracion]);
+  const sql = pool.format('INSERT INTO valoracion_vino(vino,usuario,valoracion) VALUES(?,?,?)', [idVino, idUsuario, valoracion]);
   const [result] = await pool.promise().query(sql);
-  console.log(sql);
+  //console.log(sql);
   return result;
 };
 
@@ -115,7 +115,7 @@ modelVino.modificarvalorarVino = async (idVino, idUsuario, valoracion) => {
 };
 
 modelVino.buscarValoracionesVino= async (idVino) => {
-  const sql = pool.format('SELECT AVG(valoracion) "media", count(*) "numVal" FROM valoracion_vino WHERE vino = ?', [idVino]);
+  const sql = pool.format('SELECT ROUND(AVG(valoracion),1) "media", count(*) "numVal" FROM valoracion_vino WHERE vino = ?', [idVino]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;
@@ -129,7 +129,7 @@ modelVino.buscarValoracionesVino= async (idVino) => {
 };
 
 modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
-  const sql = pool.format('SELECT COUNT(*) FROM valoracion_vino WHERE usuario = ? AND vino = ?', [idUsuario, idVino]);
+  const sql = pool.format('SELECT valoracion FROM valoracion_vino WHERE vino = ? AND usuario = ?', [idVino, idUsuario]);
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;

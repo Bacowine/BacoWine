@@ -5,6 +5,7 @@ const controllerVino = {};
 
 controllerVino.verVino = async (request, response, next) => {
   const { id } = request.query;
+  const { user } = request.session;
 
   if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
     response.status(500);
@@ -18,9 +19,13 @@ controllerVino.verVino = async (request, response, next) => {
       } else {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         rows.comentarios = await modelVino.buscarComentariosVino(id);
-        rows.valoracion = await modelVino.buscarValoracionesVino(id);
+        rows.valoraciones = await modelVino.buscarValoracionesVino(id);
+        if (user !== undefined && user.role !== 'GC') { 
+          rows.valoracion = await modelVino.confirmarValoracionVino(id, user.name); 
+        }else { rows.valoracion = []; }
         if (rows.comentarios === undefined) rows.comentarios = [];
         rows.variedades = variedades.map((item) => `${item.porcentaje}% ${item.nombre_variedad}`, '').join(', ');
+        console.log(rows);
         response.render('vino_detalles', {
           res: null, vino: rows, title: 'Detalles del vino',
         });
@@ -145,6 +150,7 @@ controllerVino.borrarComentario = async (request, response, next) => {
 };
 
 controllerVino.valorarVino = async (request, response, next) => {
+
   const {
     idVino, valoracion,
   } = request.body;
@@ -159,14 +165,15 @@ controllerVino.valorarVino = async (request, response, next) => {
       next(e);
     }
     else {
-      const existe = await modelVino.confirmarValoracionVino([idVino, user.name]);
+      const [existe] = await modelVino.confirmarValoracionVino(idVino, user.name);
       
-      if (existe == 0) {
-        await modelVino.valorarVino(idVino, user.id, valoracion);
+      if (existe === undefined) {
+        await modelVino.valorarVino(idVino, user.name, valoracion);
       }
       else {
-        await modelVino.modificarvalorarVino(idVino, user.id, valoracion);
+        await modelVino.modificarvalorarVino(idVino, user.name, valoracion);
       }
+      response.redirect(`/vino/detalles?id=${idVino}#valorar`);
     }
   } catch (e) {
     console.error(e);
