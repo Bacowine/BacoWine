@@ -23,7 +23,7 @@
               <h1 class="col-7 col-lg-9 text-white text-capitalize"><%= vino.nombre %></h1>
               <% if (typeof(session.user) !== 'undefined' && session.user.role === 'GC' ) { %> 
                 <!-- Button trigger modal -->
-                <button type="button" class="col-2 col-lg-1 btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" class="col-2 col-lg-1 btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editarModal">
                   <i class="bi bi-pencil-fill"></i>
                 </button>
                 <button type="button" class="col-2 col-lg-1 btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -46,7 +46,7 @@
             </div>
             <hr class="text-muted">
 
-            <!-- Modal -->
+            <!-- Modal borrar-->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -61,6 +61,35 @@
                     <form action="borrarVino" method="POST">
                       <input type="hidden" name="id" id="id" value="<%=vino.id%>" />
                       <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <!-- Modal editar-->
+            <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar vino</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p class="text-body">Estas seguro de que quieres editar el vino?</p> 
+                  </div>
+                  <div class="modal-footer">
+                    <form action="modificarVino" method="POST">
+                      <input type="hidden" name="nombre" id="" value="<%=vino.nombre%>" />
+                      <input type="hidden" name="añada" id="" value="<%=vino.añada%>" />
+                      <input type="hidden" name="variedadesJSON" id="" value="<%=JSON.stringify(variedadesJSON)%>" />
+                      <input type="hidden" name="gradoAlcohol" id="" value="<%=vino.graduacion%>" />
+                      <input type="hidden" name="bodega" id="" value="<%=vino.bodega%>" />
+                      <input type="hidden" name="localidad" id="" value="<%=vino.localidades%>" />
+                      <input type="hidden" name="clase" id="" value="<%=vino.clase%>" />
+                      <input type="hidden" name="tipo" id="" value="<%=vino.tipo%>" />
+                      <input type="hidden" name="maceracion" id="" value="<%=vino.maceracion%>" />
+                      <button type="submit" class="btn btn-danger">Editar</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                   </div>

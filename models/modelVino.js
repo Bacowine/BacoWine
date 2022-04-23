@@ -55,6 +55,31 @@ modelVino.insert = async (rows, variedad) => {
   }
 };
 
+modelVino.update = async (rows, variedad) => {
+  let conn;
+  try {
+    conn = await pool.promise().getConnection();
+    await conn.beginTransaction();
+    const sql1 = pool.format('UPDATE vino SET nombre = ?, añada = ?, clase = ?, tipo = ?, maceracion = ?, graduacion = ?, bodega = ?, localidades =?, foto =? WHERE id = ?', [rows]);
+    console.log(sql1.substring(0, 500));
+    const [result] = await conn.query(sql1);
+
+    await Promise.all(Object.entries(variedad).map(async ([key, value]) => {
+      const sql2 = pool.format('UPDATE variedad_vino SET nombre_variedad=?,porcentaje =? WHERE vino = ?,', [result.insertId, key, value]);
+      console.log(sql2);
+      await conn.query(sql2);
+    }));
+
+    await conn.commit();
+    return result.insertId;
+  } catch (error) {
+    if (conn) await conn.rollback();
+    throw error;
+  } finally {
+    if (conn) await conn.release();
+  }
+};
+
 modelVino.findID = async (id) => {
   const sql = pool.format('SELECT id FROM vino where id = ?', [id]);
   console.log(sql);

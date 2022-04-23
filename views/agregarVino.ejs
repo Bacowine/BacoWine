@@ -8,7 +8,11 @@
 <body>
   <%- include('./partials/_header'); %>
   <div class="text-center">
-    <h1>Agregar Vino</h1>
+    <%if ( typeof body !== 'undefined' && body.url  === '/modificarVino' ) { %>
+      <h1>Modificar Vino</h1>
+    <% } else { %>
+      <h1>Agregar Vino</h1>
+    <% } %>
   </div>
   <div class="container">
     <div class="row px-5">
@@ -25,7 +29,11 @@
           </div>
         <% }); %> 
       <% } %>
-      <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
+      <%if ( typeof body !== 'undefined' && body.url  === '/modificarVino' ) { %>
+        <form class="needs-validation was-validated" action="/vino/modificarVinoFinal" enctype="multipart/form-data" method="POST">
+        <% } else { %>
+        <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
+        <% } %>
         <div class="row mt-1">
           <label for="validationCustom01" class="form-label">Nombre</label>
           <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" name="nombre" value="<%= typeof(body) !== 'undefined' ? body.nombre : ''%>"
@@ -126,7 +134,11 @@
         <div class="row mt-4">
           <div class="col d-grid">
             <button type="submit" class="btn menu boton-buscar btn-dark">
-              <h2>Agregar</h2>
+              <%if ( typeof body !== 'undefined' && body.url  === '/modificarVino' ) { %>
+                <h2>Modificar</h2>
+              <% } else { %>
+                <h2>Agregar</h2>
+              <% } %>
             </button>
           </div>
           <div class="col d-grid">

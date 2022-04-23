@@ -19,9 +19,10 @@ controllerVino.verVino = async (request, response, next) => {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         rows.comentarios = await modelVino.buscarComentariosVino(id);
         if (rows.comentarios === undefined) rows.comentarios = [];
+        const variedadesJSON = variedades;
         rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
         response.render('vino_detalles', {
-          res: null, vino: rows, title: 'Detalles del vino',
+          res: null, vino: rows, title: 'Detalles del vino', variedadesJSON
         });
       }
     } catch (e) {
@@ -54,8 +55,52 @@ controllerVino.agregarVino = async (request, response, next) => {
     // const imagen = (request.file)
     // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
     const imagen = (request.file) ? request.file.buffer : null;
+    console.log(variedad);
 
     const id = await modelVino.insert([
+      nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
+    ], JSON.parse(variedad));
+
+    // response.render('agregarVino', { id });
+    response.redirect(`/vino/detalles?id=${id}`);
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
+
+controllerVino.modificarVino = async (request, response, next) => {
+  const {
+    nombre, añada, clase, tipo, maceracion, variedadesJSON, gradoAlcohol, bodega, localidad,
+  } = request.body;
+  console.log(variedadesJSON);
+  if (1) { // >0
+    const imagen = request.file;
+    const url = request.url;
+    response.render('agregarVino', {
+      body: {
+        nombre, añada, clase, tipo, maceracion, variedad: variedadesJSON, gradoAlcohol, bodega, localidad, imagen, url,
+      },
+    });
+    return;
+  }
+};
+
+controllerVino.modificarVinoFinal = async (request, response, next) => {
+  const {
+    nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad,
+  } = request.body;
+  const variedad = "{dsfg:100}";
+  console.log(variedad);
+
+  try {
+    // const imagen = (request.file)
+    // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
+    const imagen = (request.file) ? request.file.buffer : null;
+
+    const id = await modelVino.update([
       nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
     ], JSON.parse(variedad));
 
