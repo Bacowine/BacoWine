@@ -80,6 +80,7 @@
                   </div>
                   <div class="modal-footer">
                     <form action="modificarVino" method="POST">
+                      <input type="hidden" name="id" value="<%=vino.id%>" />
                       <input type="hidden" name="nombre" id="" value="<%=vino.nombre%>" />
                       <input type="hidden" name="añada" id="" value="<%=vino.añada%>" />
                       <input type="hidden" name="variedadesJSON" id="" value="<%=JSON.stringify(variedadesJSON)%>" />

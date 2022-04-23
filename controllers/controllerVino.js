@@ -21,6 +21,7 @@ controllerVino.verVino = async (request, response, next) => {
         if (rows.comentarios === undefined) rows.comentarios = [];
         const variedadesJSON = variedades;
         rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
+        //console.log(rows);
         response.render('vino_detalles', {
           res: null, vino: rows, title: 'Detalles del vino', variedadesJSON,
         });
@@ -73,10 +74,12 @@ controllerVino.agregarVino = async (request, response, next) => {
 
 controllerVino.modificarVino = async (request, response, next) => {
   const {
-    nombre, añada, clase, tipo, maceracion, variedadesJSON, gradoAlcohol, bodega, localidad,
+    nombre, añada, clase, tipo, maceracion, variedadesJSON, gradoAlcohol, bodega, localidad, id,
   } = request.body;
+  console.log(request.body);
 
-  const imagen = request.file;
+  
+  //const imagen = request.file;
   const { url } = request;
 
   const variedad = JSON.stringify(JSON.parse(variedadesJSON).reduce((obj, item) => {
@@ -95,24 +98,24 @@ controllerVino.modificarVino = async (request, response, next) => {
       gradoAlcohol,
       bodega,
       localidad,
-      imagen,
       url,
+      id,
     },
   });
 };
 
 controllerVino.modificarVinoFinal = async (request, response, next) => {
   const {
-    nombre, añada, clase, tipo, variedad, maceracion, gradoAlcohol, bodega, localidad,
+    nombre, añada, clase, tipo, variedad, maceracion, gradoAlcohol, bodega, localidad, id, 
   } = request.body;
-
+  //console.log(request.body);
   try {
     // const imagen = (request.file)
     // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
     const imagen = (request.file) ? request.file.buffer : null;
 
-    const id = await modelVino.update([
-      nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
+    const s = await modelVino.update([
+      nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen, id
     ], JSON.parse(variedad));
 
     // response.render('agregarVino', { id });

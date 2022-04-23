@@ -31,6 +31,7 @@
       <% } %>
       <%if ( typeof body !== 'undefined' && body.url  === '/modificarVino' ) { %>
         <form class="needs-validation was-validated" action="/vino/modificarVinoFinal" enctype="multipart/form-data" method="POST">
+          <input type="hidden" name="id" value="<%=body.id%>" />
         <% } else { %>
         <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
         <% } %>
