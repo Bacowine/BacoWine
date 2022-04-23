@@ -31,6 +31,7 @@ modelVino.find = async (id) => {
 };
 
 modelVino.insert = async (rows, variedad) => {
+  console.log(rows)
   let conn;
   try {
     conn = await pool.promise().getConnection();
@@ -38,6 +39,9 @@ modelVino.insert = async (rows, variedad) => {
     const sql1 = pool.format('INSERT INTO vino(nombre, añada, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
     console.log(sql1.substring(0, 500));
     const [result] = await conn.query(sql1);
+    
+    //const sql2 = pool.format('INSERT INTO valoracion_vino(vino, usuario, valoracion) VALUES(?,?, ?)',[rows[0],idUsuario, valoracion]);
+    //await conn.query(sql2);
 
     await Promise.all(Object.entries(variedad).map(async ([key, value]) => {
       const sql2 = pool.format('INSERT INTO variedad_vino(vino,nombre_variedad,porcentaje) VALUES(?,?,?)', [result.insertId, key, value]);
@@ -86,15 +90,43 @@ modelVino.buscarComentariosVino = async (id) => {
 modelVino.buscarComentario = async (id) => {
   const sql = pool.format('SELECT * FROM comentario WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
-  console.log(result);
+  //console.log(result);
   return result;
 };
 
 modelVino.borrarComentario = async (id) => {
   const sql = pool.format('DELETE FROM comentario WHERE id = ?', [id]);
   const [result] = await pool.promise().query(sql);
+  //console.log(result);
+  return result;
+};
+
+modelVino.valorarVino = async (idVino, idUsuario, valoracion) => {
+  const sql = pool.format('INSERT INTO valoracion_vino(vino,usuario,valoracion) VALUES(?,?,?)', [idVino, idUsuario, valoracion]);
+  const [result] = await pool.promise().query(sql);
+  //console.log(sql);
+  return result;
+};
+
+modelVino.modificarvalorarVino = async (idVino, idUsuario, valoracion) => {
+  const sql = pool.format('UPDATE valoracion_vino SET valoracion = ? where vino = ? AND usuario =  ?', [valoracion, idVino, idUsuario]);
+  const [result] = await pool.promise().query(sql);
+  console.log(sql);
+  return result;
+};
+
+modelVino.buscarValoracionesVino = async (idVino) => {
+  const sql = pool.format('SELECT ROUND(AVG(valoracion),1) "media", count(*) "numVal" FROM valoracion_vino WHERE vino = ?', [idVino]);
+  const [[result]] = await pool.promise().query(sql);
   console.log(result);
   return result;
+};
+
+modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
+  const sql = pool.format('SELECT valoracion FROM valoracion_vino WHERE vino = ? AND usuario = ?', [idVino, idUsuario]);
+  const [[result]] = await pool.promise().query(sql);
+  console.log(result);
+  return result ? result.valoracion : 0;
 };
 
 modelVino.readAll = async ({ search = '', limit = 100, offset = 0 }) => {
@@ -114,4 +146,5 @@ modelVino.readAll = async ({ search = '', limit = 100, offset = 0 }) => {
   const [[result2]] = await pool.promise().query(sql2);
   return { vinos: result, count: result2.total };
 };
+
 module.exports = modelVino;

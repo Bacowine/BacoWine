@@ -9,8 +9,9 @@ afterAll(() => {
 });
 
 test('Añadir vino ejemplo modelo', async () => {
-  const img = fs.readFileSync(`${__dirname}/img/shopping.jpg`);
-  const id = await modelVinos.insert(['CM 2017', 1999, 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', img], { a: 10 });
+  const mock = MockVino;
+  mock.foto = fs.readFileSync(`${__dirname}/img/shopping.jpg`);
+  const id = await modelVinos.insert(Object.values(mock), { a: 10 });
   expect(id).not.toBe(undefined);
   const sql = pool.format('DELETE FROM vino WHERE nombre = ?', ['CM 2017']);
   await pool.promise().query(sql);
@@ -67,7 +68,7 @@ test('mostrar vino que no existe', async () => {
 });
 
 test('Añadir comentario a un vino como UR, modelo', async () => {
-  const idVino = await modelVinos.insert(['CM 2017', 1999, 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  const idVino = await modelVinos.insert(Object.values(MockVino), { a: 10 });
   const id = await modelVinos.comentarVino(['a', idVino, 'Test de comentar vino modelo']);
   expect(id).not.toBe(undefined);
   const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
@@ -77,13 +78,13 @@ test('Añadir comentario a un vino como UR, modelo', async () => {
 });
 
 test('Añadir comentario a un vino como UR, controlador', async () => {
-  const idVino = await modelVinos.insert(['CM 2017', 1999, 'Tinto', 'Tranquilo', 'Maceracion', 14, 'Carlos Moro', 'rioja', null], { a: 10 });
+  const idVino = await modelVinos.insert(Object.values(MockVino), { a: 10 });
   const mReq = {
     body: {
-      idVino: idVino, texto: 'Test de comentar vino controlador',
+      idVino, texto: 'Test de comentar vino controlador',
     },
     session: {
-      user: { name: 'a', role: 'UR' }
+      user: { name: 'a', role: 'UR' },
     },
     errors: { lenght: 0 },
   };
@@ -100,10 +101,10 @@ test('Añadir comentario a un vino como UR, controlador', async () => {
 test('Añadir comentario a un vino como GC, controlador', async () => {
   const mReq = {
     body: {
-      idVino: '-1', texto: 'Test de comentar vino controlador como GC'
+      idVino: '-1', texto: 'Test de comentar vino controlador como GC',
     },
-    session: { 
-      user: { name: 'b', role: 'GC' }
+    session: {
+      user: { name: 'b', role: 'GC' },
     },
     errors: { lenght: 0 },
   };
@@ -116,7 +117,7 @@ test('Añadir comentario a un vino como GC, controlador', async () => {
 test('Añadir comentario a un vino como UNR, controlador', async () => {
   const mReq = {
     body: {
-      idVino: '-1', texto: 'Test de comentar vino controlador como UNR'
+      idVino: '-1', texto: 'Test de comentar vino controlador como UNR',
     },
     session: { },
     errors: { lenght: 0 },
@@ -125,4 +126,73 @@ test('Añadir comentario a un vino como UNR, controlador', async () => {
   const mNext = jest.fn();
   await CVinos.comentarVino(mReq, mRes, mNext);
   expect(mRes.status).toBeCalledWith(403);
+});
+
+// ---------------------test valorar vino---------------
+
+test('Añadir una valoracion a un vino, modelo', async () => {
+  const idVino = await modelVinos.insert(Object.values(MockVino), { a: 10 });
+  expect(idVino).not.toBe(undefined);
+  const idVal = await modelVinos.valorarVino(idVino, 'a', 5);
+  expect(idVal).not.toBe(undefined);
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
+});
+
+test('Añadir valoracion a un vino como UR, controlador', async () => {
+  const idVino = await modelVinos.insert(Object.values(MockVino), { a: 10 });
+  const mReq = {
+    body: {
+      idVino, valoracion: 10,
+    },
+    session: {
+      user: { name: 'a', role: 'UR' },
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.valorarVino(mReq, mRes, mNext);
+  expect(mRes.redirect).toBeCalled();
+ 
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
+});
+ 
+test('modificar valoracion a un vino como UR, controlador', async () => {
+  const idVino = await modelVinos.insert(Object.values(MockVino), { a: 10 });
+
+  const mReq = {
+    body: {
+      idVino, valoracion: 10,
+    },
+    session: {
+      user: { name: 'a', role: 'UR' },
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.valorarVino(mReq, mRes, mNext);
+  expect(mRes.redirect).toBeCalled();
+
+  const mReq2 = {
+    body: {
+      idVino, valoracion: 8,
+    },
+    session: {
+      user: { name: 'a', role: 'UR' },
+    },
+    errors: { lenght: 0 },
+  };
+  const mRes2 = { status: jest.fn(), render: jest.fn(), redirect: jest.fn() };
+  const mNext2 = jest.fn();
+  await CVinos.valorarVino(mReq2, mRes2, mNext2);
+  expect(mRes2.redirect).toBeCalled();
+
+  const valVino = await modelVinos.confirmarValoracionVino(idVino, 'a');
+  expect(valVino).toBe('8.0');
+
+  const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
+  await pool.promise().query(sql2);
 });
