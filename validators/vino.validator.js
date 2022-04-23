@@ -8,13 +8,13 @@ const vinoSchema = checkSchema({
       errorMessage: 'Nombre debe tener entre 1 y 50 caracteres',
     },
   },
-  añada: {
+  anyada: {
     isInt: {
       options: { gt: 1800, lt: new Date().getFullYear() },
       errorMessage: 'Añada debe estar entre 1800 y el año actual',
     },
   },
-  gradoAlcohol: {
+  graduacion: {
     isDecimal: {
       options: { min: 5, max: 20, decimal_digits: '0,2' },
       errorMessage: 'Graduación del alcohol debe estar entre 5.00% y 20.00%',
@@ -27,7 +27,7 @@ const vinoSchema = checkSchema({
       errorMessage: 'Bodega debe tener entre 1 y 50 caracteres',
     },
   },
-  localidad: {
+  localidades: {
     trim: true,
     isLength: {
       options: { min: 1, max: 50 },

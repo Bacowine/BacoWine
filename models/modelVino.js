@@ -35,7 +35,7 @@ modelVino.insert = async (rows, variedad) => {
   try {
     conn = await pool.promise().getConnection();
     await conn.beginTransaction();
-    const sql1 = pool.format('INSERT INTO vino(nombre, añada, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
+    const sql1 = pool.format('INSERT INTO vino(nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
     console.log(sql1.substring(0, 500));
     const [result] = await conn.query(sql1);
 
@@ -55,30 +55,24 @@ modelVino.insert = async (rows, variedad) => {
   }
 };
 
-modelVino.update = async (rows, variedad) => {
+modelVino.update = async ({ id, ...fields }, variedad) => {
   let conn;
   try {
     conn = await pool.promise().getConnection();
     await conn.beginTransaction();
-    //console.log(variedad);
-    const sql1 = pool.format(`UPDATE vino SET nombre = ?, añada = ?, clase = ?, tipo = ?, 
-    maceracion = ?, graduacion = ?, bodega = ?, localidades =?, foto =? WHERE id = ?`, 
-    [...rows]);
+    const sql1 = pool.format('UPDATE vino SET ? WHERE id = ?', [fields, id]);
     console.log(sql1.substring(0, 500));
     const [result] = await conn.query(sql1);
-    const id = rows[9];
 
-    const sql3 = pool.format(`DELETE FROM variedad_vino WHERE vino = ?`, [id]);
+    const sql3 = pool.format('DELETE FROM variedad_vino WHERE vino = ?', [id]);
     console.log(sql3);
     await conn.query(sql3);
-
 
     await Promise.all(Object.entries(variedad).map(async ([key, value]) => {
       const sql2 = pool.format('INSERT INTO variedad_vino(vino,nombre_variedad,porcentaje) VALUES(?,?,?)', [id, key, value]);
       console.log(sql2);
       await conn.query(sql2);
     }));
-
 
     await conn.commit();
     return result.insertId;

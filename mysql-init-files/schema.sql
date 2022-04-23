@@ -4,7 +4,7 @@ use bacowine;
 CREATE TABLE vino (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(45) NOT NULL,
-    añada VARCHAR(100) NOT NULL,
+    anyada VARCHAR(100) NOT NULL,
     clase VARCHAR(45) NOT NULL,
     tipo VARCHAR(45) NOT NULL, 
     maceracion VARCHAR(45) NOT NULL, 

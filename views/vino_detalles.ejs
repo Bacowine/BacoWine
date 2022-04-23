@@ -79,17 +79,8 @@
                     <p class="text-body">Estas seguro de que quieres editar el vino?</p> 
                   </div>
                   <div class="modal-footer">
-                    <form action="modificarVino" method="POST">
+                    <form action="modificarVino" method="GET">
                       <input type="hidden" name="id" value="<%=vino.id%>" />
-                      <input type="hidden" name="nombre" id="" value="<%=vino.nombre%>" />
-                      <input type="hidden" name="añada" id="" value="<%=vino.añada%>" />
-                      <input type="hidden" name="variedadesJSON" id="" value="<%=JSON.stringify(variedadesJSON)%>" />
-                      <input type="hidden" name="gradoAlcohol" id="" value="<%=vino.graduacion%>" />
-                      <input type="hidden" name="bodega" id="" value="<%=vino.bodega%>" />
-                      <input type="hidden" name="localidad" id="" value="<%=vino.localidades%>" />
-                      <input type="hidden" name="clase" id="" value="<%=vino.clase%>" />
-                      <input type="hidden" name="tipo" id="" value="<%=vino.tipo%>" />
-                      <input type="hidden" name="maceracion" id="" value="<%=vino.maceracion%>" />
                       <button type="submit" class="btn btn-danger">Editar</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

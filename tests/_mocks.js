@@ -1,6 +1,6 @@
 const MockVino = {
   nombre: 'B',
-  añada: 1999,
+  anyada: 1999,
   clase: 'Blanco',
   tipo: 'Espirituoso',
   maceracion: 'Crianza',
