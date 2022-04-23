@@ -22,7 +22,7 @@ controllerVino.verVino = async (request, response, next) => {
         const variedadesJSON = variedades;
         rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
         response.render('vino_detalles', {
-          res: null, vino: rows, title: 'Detalles del vino', variedadesJSON
+          res: null, vino: rows, title: 'Detalles del vino', variedadesJSON,
         });
       }
     } catch (e) {
@@ -75,25 +75,36 @@ controllerVino.modificarVino = async (request, response, next) => {
   const {
     nombre, añada, clase, tipo, maceracion, variedadesJSON, gradoAlcohol, bodega, localidad,
   } = request.body;
-  console.log(variedadesJSON);
-  if (1) { // >0
-    const imagen = request.file;
-    const url = request.url;
-    response.render('agregarVino', {
-      body: {
-        nombre, añada, clase, tipo, maceracion, variedad: variedadesJSON, gradoAlcohol, bodega, localidad, imagen, url,
-      },
-    });
-    return;
-  }
+
+  const imagen = request.file;
+  const { url } = request;
+
+  const variedad = JSON.stringify(JSON.parse(variedadesJSON).reduce((obj, item) => {
+    obj[item.nombre_variedad] = item.porcentaje;
+    return obj;
+  }, {}));
+
+  response.render('agregarVino', {
+    body: {
+      nombre,
+      añada,
+      clase,
+      tipo,
+      maceracion,
+      variedad,
+      gradoAlcohol,
+      bodega,
+      localidad,
+      imagen,
+      url,
+    },
+  });
 };
 
 controllerVino.modificarVinoFinal = async (request, response, next) => {
   const {
-    nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad,
+    nombre, añada, clase, tipo, variedad, maceracion, gradoAlcohol, bodega, localidad,
   } = request.body;
-  const variedad = "{dsfg:100}";
-  console.log(variedad);
 
   try {
     // const imagen = (request.file)
