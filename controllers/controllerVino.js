@@ -174,7 +174,7 @@ controllerVino.mostrarVinos = async (req, res, after) => {
   const offset = page < 0 ? 0 : page * size;
 
   try {
-    const { vino, count } = await modelVino.findName({ search, limit, offset });
+    const { vinos, count } = await modelVino.readAll({ search, limit, offset });
 
     const current = page + 1;
     const pages = Math.ceil(count / size);
@@ -184,7 +184,7 @@ controllerVino.mostrarVinos = async (req, res, after) => {
       current, next, prev, pages,
     };
 
-    res.render('vino', { vino, pagination, search });
+    res.render('vinos', { vinos, pagination, search });
   } catch (e) {
     console.error(e);
     res.status(500);

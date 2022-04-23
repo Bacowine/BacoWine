@@ -97,9 +97,9 @@ modelVino.borrarComentario = async (id) => {
   return result;
 };
 
-modelVino.findName = async ({ search = '', limit = 100, offset = 0 }) => {
+modelVino.readAll = async ({ search = '', limit = 100, offset = 0 }) => {
   const sql = pool.format(`
-    SELECT id, nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades,TO_BASE64(foto) foto, activo
+    SELECT id, nombre, añada, clase, tipo, maceracion, graduacion, bodega, localidades,TO_BASE64(foto) foto, activo
     FROM vino
     where nombre LIKE ? AND activo = 1
     LIMIT ?,?`, [`%${search}%`, offset, limit]);
@@ -112,6 +112,6 @@ modelVino.findName = async ({ search = '', limit = 100, offset = 0 }) => {
     where nombre LIKE ? AND activo = 1`, [`%${search}%`]);
   console.log(sql2);
   const [[result2]] = await pool.promise().query(sql2);
-  return { vino: result, count: result2.total };
+  return { vinos: result, count: result2.total };
 };
 module.exports = modelVino;
