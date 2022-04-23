@@ -119,13 +119,6 @@ modelVino.buscarValoracionesVino= async (idVino) => {
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;
-  /*let sum=0;
-  let cont=0;
-  result.forEach(row => {//Calcular media
-    sum+=row.valoracion;
-    cont++;
-  });
-  return sum/cont;*/
 };
 
 modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
@@ -133,6 +126,24 @@ modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
   const [result] = await pool.promise().query(sql);
   console.log(result);
   return result;
+};
+
+modelVino.readAll = async ({ search = '', limit = 100, offset = 0 }) => {
+  const sql = pool.format(`
+    SELECT id, nombre, añada, clase, tipo, maceracion, graduacion, bodega, localidades,TO_BASE64(foto) foto, activo
+    FROM vino
+    where nombre LIKE ? AND activo = 1
+    LIMIT ?,?`, [`%${search}%`, offset, limit]);
+  console.log(sql);
+  const [result] = await pool.promise().query(sql);
+
+  const sql2 = pool.format(`
+    SELECT COUNT(*) total
+    FROM vino
+    where nombre LIKE ? AND activo = 1`, [`%${search}%`]);
+  console.log(sql2);
+  const [[result2]] = await pool.promise().query(sql2);
+  return { vinos: result, count: result2.total };
 };
 
 module.exports = modelVino;
