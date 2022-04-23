@@ -48,11 +48,4 @@ modelBodega.borrarBodega = async (id) => {
   return result;
 };
 
-modelBodega.findAll = async () => {
-  const sql = pool.format('SELECT id,nombre FROM bodegas');
-  const result = await pool.promise().query(sql);
-  console.log(sql);
-  return result;
-};
-
 module.exports = modelBodega;
