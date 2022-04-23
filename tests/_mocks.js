@@ -4,9 +4,9 @@ const MockVino = {
   clase: 'Blanco',
   tipo: 'Espirituoso',
   maceracion: 'Crianza',
-  gradoAlcohol: '6',
+  graduacion: '6',
   bodega: 'UCM',
-  localidad: 'Madrid, Granada',
+  localidades: 'Madrid, Granada',
   foto: null,
 };
 
