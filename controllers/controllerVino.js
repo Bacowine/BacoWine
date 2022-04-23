@@ -41,7 +41,7 @@ controllerVino.agregarVino = async (request, response, next) => {
 
   const alert = request.errors;
   if (alert.length > 0) { // >0
-    const imagen = request.file;
+    const imagen = request.file ? request.file.buffer.toString('base64') : null;
     response.render('agregarVino', {
       alert,
       body: {

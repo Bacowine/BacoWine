@@ -27,7 +27,7 @@ CREATE TABLE bodegas (
   nombre VARCHAR(40) NOT NULL,
   anyoCreacion INT NOT NULL,
   localizGeo VARCHAR(40) NOT NULL,
-  descripcion VARCHAR(500) NOT NULL,
+  descripcion VARCHAR(700) NOT NULL,
   denominOrigen VARCHAR(40) NOT NULL,
   foto LONGBLOB,
   activo BOOLEAN DEFAULT true NOT NULL

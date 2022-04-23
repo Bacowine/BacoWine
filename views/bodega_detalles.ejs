@@ -1,92 +1,99 @@
 <!DOCTYPE html>
 <html lang="es-ES">
   <head>
-    <style>
-      body {
-        background: radial-gradient(circle, rgb(139, 55, 77) 0%, rgb(71, 18, 33) 100%);
-      }
-    </style>
     <%- include('./partials/_head',{title}); %>
   </head>
   <body>
     <%- include('./partials/_header'); %>
-    <h1 class="text-white">Detalles bodega <%= bodega.nombre %></h1>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-5">
+    <div class="container-md px-4">
+      <div class="card bg-dark p-3">
+        <div class="row">
+          <div class="col-12 col-sm-4 my-auto">
 
           <% if (bodega.foto !== null) { %> 
-            <img src="data:image/webp;base64, <%= bodega.foto %>" class="img-fluid" alt="Foto bodega">
+            <img src="data:image/webp;base64, <%= bodega.foto %>" class="img-fluid rounded" alt="Foto bodega">
           <% } else { %>
-            <img src="/static/images/bodega.jpg" class="img-fluid" alt="Foto bodega">
+            <img src="/static/images/bodega.jpg" class="img-fluid rounded" alt="Foto bodega">
           <% } %> 
 
+        </div>   
+        <div class="col-12 col-sm-8 pt-3">
+          <div class="row gx-0">
+            <h1 class="col-7 col-lg-9 text-white text-capitalize"><%= bodega.nombre %></h1>
+            <% if (typeof(session.user) !== 'undefined' && session.user.role === 'GC' ) { %> 
+              <!-- Button trigger modal -->
+              <button type="button" class="col-2 col-lg-1 btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editarModal">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button type="button" class="col-2 col-lg-1 btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="bi bi-trash"></i>
+              </button>
+            <% } %>
+          </div>
+          <hr class="text-muted">
+          <div class="row">
+            <% Object.keys(bodega).forEach((atr) => { %>
+              <% if(!['id','nombre','foto','descripcion'].includes(atr)) { %> 
+                <div class="col-6">
+                  <div class="row">
+                    <span class="col-6 text-capitalize text-muted text-nowrap fw-bold"><%= atr %></span>
+                    <span class="col-6 text-uppercase text-white fw-bold"><%= bodega[atr] %></span>
+                  </div>
+                </div>
+              <% } %> 
+            <% }) %>               
+          </div>
+          <hr class="text-muted">
+          <p>
+            <%= bodega['descripcion'] %> 
+          </p>
         </div>
-        <div class="col-7">
 
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">Nombre</span>
-            </div>
-            <input type="text" value="<%=bodega.nombre%>" class="form-control" readonly>
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">Año</span>
-            </div>
-            <input type="text" value="<%=bodega.anyo%>" class="form-control" readonly>
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">Localización</span>
-            </div>
-            <input type="text" value="<%=bodega.localizacion%>" class="form-control" readonly>
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">Descripción</span>
-            </div>
-            <textarea style="resize:none" class="form-control" rows="10" readonly><%=bodega.descripcion%></textarea>
-          </div>
-          
-          <div class="input-group mb-3">
-            <div class="input-group-prepend col-4">
-              <span class="input-group-text">D.O</span>
-            </div>
-            <input type="text" value="<%=bodega.origen%>" class="form-control" readonly>
-          </div>
-
-
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <i class="bi bi-trash"></i>
-          </button>
-          <!-- Modal -->
+          <!-- Modal borrar-->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Eliminar bodega</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Eliminar vino</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  Estas seguro de que quieres borrar la bodega?
+                  <p class="text-body">Estas seguro de que quieres borrar la bodega?</p> 
                 </div>
                 <div class="modal-footer">
-
-                  <form action="borrarBodega" method="post">
-                    <input type="hidden" name="id" id="id" value="<%=id%>" />
+                  <form action="borrarBodega" method="POST">
+                    <input type="hidden" name="id" value="<%=bodega.id%>" />
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                   </form>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-
                 </div>
               </div>
             </div>
           </div> 
+          <!-- Modal editar-->
+          <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Editar bodega</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p class="text-body">Estas seguro de que quieres editar la bodega?</p> 
+                </div>
+                <div class="modal-footer">
+                  <form action="modificarBodega" method="GET">
+                    <input type="hidden" name="id" value="<%=bodega.id%>" />
+                    <button type="submit" class="btn btn-danger">Editar</button>
+                  </form>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div>
+  </div>
                     
         </div>
       </div>

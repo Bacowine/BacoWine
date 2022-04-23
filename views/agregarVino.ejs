@@ -131,10 +131,10 @@
 
         <div class="row g-0 mt-1">
           <div class="col-12">
-            <img <%= typeof body !== 'undefined' && body.foto ? `src=data:image/png;base64,${body.foto}` : '' %> 
-            id="img-preview" 
-            class="img-thumbnail" 
-            style="height: 100px;<%= typeof body !== 'undefined' && body.foto ? '' : 'display:none;'%>">
+            <img <%= typeof body !== 'undefined' && body.foto ? `src=data:image/webp;base64,${body.foto}` : '' %> 
+              id="img-preview" 
+              class="img-thumbnail" 
+              style="height: 100px;<%= typeof body !== 'undefined' && body.foto ? '' : 'display:none;'%>">
             <label for="img-upload" class="form-label btn btn-success">Imagen</label>
             <input type="file" id="img-upload" name="imagen" class="form-control d-none" accept="image/png,image/jpeg" />
           </div>
@@ -166,8 +166,7 @@
 
 
       document.getElementById('img-upload').addEventListener('change',(e) => changeImgPreview(e));
-      document.getElementById("img-preview").addEventListener('change',(e) => changeImgSrc(e));
-      
+
       function changeImgPreview(e) {
         if(e.target.files.length > 0){
           const src = URL.createObjectURL(event.target.files[0]);
