@@ -226,7 +226,7 @@
 
 <% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
   <script type="text/javascript">
-    document.getElementById("valorar").addEventListener("click", function() {
+    document.getElementById("valorar").addEventListener("change", function() {
       document.valorar.submit();
     });
   </script>
