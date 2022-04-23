@@ -224,9 +224,10 @@
   </body>
 </html>
 
-
-<script type="text/javascript">
-  document.getElementById("valorar").addEventListener("click", function() {
-    document.valorar.submit();
-  });
-</script>
+<% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
+  <script type="text/javascript">
+    document.getElementById("valorar").addEventListener("click", function() {
+      document.valorar.submit();
+    });
+  </script>
+<% } %>
