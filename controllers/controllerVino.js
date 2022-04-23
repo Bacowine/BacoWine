@@ -5,6 +5,7 @@ const controllerVino = {};
 
 controllerVino.verVino = async (request, response, next) => {
   const { id } = request.query;
+  const { user } = request.session;
 
   if (Number.isNaN(Number(id)) || Number.isNaN(Number.parseInt(id, 10))) {
     response.status(500);
@@ -18,6 +19,10 @@ controllerVino.verVino = async (request, response, next) => {
       } else {
         rows.foto = rows.foto ? rows.foto.toString('base64') : null;
         rows.comentarios = await modelVino.buscarComentariosVino(id);
+        rows.valoraciones = await modelVino.buscarValoracionesVino(id);
+        if (user !== undefined && user.role !== 'GC') {
+          rows.valoracion = await modelVino.confirmarValoracionVino(id, user.name);
+        } else { rows.valoracion = []; }
         if (rows.comentarios === undefined) rows.comentarios = [];
         rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
 
@@ -205,4 +210,63 @@ controllerVino.borrarComentario = async (request, response, next) => {
     next(e);
   }
 };
+
+controllerVino.valorarVino = async (request, response, next) => {
+  const {
+    idVino, valoracion,
+  } = request.body;
+
+  const { user } = request.session;
+  try {
+    if (user === undefined || user.role === 'GC') {
+      const e = new Error('Forbidden');
+      e.status = 403;
+      response.status(403);
+      next(e);
+    } else {
+      const existe = await modelVino.confirmarValoracionVino(idVino, user.name);
+      if (existe === 0) {
+        await modelVino.valorarVino(idVino, user.name, valoracion);
+      } else {
+        await modelVino.modificarvalorarVino(idVino, user.name, valoracion);
+      }
+      response.redirect(`/vino/detalles?id=${idVino}#valorar`);
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
+
+controllerVino.mostrarVinos = async (req, res, after) => {
+  const search = req.query.search || '';
+  const page = +req.query.page - 1 || 0;
+  const size = 9;
+
+  const limit = size < 0 ? 1 : size;
+  const offset = page < 0 ? 0 : page * size;
+
+  try {
+    const { vinos, count } = await modelVino.readAll({ search, limit, offset });
+
+    const current = page + 1;
+    const pages = Math.ceil(count / size);
+    const next = current + 1 > pages ? pages : current + 1;
+    const prev = current - 1 < 0 ? 0 : current - 1;
+    const pagination = {
+      current, next, prev, pages,
+    };
+
+    res.render('vinos', { vinos, pagination, search });
+  } catch (e) {
+    console.error(e);
+    res.status(500);
+    const err = new Error('Error interno de acceso a la base de datos');
+    err.stack = e.stack;
+    after(err);
+  }
+};
+
 module.exports = controllerVino;
