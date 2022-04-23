@@ -168,6 +168,8 @@ dist
 
 .idea/workspace.xml
 
+.idea
+
 package-lock.json
 
 package.json

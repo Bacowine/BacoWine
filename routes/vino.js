@@ -6,7 +6,6 @@ const vinoSchema = require('../validators/vino.validator');
 const validate = require('../middlewares/schemaValidator');
 
 const { ROLE, authRole } = require('../middlewares/auth');
-const controllerVino = require('../controllers/controllerVino');
 
 const router = express.Router();
 
@@ -28,6 +27,5 @@ router.route('/comentarVino')
 
 router.route('/borrarComentario')
   .post(authRole([ROLE.USER, ROLE.ADMIN]), cVinos.borrarComentario);
-
 
 module.exports = router;

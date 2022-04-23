@@ -26,6 +26,16 @@ test('GET /vino/detalles should return 200', async () => {
   expect(response.statusCode).toBe(200);
 });
 
+test('GET /vino/ should return 200', async () => {
+  const response = await request(app).get('/vino').send();
+  expect(response.statusCode).toBe(200);
+});
+
+test('GET /bodega/ should return 200', async () => {
+  const response = await request(app).get('/bodega').send();
+  expect(response.statusCode).toBe(200);
+});
+
 /* Falla si no hay
 test('GET /bodega/mostrarBodega should return 200', async () => {
   const response = await request(app).get('/bodega/detalles?id=1').send();
@@ -166,6 +176,11 @@ describe('Rutas protegidas autenticado como USER', () => {
   test('GET /bodega/agregarBodega should return 403 FORBIDDEN', async () => {
     const response = await agent.get('/bodega/agregarBodega').send();
     expect(response.statusCode).toBe(403);
+  });
+
+  test('POST /vino/borrarComentario without id should return 500', async () => {
+    const response = await agent.post('/vino/borrarComentario').send();
+    expect(response.statusCode).toBe(500);
   });
 });
 
