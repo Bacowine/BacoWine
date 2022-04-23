@@ -69,16 +69,16 @@
                 <div class="row">
                   <h1 class="text-white text-capitalize"><%= vino.nombre %></h1>
                 </div>
-                <% if (vino.valoraciones[0].numVal != 0) { %>
+                <% if (vino.valoraciones.numVal != 0) { %>
                 <div class="row val">
-                    <h4 class="fw-bold"><%=vino.valoraciones[0].media%>★</h4>
+                    <h4 class="fw-bold"><%=vino.valoraciones.media%>★</h4>
                     <span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                         <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                         <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
                         <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
                       </svg>
-                      <%=vino.valoraciones[0].numVal%>
+                      <%=vino.valoraciones.numVal%>
                     </span>
                 </div>
                 <% } %>
@@ -86,43 +86,12 @@
               <% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
               <div class="col-6 col-lg-3 text-center">
                 <h4 class="val">Tu valoración</h4>
-                <form id="valorar" name="valorar" method="post" action="/vino/valorarVino">
-                  <p class="clasificacion">
-                    <% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 5) { %>
-                      <input id="radio1" type="radio" name="valoracion" value="5" checked><!--
-                      --><label for="radio1">★</label><!--
-                    --><% } else { %><!--
-                      --><input id="radio1" type="radio" name="valoracion" value="5"><!--
-                      --><label for="radio1">★</label><!--
-                    --><% } %><!--
-                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 4) { %><!--
-                      --><input id="radio2" type="radio" name="valoracion" value="4" checked><!--
-                      --><label for="radio2">★</label><!--
-                    --><% } else { %><!--
-                      --><input id="radio2" type="radio" name="valoracion" value="4"><!--
-                      --><label for="radio2">★</label><!--
-                    --><% } %><!--
-                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 3) { %><!--
-                      --><input id="radio3" type="radio" name="valoracion" value="3" checked><!--
-                      --><label for="radio3">★</label><!--
-                    --><% } else { %><!--
-                      --><input id="radio3" type="radio" name="valoracion" value="3"><!--
-                      --><label for="radio3">★</label><!--
-                    --><% } %><!--
-                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 2) { %><!--
-                      --><input id="radio4" type="radio" name="valoracion" value="2" checked><!--
-                      --><label for="radio4">★</label><!--
-                    --><% } else { %><!--
-                      --><input id="radio4" type="radio" name="valoracion" value="2"><!--
-                      --><label for="radio4">★</label><!--
-                    --><% } %><!--
-                    --><% if(vino.valoracion.length > 0 && vino.valoracion[0].valoracion == 1) { %><!--
-                      --><input id="radio5" type="radio" name="valoracion" value="1" checked><!--
-                      --><label for="radio5">★</label><!--
-                    --><% } else { %><!--
-                      --><input id="radio5" type="radio" name="valoracion" value="1"><!--
-                      --><label for="radio5">★</label><!--
-                    --><% } %>
+                <form id="valorar" method="post" action="/vino/valorarVino">
+                  <div class="clasificacion">
+                    <% for(let i = 5; i >= 1; i--) { %><!-- 
+                    --><input id="radio<%= i %>" type="radio" name="valoracion" value="<%= i %>" <%= vino.valoracion == i ? 'checked' : '' %>><!--
+                    --><label for="radio<%= i %>">★</label><!-- 
+                  --><% } %> 
                     <input type="hidden" value="<%= vino.id %>" name="idVino" />
                   </p>
                 </form>
@@ -221,13 +190,13 @@
       </div>
     </div>
     <%- include('./partials/_footer'); %>
+    <% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
+      <script type="text/javascript">
+        document.getElementById("valorar").addEventListener("change", function() {
+          document.getElementById("valorar").submit();
+        });
+      </script>
+    <% } %>
   </body>
 </html>
 
-<% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
-  <script type="text/javascript">
-    document.getElementById("valorar").addEventListener("change", function() {
-      document.valorar.submit();
-    });
-  </script>
-<% } %>

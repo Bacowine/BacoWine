@@ -114,18 +114,18 @@ modelVino.modificarvalorarVino = async (idVino, idUsuario, valoracion) => {
   return result;
 };
 
-modelVino.buscarValoracionesVino= async (idVino) => {
+modelVino.buscarValoracionesVino = async (idVino) => {
   const sql = pool.format('SELECT ROUND(AVG(valoracion),1) "media", count(*) "numVal" FROM valoracion_vino WHERE vino = ?', [idVino]);
-  const [result] = await pool.promise().query(sql);
+  const [[result]] = await pool.promise().query(sql);
   console.log(result);
   return result;
 };
 
 modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
   const sql = pool.format('SELECT valoracion FROM valoracion_vino WHERE vino = ? AND usuario = ?', [idVino, idUsuario]);
-  const [result] = await pool.promise().query(sql);
+  const [[result]] = await pool.promise().query(sql);
   console.log(result);
-  return result;
+  return result ? result.valoracion : 0;
 };
 
 modelVino.readAll = async ({ search = '', limit = 100, offset = 0 }) => {
