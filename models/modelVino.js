@@ -31,6 +31,7 @@ modelVino.find = async (id) => {
 };
 
 modelVino.insert = async (rows, variedad) => {
+  console.log(rows)
   let conn;
   try {
     conn = await pool.promise().getConnection();
