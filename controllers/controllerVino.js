@@ -22,7 +22,7 @@ controllerVino.verVino = async (request, response, next) => {
         rows.valoraciones = await modelVino.buscarValoracionesVino(id);
         if (user !== undefined && user.role !== 'GC') {
           rows.valoracion = await modelVino.confirmarValoracionVino(id, user.name);
-        } else { rows.valoracion = []; }
+        } else { rows.valoracion = 0; }
         if (rows.comentarios === undefined) rows.comentarios = [];
         rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
 

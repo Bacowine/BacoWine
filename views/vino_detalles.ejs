@@ -74,9 +74,9 @@
                       </button>
                   <% } %>           
                 </div>
-                <% if (vino.valoraciones.numVal != 0) { %>
                 <div class="row val">
-                    <div class="col">
+                  <div class="col">
+                      <% if (vino.valoraciones.numVal != 0) { %>
                       <h4 class="fw-bold"><%=vino.valoraciones.media%>★</h4>
                       <span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
@@ -86,23 +86,23 @@
                         </svg>
                         <%=vino.valoraciones.numVal%>
                       </span>
+                      <% } %> 
+                  </div>
+                  <% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
+                    <div class="col-6 col-lg-3 text-center">
+                      <h5 class="mb-0 val">Tu valoración</h5>       
+                      <form id="valorar" method="post" action="/vino/valorarVino">
+                        <div class="clasificacion">
+                          <% for(let i = 5; i >= 1; i--) { %><!-- 
+                          --><input id="radio<%= i %>" type="radio" name="valoracion" value="<%= i %>" <%= vino.valoracion == i ? 'checked' : '' %>><!--
+                          --><label for="radio<%= i %>">★</label><!-- 
+                        --><% } %> 
+                          <input type="hidden" value="<%= vino.id %>" name="idVino" />
+                        </p>
+                      </form>
                     </div>
-                    <% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
-                      <div class="col-6 col-lg-3 text-center">
-                        <h5 class="mb-0 val">Tu valoración</h5>       
-                        <form id="valorar" method="post" action="/vino/valorarVino">
-                          <div class="clasificacion">
-                            <% for(let i = 5; i >= 1; i--) { %><!-- 
-                            --><input id="radio<%= i %>" type="radio" name="valoracion" value="<%= i %>" <%= vino.valoracion == i ? 'checked' : '' %>><!--
-                            --><label for="radio<%= i %>">★</label><!-- 
-                          --><% } %> 
-                            <input type="hidden" value="<%= vino.id %>" name="idVino" />
-                          </p>
-                        </form>
-                      </div>
-                      <% } %>
+                  <% } %>
                 </div>
-                <% } %>
             </div>
             <hr class="text-muted">
             <div class="row">
