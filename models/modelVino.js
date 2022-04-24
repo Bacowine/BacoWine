@@ -36,7 +36,7 @@ modelVino.insert = async (rows, variedad) => {
   try {
     conn = await pool.promise().getConnection();
     await conn.beginTransaction();
-    const sql1 = pool.format('INSERT INTO vino(nombre, añada, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
+    const sql1 = pool.format('INSERT INTO vino(nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, foto) VALUES(?)', [rows]);
     console.log(sql1.substring(0, 500));
     const [result] = await conn.query(sql1);
     
@@ -45,6 +45,35 @@ modelVino.insert = async (rows, variedad) => {
 
     await Promise.all(Object.entries(variedad).map(async ([key, value]) => {
       const sql2 = pool.format('INSERT INTO variedad_vino(vino,nombre_variedad,porcentaje) VALUES(?,?,?)', [result.insertId, key, value]);
+      console.log(sql2);
+      await conn.query(sql2);
+    }));
+
+    await conn.commit();
+    return result.insertId;
+  } catch (error) {
+    if (conn) await conn.rollback();
+    throw error;
+  } finally {
+    if (conn) await conn.release();
+  }
+};
+
+modelVino.update = async ({ id, ...fields }, variedad) => {
+  let conn;
+  try {
+    conn = await pool.promise().getConnection();
+    await conn.beginTransaction();
+    const sql1 = pool.format('UPDATE vino SET ? WHERE id = ?', [fields, id]);
+    console.log(sql1.substring(0, 500));
+    const [result] = await conn.query(sql1);
+
+    const sql3 = pool.format('DELETE FROM variedad_vino WHERE vino = ?', [id]);
+    console.log(sql3);
+    await conn.query(sql3);
+
+    await Promise.all(Object.entries(variedad).map(async ([key, value]) => {
+      const sql2 = pool.format('INSERT INTO variedad_vino(vino,nombre_variedad,porcentaje) VALUES(?,?,?)', [id, key, value]);
       console.log(sql2);
       await conn.query(sql2);
     }));
@@ -131,7 +160,7 @@ modelVino.confirmarValoracionVino = async (idVino, idUsuario) => {
 
 modelVino.readAll = async ({ search = '', limit = 100, offset = 0 }) => {
   const sql = pool.format(`
-    SELECT id, nombre, añada, clase, tipo, maceracion, graduacion, bodega, localidades,TO_BASE64(foto) foto, activo
+    SELECT id, nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades,TO_BASE64(foto) foto, activo
     FROM vino
     where nombre LIKE ? AND activo = 1
     LIMIT ?,?`, [`%${search}%`, offset, limit]);

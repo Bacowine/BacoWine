@@ -1,12 +1,12 @@
 const MockVino = {
   nombre: 'B',
-  añada: 1999,
+  anyada: 1999,
   clase: 'Blanco',
   tipo: 'Espirituoso',
   maceracion: 'Crianza',
-  gradoAlcohol: '0.26',
+  graduacion: '6',
   bodega: 'UCM',
-  localidad: 'Madrid, Granada',
+  localidades: 'Madrid, Granada',
   foto: null,
 };
 

@@ -22,6 +22,10 @@ router.route('/agregarVino')
 router.route('/borrarVino')
   .post(authRole(ROLE.ADMIN), cVinos.borrarVino);
 
+router.route('/modificarVino')
+  .get(authRole(ROLE.ADMIN), cVinos.modificarVino)
+  .post(authRole(ROLE.ADMIN), upload.single('imagen'), imageHandler, cVinos.modificarVinoFinal);
+
 router.route('/comentarVino')
   .post(authRole(ROLE.USER), cVinos.comentarVino);
 

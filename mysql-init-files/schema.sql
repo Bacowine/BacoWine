@@ -4,7 +4,7 @@ use bacowine;
 CREATE TABLE vino (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(45) NOT NULL,
-    añada VARCHAR(100) NOT NULL,
+    anyada VARCHAR(100) NOT NULL,
     clase VARCHAR(45) NOT NULL,
     tipo VARCHAR(45) NOT NULL, 
     maceracion VARCHAR(45) NOT NULL, 
@@ -27,7 +27,7 @@ CREATE TABLE bodegas (
   nombre VARCHAR(40) NOT NULL,
   anyoCreacion INT NOT NULL,
   localizGeo VARCHAR(40) NOT NULL,
-  descripcion VARCHAR(500) NOT NULL,
+  descripcion VARCHAR(700) NOT NULL,
   denominOrigen VARCHAR(40) NOT NULL,
   foto LONGBLOB,
   activo BOOLEAN DEFAULT true NOT NULL

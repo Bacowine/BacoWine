@@ -8,7 +8,11 @@
 <body>
   <%- include('./partials/_header'); %>
   <div class="text-center">
-    <h1>Agregar Vino</h1>
+    <%if ( typeof body !== 'undefined' && body.edit ) { %>
+      <h1>Modificar Vino</h1>
+    <% } else { %>
+      <h1>Agregar Vino</h1>
+    <% } %>
   </div>
   <div class="container">
     <div class="row px-5">
@@ -25,20 +29,25 @@
           </div>
         <% }); %> 
       <% } %>
-      <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
+      <%if ( typeof body !== 'undefined' && body.edit ) { %>
+        <form class="needs-validation was-validated" action="/vino/modificarVino" enctype="multipart/form-data" method="POST">
+          <input type="hidden" name="id" value="<%=body.id%>" />
+        <% } else { %>
+        <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
+        <% } %>
         <div class="row mt-1">
           <label for="validationCustom01" class="form-label">Nombre</label>
           <input class="form-control" id="validationCustom01" minlength="1" maxlength="50" type="text" name="nombre" value="<%= typeof(body) !== 'undefined' ? body.nombre : ''%>"
             required />
         </div>
         <div class="row mt-1">
-          <label for="añada" class="form-label">Añada</label>
-          <input class="form-control" id="añada" min="1800" max="<%= new Date().getFullYear() %>" type="number" name="añada" value="<%= typeof(body) !== 'undefined' ? body.añada : ''%>"
+          <label for="anyada" class="form-label">Anyada</label>
+          <input class="form-control" id="anyada" min="1800" max="<%= new Date().getFullYear() %>" type="number" name="anyada" value="<%= typeof(body) !== 'undefined' ? body.anyada : ''%>"
             required />
         </div>
         <div class="row mt-1">
           <label for="validationCustom02" class="form-label">Grado alcoholico:</label>
-          <input class="form-control" id="validationCustom02" name="gradoAlcohol" value="<%= typeof(body) !== 'undefined' ? body.gradoAlcohol : ''%>"
+          <input class="form-control" id="validationCustom02" name="graduacion" value="<%= typeof(body) !== 'undefined' ? body.graduacion : ''%>"
             type="number" step="0.01" min="5" max="20" required />
         </div>
         <div class="row mt-1">
@@ -55,22 +64,23 @@
         </div>
         <div class="row mt-1">
           <label for="validationCustom04" class="form-label">Localidad:</label>
-          <input class="form-control" id="validationCustom04" minlength="1" maxlength="50" name="localidad" value="<%= typeof(body) !== 'undefined' ? body.localidad : ''%>" type="text"
+          <input class="form-control" id="validationCustom04" minlength="1" maxlength="50" name="localidades" value="<%= typeof(body) !== 'undefined' ? body.localidades : ''%>" type="text"
             required />
 
         </div>
         <div class="row mt-1">
           <label for="selectClase" class="form-label">Clase:</label>
-          <select id="selectClase" class="selectpicker form-select" name="clase" value="<%= typeof(body) !== 'undefined' ? body.clase : ''%>" data-style="btn-danger">
-            <option>Blanco</option>
-            <option>Rosado</option>
-            <option>Tinto</option>
-            <option>Clarete</option>
-            <option>Blanc de blanc</option>
-            <option>Blanc de noirs</option>
-            <option>Vino de nueces</option>
-            <option>Vino especiado</option>
-            <option>Vino oloroso</option>
+          <select id="selectClase" class="selectpicker form-select" name="clase" data-style="btn-danger">
+            <% var selected = typeof(body) !== 'undefined' ? body.clase : ''%> 
+            <option <%= selected === 'Blanco' ? 'selected' : '' %> >Blanco</option>
+            <option <%= selected === 'Rosado' ? 'selected' : '' %> >Rosado</option>
+            <option <%= selected === 'Tinto' ? 'selected' : '' %> >Tinto</option>
+            <option <%= selected === 'Clarete' ? 'selected' : '' %> >Clarete</option>
+            <option <%= selected === 'Blanc de blanc' ? 'selected' : '' %> >Blanc de blanc</option>
+            <option <%= selected === 'Blanc de noirs' ? 'selected' : '' %> >Blanc de noirs</option>
+            <option <%= selected === 'Vino de nueces' ? 'selected' : '' %> >Vino de nueces</option>
+            <option <%= selected === 'Vino especiado' ? 'selected' : '' %> >Vino especiado</option>
+            <option <%= selected === 'Vino oloroso' ? 'selected' : '' %> >Vino oloroso</option>
           </select>
         </div>
         <div class="row mt-1">
@@ -119,14 +129,24 @@
           </div>
         </div>
 
-        <div class="row mt-1">
-          <label for="file" class="form-label">Imagen:</label>
-          <input type="file" name="imagen" value="<%= typeof(body) !== 'undefined' ? body.imagen : '' %>" class="form-control" accept="image/png,image/jpeg" />
+        <div class="row g-0 mt-1">
+          <div class="col-12">
+            <img <%= typeof body !== 'undefined' && body.foto ? `src=data:image/webp;base64,${body.foto}` : '' %> 
+              id="img-preview" 
+              class="img-thumbnail" 
+              style="height: 100px;<%= typeof body !== 'undefined' && body.foto ? '' : 'display:none;'%>">
+            <label for="img-upload" class="form-label btn btn-success">Imagen</label>
+            <input type="file" id="img-upload" name="imagen" class="form-control d-none" accept="image/png,image/jpeg" />
+          </div>
         </div>
         <div class="row mt-4">
           <div class="col d-grid">
             <button type="submit" class="btn menu boton-buscar btn-dark">
-              <h2>Agregar</h2>
+              <%if ( typeof body !== 'undefined' && body.edit ) { %>
+                <h2>Modificar</h2>
+              <% } else { %>
+                <h2>Agregar</h2>
+              <% } %>
             </button>
           </div>
           <div class="col d-grid">
@@ -143,6 +163,18 @@
     document.addEventListener("DOMContentLoaded", () => {
       validarFormulario();
       cambiarTipoSegunClase();
+
+
+      document.getElementById('img-upload').addEventListener('change',(e) => changeImgPreview(e));
+
+      function changeImgPreview(e) {
+        if(e.target.files.length > 0){
+          const src = URL.createObjectURL(event.target.files[0]);
+          const preview = document.getElementById("img-preview");
+          preview.src = src;
+          preview.style.display = "inline-block";
+        }
+      }
 
       function validarFormulario() {
         const forms = document.querySelectorAll(".needs-validation");

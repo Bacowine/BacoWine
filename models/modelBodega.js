@@ -4,8 +4,15 @@ const modelBodega = {};
 
 modelBodega.find = async (id) => {
   const sql = pool.format('SELECT * FROM bodegas where id = ? and activo = 1', [id]);
-  const [result] = await pool.promise().query(sql);
   console.log(sql);
+  const [result] = await pool.promise().query(sql);
+  return result;
+};
+
+modelBodega.update = async ({ id, ...fields }) => {
+  const sql = pool.format('UPDATE bodegas SET ? WHERE id = ?', [fields, id]);
+  console.log(sql);
+  const [result] = await pool.promise().query(sql);
   return result;
 };
 

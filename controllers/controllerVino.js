@@ -25,6 +25,7 @@ controllerVino.verVino = async (request, response, next) => {
         } else { rows.valoracion = []; }
         if (rows.comentarios === undefined) rows.comentarios = [];
         rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
+
         response.render('vino_detalles', {
           res: null, vino: rows, title: 'Detalles del vino',
         });
@@ -40,16 +41,16 @@ controllerVino.verVino = async (request, response, next) => {
 
 controllerVino.agregarVino = async (request, response, next) => {
   const {
-    nombre, añada, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad,
+    nombre, anyada, clase, tipo, maceracion, variedad, graduacion, bodega, localidades,
   } = request.body;
 
   const alert = request.errors;
   if (alert.length > 0) { // >0
-    const imagen = request.file;
+    const imagen = request.file ? request.file.buffer.toString('base64') : null;
     response.render('agregarVino', {
       alert,
       body: {
-        nombre, añada, clase, tipo, maceracion, variedad, gradoAlcohol, bodega, localidad, imagen,
+        nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, imagen, variedad,
       },
     });
     return;
@@ -59,12 +60,73 @@ controllerVino.agregarVino = async (request, response, next) => {
     // const imagen = (request.file)
     // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
     const imagen = (request.file) ? request.file.buffer : null;
+    console.log(variedad);
 
     const id = await modelVino.insert([
-      nombre, añada, clase, tipo, maceracion, gradoAlcohol, bodega, localidad, imagen,
+      nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, imagen,
     ], JSON.parse(variedad));
 
     // response.render('agregarVino', { id });
+    response.redirect(`/vino/detalles?id=${id}`);
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
+
+controllerVino.modificarVino = async (request, response, next) => {
+  const { id } = request.query;
+  const { url } = request;
+
+  try {
+    const [rows, variedades] = await modelVino.find(id);
+    const edit = url.includes('/modificarVino');
+    if (rows === undefined || variedades === undefined) {
+      response.render('agregarVino', {
+        body: {
+          edit,
+          variedad: '{}',
+        },
+      });
+    } else {
+      rows.foto = rows.foto ? rows.foto.toString('base64') : null;
+      rows.variedad = JSON.stringify(variedades.reduce((obj, item) => {
+        obj[item.nombre_variedad] = item.porcentaje;
+        return obj;
+      }, {}));
+      response.render('agregarVino', {
+        body: {
+          ...rows,
+          edit,
+        },
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
+
+controllerVino.modificarVinoFinal = async (request, response, next) => {
+  const {
+    nombre, anyada, clase, tipo, variedad, maceracion, graduacion, bodega, localidades, id,
+  } = request.body;
+  try {
+    // const imagen = (request.file)
+    // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
+    const update = {
+      nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, id,
+    };
+    if (request.file) {
+      update.foto = request.file.buffer;
+    }
+
+    await modelVino.update(update, JSON.parse(variedad));
+
     response.redirect(`/vino/detalles?id=${id}`);
   } catch (e) {
     console.error(e);

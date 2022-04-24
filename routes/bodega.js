@@ -22,4 +22,8 @@ router.route('/agregarBodega')
 router.route('/borrarBodega')
   .post(authRole(ROLE.ADMIN), controllerBodega.borrarBodega);
 
+router.route('/modificarBodega')
+  .get(authRole(ROLE.ADMIN), controllerBodega.modificarBodega)
+  .post(authRole(ROLE.ADMIN), upload.single('imagen'), imageHandler, validate(bodegaSchema), controllerBodega.modificarBodegaFinal);
+
 module.exports = router;

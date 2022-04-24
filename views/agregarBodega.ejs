@@ -5,7 +5,13 @@
 </head>
 <body>
     <%- include('./partials/_header'); %>
-    <div class="text-center"><h1>Agregar Bodega</h1></div>
+    <div class="text-center">
+      <%if ( typeof body !== 'undefined' && body.edit ) { %>
+        <h1>Modificar Bodega</h1>
+      <% } else { %>
+        <h1>Agregar Bodega</h1>
+      <% } %>
+    </div>
     <div class="container">
         <% if(typeof id !== 'undefined') { %>
             <div class="row"> 
@@ -14,87 +20,89 @@
                 </div>
             </div>
         <% } %> 
-        <div class="row"> 
-            <form class="needs-validation" action="/bodega/agregarBodega" enctype="multipart/form-data" method="POST" novalidate>
+        <% if(typeof alert != 'undefined') { %> 
+          <% alert.forEach( (error) => { %>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <%= error.msg %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          <% }); %> 
+        <% } %>
+        <div class="row g-0">
+          <%if ( typeof body !== 'undefined' && body.edit ) { %>
+            <form class="needs-validation was-validated" action="/bodega/modificarBodega" enctype="multipart/form-data" method="POST" >
+              <input type="hidden" name="id" value="<%=body.id%>" />
+            <% } else { %>
+            <form class="needs-validation was-validated" action="/bodega/agregarBodega" enctype="multipart/form-data" method="POST" >
+            <% } %>
+            <form class="needs-validation was-validated" action="/bodega/agregarBodega" enctype="multipart/form-data" method="POST">
                 <div class="row mt-1">
                   <label for="validationCustom01" class="form-label">Nombre</label>
-                  <input class="form-control" id="validationCustom01" name="nombre" minlength="1" maxlength="50" type="text" required>
-                  <div class="valid-feedback">
-                    Nombre correcto!
-                  </div>
-                  <div class="invalid-feedback">
-                      Nombre incorrecto!
-                  </div>
+                  <input class="form-control" id="validationCustom01" name="nombre" value="<%= typeof body !== 'undefined' ? body.nombre : '' %>" minlength="1" maxlength="50" type="text" required>
                 </div>
                 <div class="row mt-1">
                   <label for="validationCustom02" class="form-label">Año de creación</label>
-                  <input class="form-control" id="validationCustom02" name="anyoCreacion" minlength="1" maxlength="4" type="number" step="1" min="1900" max="2022" required >
-                  <div class="valid-feedback">
-                    Año correcto!
-                  </div>
-                  <div class="invalid-feedback">
-                    Año incorrecto!
-                  </div>
+                  <input class="form-control" id="validationCustom02" name="anyoCreacion" value="<%= typeof body !== 'undefined' ? body.anyoCreacion : '' %>" type="number" step="1" min="1900" max="<%= new Date().getFullYear() %>" required >
                 </div>
                 <div class="row mt-1">
                   <label for="validationCustom03" class="form-label">Localización geográfica</label> 
-                    <input class="form-control" id="validationCustom03" name="localizGeo" type="text" minlength="1" maxlength="50" type="text" required>
-                    <div class="valid-feedback">
-                      Localización geográfica correcta!
-                    </div>
-                    <div class="invalid-feedback">
-                      Localización geográfica incorrecta!
-                    </div>
+                    <input class="form-control" id="validationCustom03" name="localizGeo" value="<%= typeof body !== 'undefined' ? body.localizGeo : '' %>" type="text" minlength="1" maxlength="50" type="text" required>
                 </div>
                 <div class="row mt-1">
                   <label for="validationCustom04" class="form-label">Descripción</label> 
-                  <input class="form-control" id="validationCustom04" name="descripcion" minlength="1" maxlength="500" type="text" required>
-                  <div class="valid-feedback">
-                    Descripción correcta!
-                  </div>
-                  <div class="invalid-feedback">
-                    Descripción incorrecta!
-                  </div>
+                  <textarea name="descripcion" class="form-control" minlength="1" maxlength="500" required><%= typeof body !== 'undefined' ? body.descripcion : '' %></textarea>
                 </div>
                 <div class="row mt-1">
                   <label for="validationCustom05" class="form-label">Denominación de origen:</label> 
-                  <input class="form-control" id="validationCustom05" name="denominOrigen" minlength="1" maxlength="50" type="text" required>
+                  <input class="form-control" id="validationCustom05" name="denominOrigen" value="<%= typeof body !== 'undefined' ? body.denominOrigen : '' %>" minlength="1" maxlength="50" type="text" required>
                 </div>
-                <div class="row mt-1">
-                  <label for="validationCustom06" class="form-label">Imagen:</label> 
-                  <input type="file" name="imagen" class="form-control" accept="image/png,image/jpeg">
+                <div class="row g-0 mt-1">
+                  <div class="col-12">
+                    <img <%= typeof body !== 'undefined' && body.foto ? `src=data:image/webp;base64,${body.foto}` : '' %> 
+                      id="img-preview" 
+                      class="img-thumbnail" 
+                      style="height: 100px;<%= typeof body !== 'undefined' && body.foto ? '' : 'display:none;'%>">
+                    <label for="img-upload" class="form-label btn btn-success">Imagen</label>
+                    <input type="file" id="img-upload" name="imagen" class="form-control d-none" accept="image/png,image/jpeg" />
+                  </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col d-grid">
-                        <button type="submit" class="btn menu boton-buscar btn-dark "><h2>Agregar</h2></button>
+                        <button type="submit" class="btn menu boton-buscar btn-dark"><h2>Agregar</h2></button>
                     </div>
                     <div class="col d-grid">
-                        <a type="button" href="/" class="btn btn-lg btn-dark " ><h2>Volver</h2></a>
+                        <a type="button" href="/" class="btn btn-lg btn-dark "><h2>Volver</h2></a>
                     </div>
                 </div>
             </form>
         </div>
     </div>
     <script>
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (function () {
-      'use strict'
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      var forms = document.querySelectorAll('.needs-validation')
-    
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
-          .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-              if (!form.checkValidity()) {
-              event.preventDefault()
-              event.stopPropagation()
-              }
-    
-              form.classList.add('was-validated')
-          }, false)
-          })
-      })()
+      validarFormulario();
+
+      document.getElementById('img-upload').addEventListener('change',(e) => changeImgPreview(e));
+
+      function changeImgPreview(e) {
+        if(e.target.files.length > 0){
+          const src = URL.createObjectURL(event.target.files[0]);
+          const preview = document.getElementById("img-preview");
+          preview.src = src;
+          preview.style.display = "inline-block";
+        }
+      }
+
+      function validarFormulario() {
+        const forms = document.querySelectorAll(".needs-validation");
+        // Loop over them and prevent submission
+        forms.forEach((form) => {
+          form.addEventListener("submit", (event) => {
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          },false);
+        });
+      }
     </script>
     <%- include('./partials/_footer'); %>
 </body>

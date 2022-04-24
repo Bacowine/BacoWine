@@ -10,11 +10,9 @@ const bodegaSchema = checkSchema({
     },
   },
   anyoCreacion: {
-    notEmpty: true,
-    errorMessage: 'Año de creacion no puede estar vacio',
-    isLength: {
-      options: { min: 1, max: 4 },
-      errorMessage: 'Año de creacion formato debe ser YYYY',
+    isInt: {
+      options: { gt: 1800, lt: new Date().getFullYear() },
+      errorMessage: 'Añada debe estar entre 1800 y el año actual',
     },
   },
   localizGeo: {
