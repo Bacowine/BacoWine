@@ -1,12 +1,14 @@
 const express = require('express');
 const controllerUser = require('../controllers/controllerUser');
 
+const cVinos = require('../controllers/controllerVino');
+
 const { authRole, ROLE } = require('../middlewares/auth');
 
 const router = express.Router();
 
 router.route('/')
-  .get((_req, res) => res.render('index', { title: 'BacoWine DEV' }));
+  .get(cVinos.mostrarVinos);
 
 router.route('/login')
   .get(authRole(), (_req, res) => res.render('login'))

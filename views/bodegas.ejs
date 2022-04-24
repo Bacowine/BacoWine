@@ -29,16 +29,36 @@
 <body>
   <%- include('./partials/_header'); %>
   <div id="main" class="container p-4">
-    <form method="get">
-      <div class="row mb-2">
-        <div class="input-group">
-          <input class="form-control" name="search" type="search" placeholder="Bodega...">
-          <button class="btn btn-outline-secondary bg-dark" type="submit">
-              <i class="bi bi-search"></i>
-          </button>
+    <div class="row mb-2">
+      <% if (typeof(session.user) !== 'undefined' && session.user.role === 'GC' ) { %> 
+        <form method="get" class="col-10">
+          <div class="row mb-2">
+            <div class="input-group">
+              <input class="form-control" name="search" type="search" placeholder="Bodega...">
+              <button class="btn btn-outline-secondary bg-dark" type="submit">
+                  <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+        <div class="col">
+          <a href="bodega/agregarBodega" class="btn btn-warning mb-4" role="button">Añadir Bodega</a>
         </div>
-      </div>
-    </form>
+      <% } else{ %>
+        <form method="get" class="col-12">
+          <div class="row mb-2">
+            <div class="input-group">
+              <input class="form-control" name="search" type="search" placeholder="Bodega...">
+              <button class="btn btn-outline-secondary bg-dark" type="submit">
+                  <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      <%} %> 
+      
+    </div>
+    
 
     <% if(bodegas.length === 0) { %> 
       <h5>No se encontraron resultados</h5>
