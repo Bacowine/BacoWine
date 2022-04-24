@@ -68,7 +68,13 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col d-grid">
-                        <button type="submit" class="btn menu boton-buscar btn-dark"><h2>Agregar</h2></button>
+                        <button type="submit" class="btn menu boton-buscar btn-dark">
+                          <%if ( typeof body !== 'undefined' && body.edit ) { %>
+                            <h2>Modificar</h2>
+                          <% } else { %>
+                            <h2>Agregar</h2>
+                          <% } %>
+                        </button>
                     </div>
                     <div class="col d-grid">
                         <a type="button" href="/" class="btn btn-lg btn-dark "><h2>Volver</h2></a>
