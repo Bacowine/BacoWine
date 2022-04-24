@@ -43,13 +43,13 @@ controllerBodega.mostrarDetallesBodega = async (request, response, next) => {
       const [row] = await modelBodega.find(id);
       if (row !== undefined) {
         const bodega = {
-          foto: row.foto ? row.foto.toString('base64') : null,
-          nombre: row.nombre,
-          anyo: row.anyoCreacion,
-          localizacion: row.localizGeo,
-          descripcion: row.descripcion,
-          origen: row.denominOrigen,
           id,
+          nombre: row.nombre,
+          año: row.anyoCreacion,
+          localización: row.localizGeo,
+          descripción: row.descripcion,
+          'D.O': row.denominOrigen,
+          foto: row.foto ? row.foto.toString('base64') : null,
         };
         response.render('bodega_detalles', { title: 'BacoWine DEV', bodega });
       } else {

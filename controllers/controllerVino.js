@@ -26,8 +26,25 @@ controllerVino.verVino = async (request, response, next) => {
         if (rows.comentarios === undefined) rows.comentarios = [];
         rows.variedades = variedades.map((item) => (item.porcentaje === 0 ? item.nombre_variedad : `${item.porcentaje}% ${item.nombre_variedad}`), '').join(', ');
 
+        const vino = {
+          id: rows.id,
+          nombre: rows.nombre,
+          añada: rows.anyada,
+          clase: rows.clase,
+          tipo: rows.tipo,
+          maceración: rows.maceracion,
+          graduación: rows.graduacion,
+          bodega: rows.bodega,
+          localidades: rows.localidades,
+          foto: rows.foto,
+          activo: rows.activo,
+          variedades: rows.variedades,
+          comentarios: rows.comentarios,
+          valoraciones: rows.valoraciones,
+          valoracion: rows.valoracion,
+        };
         response.render('vino_detalles', {
-          res: null, vino: rows, title: 'Detalles del vino',
+          res: null, vino, title: 'Detalles del vino',
         });
       }
     } catch (e) {
