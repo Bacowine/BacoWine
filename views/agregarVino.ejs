@@ -108,17 +108,7 @@
         </div>
         <div class="row mt-1">
           <label for="selectClase" class="form-label">Clase:</label>
-          <select id="selectClase" class="selectpicker form-select" name="clase" data-style="btn-danger">
-            <% var selected = typeof(body) !== 'undefined' ? body.clase : ''%> 
-            <option <%= selected === 'Blanco' ? 'selected' : '' %> >Blanco</option>
-            <option <%= selected === 'Rosado' ? 'selected' : '' %> >Rosado</option>
-            <option <%= selected === 'Tinto' ? 'selected' : '' %> >Tinto</option>
-            <option <%= selected === 'Clarete' ? 'selected' : '' %> >Clarete</option>
-            <option <%= selected === 'Blanc de blanc' ? 'selected' : '' %> >Blanc de blanc</option>
-            <option <%= selected === 'Blanc de noirs' ? 'selected' : '' %> >Blanc de noirs</option>
-            <option <%= selected === 'Vino de nueces' ? 'selected' : '' %> >Vino de nueces</option>
-            <option <%= selected === 'Vino especiado' ? 'selected' : '' %> >Vino especiado</option>
-            <option <%= selected === 'Vino oloroso' ? 'selected' : '' %> >Vino oloroso</option>
+          <select id="selectClase" class="selectpicker form-select" name="clase" data-style="btn-danger">            
           </select>
         </div>
         <div class="row mt-1">
@@ -250,8 +240,9 @@
         const tipo = document.querySelector("#tipo");
         const clases = await fetchClasesVino();
 
+        <% var selected = typeof(body) !== 'undefined' ? body.clase : ''%> 
         Object.keys(clases).map(key => {
-          selector.insertAdjacentHTML( 'beforeend', `<option>${key}</option>` )
+          selector.insertAdjacentHTML( 'beforeend', `<option <%= selected === key ? 'selected' : '' %>>${key}</option>` )
         })
 
         selector.addEventListener("change", (evt) => changeTipo(evt.currentTarget.value));
