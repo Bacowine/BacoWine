@@ -240,9 +240,9 @@
         const tipo = document.querySelector("#tipo");
         const clases = await fetchClasesVino();
 
-        <% var selected = typeof(body) !== 'undefined' ? body.clase : ''%> 
+        let selected = "<%= typeof(body) !== 'undefined' ? body.clase : ''%>" 
         Object.keys(clases).map(key => {
-          selector.insertAdjacentHTML( 'beforeend', `<option <%= selected === key ? 'selected' : '' %>>${key}</option>` )
+          selector.insertAdjacentHTML( 'beforeend', `<option ${selected === key ? 'selected' : ''}>${key}</option>` )
         })
 
         selector.addEventListener("change", (evt) => changeTipo(evt.currentTarget.value));
@@ -358,7 +358,7 @@
     }
 
     /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-    autocomplete(document.getElementById("validationCustom03"), <%-bodega%>);
+    autocomplete(document.getElementById("validationCustom03"), <%- typeof bodega !== 'undefined' ? bodega : '{}' %>);
 
   </script>
   <%- include('./partials/_footer'); %>
