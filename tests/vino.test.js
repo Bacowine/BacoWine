@@ -3,10 +3,13 @@ const pool = require('../models/db');
 const modelVinos = require('../models/modelVino');
 const CVinos = require('../controllers/controllerVino');
 const { MockVino, MockVariedad } = require('./_mocks');
+const Util = require('./_util');
 
-afterAll(() => {
+afterAll(async () => {
+  await Util.emptyTables(pool);
   pool.end();
 });
+
 
 test('Añadir vino ejemplo modelo', async () => {
   const mock = MockVino;
@@ -154,11 +157,11 @@ test('Añadir valoracion a un vino como UR, controlador', async () => {
   const mNext = jest.fn();
   await CVinos.valorarVino(mReq, mRes, mNext);
   expect(mRes.redirect).toBeCalled();
- 
+
   const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
   await pool.promise().query(sql2);
 });
- 
+
 test('modificar valoracion a un vino como UR, controlador', async () => {
   const idVino = await modelVinos.insert(Object.values(MockVino), { a: 10 });
 
@@ -195,4 +198,12 @@ test('modificar valoracion a un vino como UR, controlador', async () => {
 
   const sql2 = pool.format('DELETE FROM vino WHERE id = ?', [idVino]);
   await pool.promise().query(sql2);
+});
+
+test('controller get clases vino deberia devolver un json', async () => {
+  const mReq = { query: {} };
+  const mRes = { status: jest.fn(), render: jest.fn(), json: jest.fn() };
+  const mNext = jest.fn();
+  await CVinos.getClasesVino(mReq, mRes, mNext);
+  expect(mRes.json).toBeCalled();
 });

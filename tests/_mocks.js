@@ -2,7 +2,6 @@ const MockVino = {
   nombre: 'B',
   anyada: 1999,
   clase: 'Blanco',
-  tipo: 'Espirituoso',
   maceracion: 'Crianza',
   graduacion: '6',
   bodega: 'UCM',

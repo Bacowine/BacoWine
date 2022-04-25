@@ -2,8 +2,10 @@ const pool = require('../models/db');
 const CBodega = require('../controllers/controllerBodega');
 const modelBodega = require('../models/modelBodega');
 const { MockBodega } = require('./_mocks');
+const Util = require('./_util');
 
-afterAll(() => {
+afterAll(async () => {
+  await Util.emptyTables(pool);
   pool.end();
 });
 
@@ -32,7 +34,7 @@ test('model bodega / agregar bodega con año correcto', async () => {
 test('model bodega / agregar bodega con anyo incorrecto', async () => {
   let result;
   let err;
-  const bodega = MockBodega;
+  const bodega = { ...MockBodega };
   bodega.anyoCreacion = '*&*&(';
 
   try {
@@ -60,12 +62,13 @@ test('controller mostrar bodega / deberia lanzar un error 500 si el id no existe
   expect(mRes.status).toBeCalledWith(500);
 });
 
-/* No funciona si no existe la bodega
-test('controller mostrar bodega / deberia leer la bodega por id y cargar la vista', async () => {
-  const mReq = { query: { id: 1 } };
+test('Controller bodega / mostrar bodega', async () => {
+  const resultId = await modelBodega.add(Object.values(MockBodega));
+
+  const mReq = { query: { id: resultId } };
   const mRes = { status: jest.fn(), render: jest.fn() };
   const mNext = jest.fn();
   await CBodega.mostrarDetallesBodega(mReq, mRes, mNext);
   expect(mRes.render).toBeCalled();
+  expect(resultId).not.toBe(undefined);
 });
-*/

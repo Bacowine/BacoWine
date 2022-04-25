@@ -4,7 +4,50 @@
 <head>
   <%- include('./partials/_head',{title:'Agregar Vino'}); %>
 </head>
-
+<style>
+  
+  /*the container must be positioned relative:*/
+  .autocomplete {
+    position: relative;
+  }
+  
+  input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+  }
+  
+  .autocomplete-items {
+    position: absolute;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+    color: black;
+    padding: 2px;
+    /*height: 20vh;*/
+  }
+  
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+  }
+  
+  /*when hovering an item:*/
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+  }
+  
+  /*when navigating through the items using the arrow keys:*/
+  .autocomplete-active {
+    background-color: DodgerBlue !important; 
+    color: #ffffff; 
+  }
+  </style>
 <body>
   <%- include('./partials/_header'); %>
   <div class="text-center">
@@ -30,10 +73,10 @@
         <% }); %> 
       <% } %>
       <%if ( typeof body !== 'undefined' && body.edit ) { %>
-        <form class="needs-validation was-validated" action="/vino/modificarVino" enctype="multipart/form-data" method="POST">
+        <form class="needs-validation was-validated" autocomplete="off" action="/vino/modificarVino" enctype="multipart/form-data" method="POST">
           <input type="hidden" name="id" value="<%=body.id%>" />
         <% } else { %>
-        <form class="needs-validation was-validated" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
+        <form class="needs-validation was-validated" autocomplete="off" action="/vino/agregarVino" enctype="multipart/form-data" method="POST">
         <% } %>
         <div class="row mt-1">
           <label for="validationCustom01" class="form-label">Nombre</label>
@@ -41,7 +84,7 @@
             required />
         </div>
         <div class="row mt-1">
-          <label for="anyada" class="form-label">Anyada</label>
+          <label for="anyada" class="form-label">Añada</label>
           <input class="form-control" id="anyada" min="1800" max="<%= new Date().getFullYear() %>" type="number" name="anyada" value="<%= typeof(body) !== 'undefined' ? body.anyada : ''%>"
             required />
         </div>
@@ -50,17 +93,12 @@
           <input class="form-control" id="validationCustom02" name="graduacion" value="<%= typeof(body) !== 'undefined' ? body.graduacion : ''%>"
             type="number" step="0.01" min="5" max="20" required />
         </div>
-        <div class="row mt-1">
+        <div class="row mt-1 autocomplete">
 
           <label for="validationCustom03" class="form-label">Bodega:</label>
           <input class="form-control" id="validationCustom03" minlength="1" maxlength="50" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodega : ''%>" type="text"
             required />
 
-          <!-- 
-          <label for="validationCustom03_1" class="form-label">Id Bodega:</label>
-          <input class="form-control" id="validationCustom03_1" min="1" step="1" name="bodega" value="<%= typeof(body) !== 'undefined' ? body.bodegaID : ''%>" type="number"
-            required />
-          -->
         </div>
         <div class="row mt-1">
           <label for="validationCustom04" class="form-label">Localidad:</label>
@@ -70,22 +108,12 @@
         </div>
         <div class="row mt-1">
           <label for="selectClase" class="form-label">Clase:</label>
-          <select id="selectClase" class="selectpicker form-select" name="clase" data-style="btn-danger">
-            <% var selected = typeof(body) !== 'undefined' ? body.clase : ''%> 
-            <option <%= selected === 'Blanco' ? 'selected' : '' %> >Blanco</option>
-            <option <%= selected === 'Rosado' ? 'selected' : '' %> >Rosado</option>
-            <option <%= selected === 'Tinto' ? 'selected' : '' %> >Tinto</option>
-            <option <%= selected === 'Clarete' ? 'selected' : '' %> >Clarete</option>
-            <option <%= selected === 'Blanc de blanc' ? 'selected' : '' %> >Blanc de blanc</option>
-            <option <%= selected === 'Blanc de noirs' ? 'selected' : '' %> >Blanc de noirs</option>
-            <option <%= selected === 'Vino de nueces' ? 'selected' : '' %> >Vino de nueces</option>
-            <option <%= selected === 'Vino especiado' ? 'selected' : '' %> >Vino especiado</option>
-            <option <%= selected === 'Vino oloroso' ? 'selected' : '' %> >Vino oloroso</option>
+          <select id="selectClase" class="selectpicker form-select" name="clase" data-style="btn-danger">            
           </select>
         </div>
         <div class="row mt-1">
           <label for="tipo" class="form-label">Tipo:</label>
-          <input id="tipo" class="form-control" type="text" name="tipo" value="<%= typeof(body) !== 'undefined' ? body.tipo : ''%>" readonly/>
+          <input id="tipo" class="form-control" type="text" value="<%= typeof(body) !== 'undefined' ? body.tipo : ''%>" readonly/>
         </div>
         <div class="row mt-1">
           <label for="selectMaceracion" class="form-label">Maceración:</label>
@@ -189,36 +217,149 @@
         });
       }
 
-      function cambiarTipoSegunClase() {
-        let selector = document.querySelector("#selectClase");
-        let tipo = document.querySelector("#tipo");
-        let tiposVinos = [
-          "Tranquilo",
-          "Espumoso",
-          "Espirituoso",
-          "Vino oloroso",
-        ];
-        let clases = {
-          "Blanco": 0,
-          "Rosado": 0,
-          "Tinto": 0,
-          "Clarete": 0,
-          "Blanc de blanc": 1,
-          "Blanc de noirs": 1,
-          "Vino de nueces": 2,
-          "Vino especiado": 2,
-          "Vino oloroso": 3,
-        };
+      async function fetchClasesVino() {
+        let clases = {};
+        try {
+          const res = await fetch('/vino/clasesVino');
+          if(!res.ok) throw new Error();
+          const json = await res.json();
+          
+          clases = json.reduce((obj,item) => {
+            obj[item.clase] = item.tipo;
+            return obj;
+          },{})
+        } catch (error) {
+          clases = {};
+        }
+       
+        return clases;
+      }
+
+      async function cambiarTipoSegunClase() {
+        const selector = document.querySelector("#selectClase");
+        const tipo = document.querySelector("#tipo");
+        const clases = await fetchClasesVino();
+
+        let selected = "<%= typeof(body) !== 'undefined' ? body.clase : ''%>" 
+        Object.keys(clases).map(key => {
+          selector.insertAdjacentHTML( 'beforeend', `<option ${selected === key ? 'selected' : ''}>${key}</option>` )
+        })
+
         selector.addEventListener("change", (evt) => changeTipo(evt.currentTarget.value));
         changeTipo(selector.value);
 
         function changeTipo(val) {
           tipo.value = clases.hasOwnProperty(val) ?
-            tiposVinos[clases[val]] :
-            tiposVinos[3];
+            clases[val] :
+            'No definido';
         }
       }
     });
+
+    function autocomplete(inp, arr) {
+      let bodegas = arr;
+      /*the autocomplete function takes two arguments,
+      the text field element and an array of possible autocompleted values:*/
+      var currentFocus;
+      /*execute a function when someone writes in the text field:*/
+      inp.addEventListener("input", function(e) {
+          var a, b, i, val = this.value;
+          /*close any already open lists of autocompleted values*/
+          closeAllLists();
+          if (!val) { return false;}
+          currentFocus = -1;
+          /*create a DIV element that will contain the items (values):*/
+          a = document.createElement("DIV");
+          a.setAttribute("id", this.id + "autocomplete-list");
+          a.setAttribute("class", "autocomplete-items overflow-auto");
+          /*append the DIV element as a child of the autocomplete container:*/
+          this.parentNode.appendChild(a);
+          /*for each item in the array...*/
+          for (i = 0; i < bodegas.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            //if (bodegas[i].nombre.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            if (bodegas[i].nombre.toUpperCase().includes(val.toUpperCase())) {
+              /*create a DIV element for each matching element:*/
+              b = document.createElement("DIV");
+              /*make the matching letters bold:*/
+              let idx = bodegas[i].nombre.toUpperCase().indexOf(val.toUpperCase())
+              b.innerHTML = bodegas[i].id + " - " + bodegas[i].nombre.substr(0,idx);
+              b.innerHTML += "<strong>" + bodegas[i].nombre.substr(idx,val.length) + "</strong>";
+              b.innerHTML += bodegas[i].nombre.substr(idx+val.length);
+              /*insert a input field that will hold the current array item's value:*/
+              b.innerHTML += "<input type='hidden' value='" + bodegas[i].nombre + "'>";
+              /*execute a function when someone clicks on the item value (DIV element):*/
+              b.addEventListener("click", function(e) {
+                  /*insert the value for the autocomplete text field:*/
+                  inp.value = this.getElementsByTagName("input")[0].value;
+                  /*close the list of autocompleted values,
+                  (or any other open lists of autocompleted values:*/
+                  closeAllLists();
+              });
+              a.appendChild(b);
+            }
+          }
+      });
+      /*execute a function presses a key on the keyboard:*/
+      inp.addEventListener("keydown", function(e) {
+          var x = document.getElementById(this.id + "autocomplete-list");
+          if (x) x = x.getElementsByTagName("div");
+          if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+            decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+              /*and simulate a click on the "active" item:*/
+              if (x) x[currentFocus].click();
+            }
+          }
+      });
+      function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+      }
+      function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+      function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            x[i].parentNode.removeChild(x[i]);
+          }
+        }
+      }
+      /*execute a function when someone clicks in the document:*/
+      document.addEventListener("click", function (e) {
+          closeAllLists(e.target);
+      });
+    }
+
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("validationCustom03"), <%- typeof bodega !== 'undefined' ? bodega : '{}' %>);
+
   </script>
   <%- include('./partials/_footer'); %>
 </body>

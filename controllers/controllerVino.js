@@ -1,5 +1,6 @@
 // const fs = require('fs');
 const modelVino = require('../models/modelVino');
+const modelBodega = require('../models/modelBodega');
 
 const controllerVino = {};
 
@@ -33,7 +34,7 @@ controllerVino.verVino = async (request, response, next) => {
           clase: rows.clase,
           tipo: rows.tipo,
           maceración: rows.maceracion,
-          graduación: rows.graduacion,
+          graduación: rows.graduacion+"% vol.",
           bodega: rows.bodega,
           localidades: rows.localidades,
           foto: rows.foto,
@@ -58,7 +59,7 @@ controllerVino.verVino = async (request, response, next) => {
 
 controllerVino.agregarVino = async (request, response, next) => {
   const {
-    nombre, anyada, clase, tipo, maceracion, variedad, graduacion, bodega, localidades,
+    nombre, anyada, clase, maceracion, variedad, graduacion, bodega, localidades,
   } = request.body;
 
   const alert = request.errors;
@@ -67,7 +68,7 @@ controllerVino.agregarVino = async (request, response, next) => {
     response.render('agregarVino', {
       alert,
       body: {
-        nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, imagen, variedad,
+        nombre, anyada, clase, maceracion, graduacion, bodega, localidades, imagen, variedad,
       },
     });
     return;
@@ -80,7 +81,7 @@ controllerVino.agregarVino = async (request, response, next) => {
     console.log(variedad);
 
     const id = await modelVino.insert([
-      nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, imagen,
+      nombre, anyada, clase, maceracion, graduacion, bodega, localidades, imagen,
     ], JSON.parse(variedad));
 
     // response.render('agregarVino', { id });
@@ -93,6 +94,24 @@ controllerVino.agregarVino = async (request, response, next) => {
   }
 };
 
+controllerVino.irAgregarVino = async (request, response, next) => {
+  try {
+    const [rows] = await modelBodega.findAll();
+    if (rows === undefined) {
+      response.status(500);
+      next(new Error('No existe el vino con ese ID'));
+    } else {
+      response.render('agregarVino', {
+        res: null, bodega: JSON.stringify(rows), title: 'Agregar vino',
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
 controllerVino.modificarVino = async (request, response, next) => {
   const { id } = request.query;
   const { url } = request;
@@ -130,13 +149,13 @@ controllerVino.modificarVino = async (request, response, next) => {
 
 controllerVino.modificarVinoFinal = async (request, response, next) => {
   const {
-    nombre, anyada, clase, tipo, variedad, maceracion, graduacion, bodega, localidades, id,
+    nombre, anyada, clase, variedad, maceracion, graduacion, bodega, localidades, id,
   } = request.body;
   try {
     // const imagen = (request.file)
     // ? request.file.buffer : fs.readFileSync(`${__dirname}/../public/images/vino.jpg`);
     const update = {
-      nombre, anyada, clase, tipo, maceracion, graduacion, bodega, localidades, id,
+      nombre, anyada, clase, maceracion, graduacion, bodega, localidades, id,
     };
     if (request.file) {
       update.foto = request.file.buffer;
@@ -252,6 +271,19 @@ controllerVino.valorarVino = async (request, response, next) => {
   } catch (e) {
     console.error(e);
     response.status(500);
+    e.message = 'Error interno de acceso a la base de datos';
+    next(e);
+  }
+};
+
+controllerVino.getClasesVino = async (_req, res, next) => {
+  try {
+    const clases = await modelVino.readClasesVino();
+    console.log(clases);
+    res.json(clases);
+  } catch (e) {
+    console.error(e);
+    res.status(500);
     e.message = 'Error interno de acceso a la base de datos';
     next(e);
   }

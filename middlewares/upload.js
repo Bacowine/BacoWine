@@ -11,6 +11,7 @@ const imageHandler = async (req, res, next) => {
   if (req.file) {
     try {
       req.file.buffer = await sharp(req.file.buffer)
+        .rotate()
         .resize({
           width: 1024,
           height: 768,
