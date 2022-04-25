@@ -34,7 +34,7 @@ controllerVino.verVino = async (request, response, next) => {
           clase: rows.clase,
           tipo: rows.tipo,
           maceración: rows.maceracion,
-          graduación: rows.graduacion,
+          graduación: rows.graduacion+"% vol.",
           bodega: rows.bodega,
           localidades: rows.localidades,
           foto: rows.foto,

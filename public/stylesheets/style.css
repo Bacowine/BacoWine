@@ -49,3 +49,13 @@ a {
 .link-animation:hover::after{
   width: 100%;
 }
+
+.link-animation.active::after{
+  content: '';
+  background: #F00;
+  display: block;
+  position: absolute;
+  bottom: -5px;
+  height: 3px;
+  width: 100%;
+}
