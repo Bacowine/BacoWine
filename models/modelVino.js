@@ -35,10 +35,9 @@ modelVino.readClasesVino = async () => {
   console.log(sql);
   const [result] = await pool.promise().query(sql);
   return result;
-}
+};
 
 modelVino.insert = async (rows, variedad) => {
-  console.log(rows)
   let conn;
   try {
     conn = await pool.promise().getConnection();
@@ -122,22 +121,22 @@ modelVino.buscarComentariosVino = async (id) => {
 
 modelVino.buscarComentario = async (id) => {
   const sql = pool.format('SELECT * FROM comentario WHERE id = ?', [id]);
+  console.log(sql);
   const [result] = await pool.promise().query(sql);
-  //console.log(result);
   return result;
 };
 
 modelVino.borrarComentario = async (id) => {
   const sql = pool.format('DELETE FROM comentario WHERE id = ?', [id]);
+  console.log(sql);
   const [result] = await pool.promise().query(sql);
-  //console.log(result);
   return result;
 };
 
 modelVino.valorarVino = async (idVino, idUsuario, valoracion) => {
   const sql = pool.format('INSERT INTO valoracion_vino(vino,usuario,valoracion) VALUES(?,?,?)', [idVino, idUsuario, valoracion]);
+  console.log(sql);
   const [result] = await pool.promise().query(sql);
-  //console.log(sql);
   return result;
 };
 

@@ -8,10 +8,12 @@ const modelVino = require('../models/modelVino');
 const {
   MockVino, MockVariedad, MockBodega, MockLogin,
 } = require('./_mocks');
+const Util = require('./_util');
 
 let agent;
 
-afterAll(() => {
+afterAll(async () => {
+  await Util.emptyTables(pool);
   pool.end();
 });
 
@@ -89,6 +91,7 @@ describe('Rutas protegidas sin autenticarse', () => {
 describe('Rutas protegidas autenticado como admin', () => {
   const login = MockLogin;
   beforeAll(async () => {
+    await modelUser.delete(login.user);
     agent = request.agent(app);
     const hash = await bcrypt.hash(login.password, 10);
     const { password } = login;
@@ -146,6 +149,11 @@ describe('Rutas protegidas autenticado como admin', () => {
 
     expect(resultId).not.toBeNaN();
     expect(response.statusCode).toBe(302);
+  });
+
+  test('POST /bodega/borrarBodega that not exists should return 500', async () => {
+    const response = await agent.post('/bodega/borrarBodega').send({ id: -1 });
+    expect(response.statusCode).toBe(500);
   });
 });
 
