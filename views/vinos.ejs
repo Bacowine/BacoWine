@@ -5,23 +5,23 @@
   <%- include('./partials/_head',{title: 'Vinos'}); %>
   <style>
     .pagination-dark .page-item .page-link{
-      color: #fff;
-      background-color: #343a40;
+      color: black;
+      background-color: silver;
     }
 
     .pagination-dark .page-item .page-link:hover{
-      color: #fff;
+      color: black;
       background-color: #212529;
     }
 
     .pagination-dark .page-item.active .page-link {
-      color: #fff;
-      background-color: #0d6efd;
+      color: black;
+      background-color: silver;
       border-color: #0d6efd;
     }
     .pagination-dark .page-item.disabled .page-link {
       color: #6c757d;
-      background-color: #343a40;
+      background-color: silver;
     }
   </style>
 </head>
@@ -75,11 +75,12 @@
                 <% } %> 
               </a>
               <div class="card-body">
+                <hr style="color:black;height:3px"/>
                 <h5 class="card-title">
-                  <a class="text-decoration-none" href="/vino/detalles?id=<%= vin.id %> "><%= vin.nombre %></a>
+                  <a class="text-decoration-none" style="text-shadow: 2px 2px 2px rgb(149, 153, 153);" href="/vino/detalles?id=<%= vin.id %> "><%= vin.nombre %></a>
                 </h5>
-                <p class="text-muted"><%= vin.clase %> (<%= vin.tipo %>)</p>
-                <p class="text-muted"><%= vin.bodega %></p>             
+                <p><%= vin.clase %> (<%= vin.tipo %>)</p>
+                <p><%= vin.bodega %></p>             
               </div>
             </div>
           </div>

@@ -59,3 +59,12 @@ a {
   height: 3px;
   width: 100%;
 }
+
+.bg-dark {
+  background-color: silver!important;
+  color: black;
+}
+
+.card-title a{
+  color: #F00!important;
+}

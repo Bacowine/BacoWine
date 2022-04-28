@@ -33,11 +33,11 @@
     }
 
     input[type="radio"]:checked ~ label {
-      color: orange;
+      color: gold;
     }
 
     .val{
-      color:rgb(157, 157, 157);
+      color:rgb(0, 0, 0);
     }
   </style>
   <head>
@@ -62,40 +62,36 @@
             <div class="row gx-0">
                 <div class="row">
                   <div class="col">
-                    <h1 class="text-white text-capitalize"><%= vino.nombre %></h1>
+                    <h1 class="text-black text-capitalize"><%= vino.nombre %></h1>
                   </div>
                   <% if (typeof(session.user) !== 'undefined' && session.user.role === 'GC' ) { %> 
                     <!-- Button trigger modal -->
-                      <button type="button" class="col-2 col-lg-1 btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editarModal">
+                      <button type="button" class="col-2 col-lg-1 btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal">
                         <i class="bi bi-pencil-fill"></i>
                       </button>
-                      <button type="button" class="col-2 col-lg-1 btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      <button type="button" class="col-2 col-lg-1 btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <i class="bi bi-trash"></i>
                       </button>
                   <% } %>           
                 </div>
                 <div class="row val">
-                  <div class="col">
+                  <div class="col" style="color: gold; text-shadow: 2px 2px 2px #CE5937;">
                       <% if (vino.valoraciones.numVal != 0) { %>
                       <h4 class="fw-bold"><%=vino.valoraciones.media%>★</h4>
                       <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                          <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
-                          <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
-                        </svg>
+                        <i class="bi bi-people-fill" style="font-size: 22px;"></i>
                         <%=vino.valoraciones.numVal%>
                       </span>
                       <% } %> 
                   </div>
                   <% if (typeof(session.user) !== 'undefined' && session.user.role === 'UR' ) { %> 
-                    <div class="col-6 col-lg-3 text-center">
+                    <div class="col-8 col-lg-4 text-center">
                       <h5 class="mb-0 val">Tu valoración</h5>       
                       <form id="valorar" method="post" action="/vino/valorarVino">
                         <div class="clasificacion">
                           <% for(let i = 5; i >= 1; i--) { %><!-- 
                           --><input id="radio<%= i %>" type="radio" name="valoracion" value="<%= i %>" <%= vino.valoracion == i ? 'checked' : '' %>><!--
-                          --><label for="radio<%= i %>">★</label><!-- 
+                          --><label style="text-shadow: 1px 2px 4px #3a3838;" for="radio<%= i %>">★</label><!-- 
                         --><% } %> 
                           <input type="hidden" value="<%= vino.id %>" name="idVino" />
                         </p>
@@ -110,8 +106,8 @@
                 <% if(!['id','comentarios','foto','activo','nombre','valoracion','valoraciones'].includes(atr)) { %> 
                   <div class="col-6">
                     <div class="row mb-2">
-                      <span class="col-6 text-capitalize text-muted text-nowrap fw-bold"><%= atr %></span>
-                      <span class="col-6 text-uppercase text-white fw-bold"><%= vino[atr] %></span>
+                      <span class="col-12 col-lg-6 text-capitalize text-muted text-nowrap fw-bold"><%= atr %></span>
+                      <span class="col-12 col-lg-6 text-uppercase text-black"><%= vino[atr] %></span>
                     </div>
                   </div>
                 <% } %> 
@@ -167,30 +163,30 @@
 
     <div class="card bg-dark my-5">
       <div class="card-body">
-        <h5 class="card-title text-white">Comentarios</h5>
+        <h5 class="card-title text-black">Comentarios</h5>
 
         <% if (typeof(session.user) !== 'undefined' && session.user.role !== 'GC' ) { %> 
-        <div class="row gx-0 text-white mt-1">
-          <div class="pb-3 border-bottom">
+        <div class="row gx-0 text-black mt-1">
+          <div class="pb-3">
             <form action="/vino/comentarVino" method="POST">
               <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
-              <div class="row gx-0">
-                <textarea class="bg-transparent border border-2 rounded p-3 text-white" name="texto" minlength="5" maxlength="280" required></textarea>
+              <div class="row gx-0 bg-light">
+                <textarea class="bg-transparent border border-2 rounded p-3 text-black" name="texto" minlength="5" maxlength="280" required></textarea>
               </div>
               <button type="submit" class="btn btn-primary mt-2 align-items-center">Publicar</button>
             </form>
           </div>
         </div>
         <% } %>
-        <div class="row text-white gx-0 pb-5">
+        <div class="row text-black gx-0 pb-5">
           <% vino.comentarios.forEach(comentario => { %>
           <div class="row g-0">
               <div class="row g-0">
                 <p id="<%= comentario.id %>"></p>
-                <p class="fw-bold"><%= comentario.user %><span class="badge"><%= comentario.fecha.toLocaleString('es-ES') %></span></p> 
+                <p class="fw-bold"><%= comentario.user %><span class="ms-2 badge" style="background-color: #26517e;"><%= comentario.fecha.toLocaleString('es-ES') %></span></p> 
               </div>
               <div class="row g-0">
-                <div class="col-10 col-sm-11 border border-2 rounded p-1">
+                <div class="col-10 col-sm-11 border border-2 rounded p-1 bg-light">
                   <p class="m-0"><%= comentario.texto %></p>
                 </div>
                 <% if (typeof(session.user) !== 'undefined' && (comentario.user === session.user.name || session.user.role == 'GC' )) { %> 
@@ -198,7 +194,7 @@
                     <form action="borrarComentario" method="POST">
                       <input type="hidden" name="idVino" id="idVino" value="<%=vino.id%>" />
                       <input type="hidden" name="idComentario" id="idComentario" value="<%=comentario.id %>" />
-                      <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                     </form>
                 </div>
                 <% }%>

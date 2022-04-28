@@ -1,38 +1,40 @@
-<nav class="navbar navbar-dark navbar-expand-lg p-md-3">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      <img src="/static/logo.svg" height="30px" class="d-inline-block align-text-top">
-    </a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarText">
-      <div class="mx-auto"></div>
-      <div class="navbar-nav">
-        <a href="/vino" class="nav-item nav-link link-animation h5">VINOS</a>
-        <a href="/bodega" class="nav-item nav-link link-animation h5">BODEGAS</a>
-      </div>
-      <div class="mx-auto"></div>
-      <% if (!session.user || !session.user.name || !session.user.role) {%> 
-        <div> 
-          <a href="/login" class="navbar-shadow btn btn-dark">Login</a>
-          <a href="/signup" class="navbar-shadow btn btn-dark ms-2">Registrarse</a>
+<div class="bg-dark m-1 rounded-3 mb-4">
+  <nav class="navbar navbar-dark navbar-expand-lg p-md-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="/static/logo.svg" height="30px" class="d-inline-block align-text-top">
+      </a>
+  
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarText">
+        <div class="mx-auto"></div>
+        <div class="navbar-nav">
+          <a href="/vino" class="nav-item nav-link link-animation h5">VINOS</a>
+          <a href="/bodega" class="nav-item nav-link link-animation h5">BODEGAS</a>
         </div>
-      <% } else { %>      
-        <div class="dropdown">
-        <button class="navbar-shadow btn btn-outline-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-          <%= session.user.name %> | <%= session.user.role %>
-        </button>
-        <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-          <!-- <li><hr class="dropdown-divider"></li>--> 
-          <form action="/logout" method="post">
-            <button type="submit" class="navbar-shadow dropdown-item text-center" href="/logout">Cerrar sesión</a>
-          </form>       
-      </div>
-      <% } %> 
-
-  </div>
-  </div>
-</nav>
+        <div class="mx-auto"></div>
+        <% if (!session.user || !session.user.name || !session.user.role) {%>
+          <div>
+            <a href="/login" class="navbar-shadow btn btn-dark">Login</a>
+            <a href="/signup" class="navbar-shadow btn btn-dark ms-2">Registrarse</a>
+          </div>
+        <% } else { %>
+          <div class="dropdown">
+          <button class="navbar-shadow btn btn-dark text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <%= session.user.name %> | <%= session.user.role %>
+          </button>
+          <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+            <!-- <li><hr class="dropdown-divider"></li>-->
+            <form action="/logout" method="post">
+              <button type="submit" class="dropdown-item text-center" href="/logout">Cerrar sesión</a>
+            </form>
+        </div>
+        <% } %>
+  
+    </div>
+    </div>
+  </nav>
+</div>

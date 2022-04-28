@@ -19,13 +19,13 @@
         </div>   
         <div class="col-12 col-sm-8 pt-3">
           <div class="row gx-0">
-            <h1 class="col-7 col-lg-9 text-white text-capitalize"><%= bodega.nombre %></h1>
+            <h1 class="col-7 col-lg-9 text-black text-capitalize"><%= bodega.nombre %></h1>
             <% if (typeof(session.user) !== 'undefined' && session.user.role === 'GC' ) { %> 
               <!-- Button trigger modal -->
-              <button type="button" class="col-2 col-lg-1 btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editarModal">
+              <button type="button" class="col-2 col-lg-1 btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal">
                 <i class="bi bi-pencil-fill"></i>
               </button>
-              <button type="button" class="col-2 col-lg-1 btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <button type="button" class="col-2 col-lg-1 btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i class="bi bi-trash"></i>
               </button>
             <% } %>
@@ -36,8 +36,8 @@
               <% if(!['id','nombre','foto','descripción'].includes(atr)) { %> 
                 <div class="col-6">
                   <div class="row">
-                    <span class="col-6 text-capitalize text-muted text-nowrap fw-bold"><%= atr %></span>
-                    <span class="col-6 text-uppercase text-white fw-bold"><%= bodega[atr] %></span>
+                    <span class="col-12 col-lg-6 text-capitalize text-muted text-nowrap fw-bold"><%= atr %></span>
+                    <span class="col-12 col-lg-6 text-uppercase text-black fw-bold"><%= bodega[atr] %></span>
                   </div>
                 </div>
               <% } %> 
